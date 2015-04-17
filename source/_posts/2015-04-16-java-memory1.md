@@ -75,3 +75,7 @@ Hotspot虚拟机要求对象的大小是8字节的整数倍，不够的用Paddin
 ![img](http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-16/2.png)
 * 直接指针：reference中直接存储对象的地址（Hotspot实现）
 ![img](http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-16/2.png)
+
+## References
+
+* 图片来自：《深入理解Java虚拟机》
