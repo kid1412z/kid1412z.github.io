@@ -96,6 +96,107 @@
           
           
             
+              <a class="post-title-link" href="/2015/04/17/java-memory2/">
+                Java内存溢出(Java OutOfMemoryError)
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2015-04-17
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/Java/">Java</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/04/17/java-memory2/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/17/java-memory2/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p><strong>摘要</strong>：<em>本文介绍了Java内存溢出的四种形式：Java堆溢出、虚拟机栈和本地方法栈溢出、方法区和运行时常量池溢出、直接内存溢出。并对JVM堆外内存使用做了简单了介绍。</em><br><strong>Abstract</strong>: <em>This article describes the four types of memory overflow in Java: Java heap overflow, virtual machine stack and local method stack overflow, the method area and runtime constant pool overflow, direct memory overflow. And a simple introduction of off-heap memory usage.</em></p>
+<h2 id="Java堆溢出">Java堆溢出</h2><pre><code><span class="comment">//JVM args: -Xms20m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError</span>
+public <span class="class"><span class="keyword">class</span> <span class="title">TestMemLeak</span> </span>{
+    public <span class="literal">static</span> <span class="keyword">void</span> main(<span class="built_in">String</span>[] args) {
+        <span class="built_in">List</span>&lt;<span class="built_in">Object</span>&gt; list = <span class="keyword">new</span> ArrayList&lt;<span class="built_in">Object</span>&gt;();
+        <span class="keyword">while</span>(<span class="keyword">true</span>) {
+            list.add(<span class="keyword">new</span> <span class="built_in">Object</span>());
+        }
+    }
+}
+</code></pre>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/04/17/java-memory2/#more">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JVM/"> #JVM </a>
+          
+            <a href="/tags/Java/"> #Java </a>
+          
+            <a href="/tags/OOM/"> #OOM </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2015/04/16/java-memory1/">
                 Java内存区域
               </a>
@@ -208,7 +309,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-count">2</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -222,7 +323,7 @@
 
           <div class="site-state-item site-state-tags">
             
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">3</span>
               <span class="site-state-item-name">tags</span>
               
           </div>
