@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="JVM,Java," />
+  <meta name="keywords" content="GC,JVM,Java," />
 
 
 
@@ -41,7 +41,7 @@
   </script>
 
 
-  <title> Java内存区域 // Q.Y Zuo Believes </title>
+  <title> Java finalize方法 // Q.Y Zuo Believes </title>
 </head>
 
 <body>
@@ -104,7 +104,7 @@
           
           
             
-              Java内存区域
+              Java finalize方法
             
           
         </h1>
@@ -112,7 +112,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2015-04-16
+          Posted on 2015-04-20
         </span>
 
         
@@ -132,8 +132,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/04/16/java-memory1/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/16/java-memory1/"></span>
+            <a href="/2015/04/20/java-finalize/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/20/java-finalize/"></span>
             </a>
           </span>
           
@@ -147,38 +147,52 @@
       
 
       
-        <p><strong>摘要</strong>：本文主要介绍了Java运行时数据区域的划分、各个区域的职能、对象内存分配和定位方法。<br><strong>Abstract</strong>: This article describes the division of the Java runtime data area, the functions of the corresponding region, the object memory allocation and positioning methods.</p>
-<a id="more"></a>
-<h2 id="运行时数据区域">运行时数据区域</h2><p>JVM在程序运行过程中，会把内存划分成以下区域：<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-16/1.png" alt="img"></p>
-<h3 id="程序计数器">程序计数器</h3><p>每个线程都有独立存储的程序计数器，互不影响，独立存储，属于<em>线程私有</em>内存。如果线程执行的是Java方法，计数器记录的是正在执行的虚拟机字节指令的地址；如果正在执行的时Native方法，这个计数器的值则为空(Undefined)。<br>此内存区域是唯一一个在JVM规范中没有规定任何OutOfMemoryError情况的区域。</p>
-<h3 id="Java虚拟机栈(Java_Virtual_Machine_Stacks)">Java虚拟机栈(Java Virtual Machine Stacks)</h3><p>虚拟机栈描述的时Java方法执行的内存模型，每个方法在执行的时候都会创建一个栈帧(Stack Frame)用于存储局部变量表、操作数栈、动态链接、方法出口等信息。<br>局部变量表存放了<em>编译期</em>可知的各种基本数据类型、对象引用、和返回地址类型。其所需的内存空间在<em>编译期</em>分配，运行时不会改变局部变量表的大小。<br>异常状况：1）StackOverflowError: 线程请求的栈深度大于JVM允许的深度。2）OutOfMemoryError:虚拟机栈动态扩展的时候无法申请到足够的内存。</p>
-<h3 id="本地方法栈(Native_Method_Stack)">本地方法栈(Native Method Stack)</h3><p>本地方法栈为虚拟机使用到的Native方法提供栈空间，本地方法栈也有上述两种异常情况。</p>
-<h3 id="Java堆">Java堆</h3><p>Java堆是被所有线程共享的一块内存区域，在虚拟机启动时创建。几乎所有的对象实例都在这里分配内存。（逃逸分析和标量替换允许在栈上分配对象内存）<br>Java堆是垃圾收集器管理的主要区域，也被成为GC堆。从内存分代回收的角度看，Java堆可以细分为：新生代和老年代；从内存分配的角度看，Java堆可能分出多个线程私有的分配缓冲区(Thread Local Allocation Buffer, TLAB)</p>
-<h3 id="方法区(Method_Area)">方法区(Method Area)</h3><p>线程共享内存区域，用于存储虚拟机加载的类信息、常量、静态变量、及时编译器编译后的代码等数据。HotSpot JVM用永久代(Permanent Generation)实现方法区，但两者并不等价。但这种实现方法容易导致内存溢出（可通过-XX:MaxPermSize设置永久代上限），新版的JDK1.7 Hotspot 已经把原本放在永久带的字符串常量池移出。<br>这个区域的内存回收主要针对类型的卸载和常量池的回收。异常情况：OutOfMemoryError.</p>
-<h3 id="直接内存(Direct_Memory)">直接内存(Direct Memory)</h3><p>直接内存不是JVM运行时数据区域，但在Java NIO中引入了基于Channel和Buffer的I/O方式，可以直接使用Native函数库分配<em>堆外内存</em>。申请直接内存大小超过限制，同样会有OutOfMemory异常。</p>
-<h3 id="新生对象内存分配方式">新生对象内存分配方式</h3><ul>
-<li>指针碰撞(Bump The Pointer): 指针作为分配和未分配的界限，要求JAVA堆规整。</li>
-<li>空闲列表(Free List): Java堆不规整。</li>
-</ul>
-<p>为了解决以上两种分配方式并发安全问题，可以采用：</p>
+        <p><strong>摘要</strong>：本文简单介绍了Java finalize方法，以及运行时是否可能查看对象的GC状态。<br><strong>Abstract</strong>: This article introduces the Java finalize method, and whether it is possible to view the status of the runtime object GC.<br><a id="more"></a></p>
+<p>即使在<a href="/2015/04/20/java-gc-reference/">可达性分析算法</a>中不可达的对象，也并非是非死不可，对象要被回收，至少需要以下两个过程：</p>
 <ul>
-<li>CAS失败重试</li>
-<li>本地线程分配缓冲TLAB (配置参数：-XX:+/-UseTLAB)(只有本地缓冲用完，需要重新分配的时候才需要同步锁定)</li>
+<li>根据是否有必要执行finalize方法进行第一次筛选（如果finalize方法没有被覆盖或者JVM已经调用过，视为<em>没有必要执行</em>）。如果对象被判定为有必要执行finalize方法，则被加入F-Queue队列，稍后由JVM建立的低优先级的Finalizer线程调用其finalize方法（为防止死循环或者调用缓慢阻塞队列中其他对象，JVM不保证等待调用执行完毕）。</li>
+<li>对象在finalize方法中，与GC Roots重新建立了连接，则不会被回收；否则对象将被回收。</li>
 </ul>
-<h2 id="对象的创建">对象的创建</h2><h3 id="对象的内存布局">对象的内存布局</h3><p>对象的内存布局可以分为三块：对象头(Header)、实例数据（Instance Data）、对齐填充（Padding）。</p>
-<h4 id="对象头">对象头</h4><ul>
-<li>运行时数据：HashCode、GC分代、锁状态标识、线程持有的锁、偏向线程ID、偏向时间戳。这部分数据的长度与虚拟机位数相同。官方称为<em>“MarkWord”</em></li>
-<li>类型指针：确定对象是哪个类的实例。（不一定所有的虚拟机都通过保留类型指针来确定对象的类型）</li>
-</ul>
-<h4 id="实例数据">实例数据</h4><p>存放代码中定义的各种类型的字段内容，顺序收到JVM内存分配策略的影响，相同长度的字段往往相邻分配。</p>
-<h4 id="对齐填充">对齐填充</h4><p>Hotspot虚拟机要求对象的大小是8字节的整数倍，不够的用Padding字段补全。</p>
-<h3 id="对象的访问定位">对象的访问定位</h3><ul>
-<li>句柄：reference中包含了对象的句柄地址，句柄中包含对象各部分的地址<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-16/2.png" alt="img"></li>
-<li>直接指针：reference中直接存储对象的地址（Hotspot实现）<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-16/2.png" alt="img"></li>
-</ul>
-<h2 id="References">References</h2><ul>
-<li>图片来自：《深入理解Java虚拟机》</li>
-</ul>
+<p>在《深入理解Java虚拟机》中<br><a href="http://stackoverflow.com/questions/4223956/check-if-object-can-be-fetched-by-garbage-collector" target="_blank" rel="external">http://stackoverflow.com/questions/4223956/check-if-object-can-be-fetched-by-garbage-collector</a></p>
+<p><em>注</em>：任何对象的finalize方法都只会被JVM调用一次，如果对象面临第二次回收过程，finalize方法将不会被再次调用。</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FinalizeTest</span> </span>{
+    <span class="keyword">public</span> <span class="keyword">static</span> FinalizeTest SAVE_HOOK = <span class="keyword">null</span>;
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">alive</span><span class="params">()</span> </span>{
+        System.out.println(<span class="string">"I am alive!"</span>);
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">die</span><span class="params">()</span> </span>{
+        System.out.println(<span class="string">"Die!"</span>);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>{
+        <span class="keyword">super</span>.finalize();
+        SAVE_HOOK = <span class="keyword">this</span>;
+        System.out.println(<span class="string">"finalize()"</span>);
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>{
+        SAVE_HOOK = <span class="keyword">new</span> FinalizeTest();
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) {
+            gc();
+            <span class="keyword">if</span> (SAVE_HOOK != <span class="keyword">null</span>) {
+                SAVE_HOOK.alive();
+            } <span class="keyword">else</span> {
+                die();
+            }
+        }
+    }
+
+    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">gc</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>{
+        SAVE_HOOK = <span class="keyword">null</span>;
+        System.gc();
+        Thread.sleep(<span class="number">500</span>);
+    }
+}
+</code></pre><p><em>以上代码验证了finalize()方法只会被JVM调用一次，但不能说明对象是否在运行过程中是否已经被回收掉！换句话说，在运行时判断一个对象是否已经被回收掉是<strong>不可能</strong>的（<a href="http://stackoverflow.com/questions/4223956/check-if-object-can-be-fetched-by-garbage-collector" target="_blank" rel="external">参见这里</a>）。</em></p>
+<p><em>finalize方法可以被try-finally替代，并处理的更好更及时。</em></p>
 
       
     </div>
@@ -186,6 +200,8 @@
     <div class="post-footer">
       
         <div class="post-tags">
+          
+            <a href="/tags/GC/"> #GC </a>
           
             <a href="/tags/JVM/"> #JVM </a>
           
@@ -198,11 +214,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/04/17/java-memory2/">Java内存溢出(Java OutOfMemoryError)</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/20/java-gc-reference/">Java内存回收算法和引用类型</a>
             
           </div>
         </div>
@@ -307,7 +323,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#运行时数据区域"><span class="nav-number">1.</span> <span class="nav-text">运行时数据区域</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#程序计数器"><span class="nav-number">1.1.</span> <span class="nav-text">程序计数器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java虚拟机栈(Java_Virtual_Machine_Stacks)"><span class="nav-number">1.2.</span> <span class="nav-text">Java虚拟机栈(Java Virtual Machine Stacks)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本地方法栈(Native_Method_Stack)"><span class="nav-number">1.3.</span> <span class="nav-text">本地方法栈(Native Method Stack)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java堆"><span class="nav-number">1.4.</span> <span class="nav-text">Java堆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法区(Method_Area)"><span class="nav-number">1.5.</span> <span class="nav-text">方法区(Method Area)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#直接内存(Direct_Memory)"><span class="nav-number">1.6.</span> <span class="nav-text">直接内存(Direct Memory)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新生对象内存分配方式"><span class="nav-number">1.7.</span> <span class="nav-text">新生对象内存分配方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的创建"><span class="nav-number">2.</span> <span class="nav-text">对象的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对象的内存布局"><span class="nav-number">2.1.</span> <span class="nav-text">对象的内存布局</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#对象头"><span class="nav-number">2.1.1.</span> <span class="nav-text">对象头</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实例数据"><span class="nav-number">2.1.2.</span> <span class="nav-text">实例数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对齐填充"><span class="nav-number">2.1.3.</span> <span class="nav-text">对齐填充</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象的访问定位"><span class="nav-number">2.2.</span> <span class="nav-text">对象的访问定位</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#References"><span class="nav-number">3.</span> <span class="nav-text">References</span></a></li></ol></div>
+              <p class="post-toc-empty">This post does not have a Table Of Contents</p>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -866,8 +882,8 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'zuoqycom';
-      var disqus_identifier = '2015/04/16/java-memory1/';
-      var disqus_url = 'http://zuoqy.com/2015/04/16/java-memory1/';
+      var disqus_identifier = '2015/04/20/java-finalize/';
+      var disqus_url = 'http://zuoqy.com/2015/04/20/java-finalize/';
 
       (function(){
         var dsq = document.createElement('script');

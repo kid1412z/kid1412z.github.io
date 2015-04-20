@@ -148,6 +148,7 @@
 
       
         <p><strong>摘要</strong>：<em>本文介绍了Java内存溢出的四种形式：Java堆溢出、虚拟机栈和本地方法栈溢出、方法区和运行时常量池溢出、直接内存溢出。并对JVM堆外内存使用做了简单了介绍。</em><br><strong>Abstract</strong>: <em>This article describes the four types of memory overflow in Java: Java heap overflow, virtual machine stack and local method stack overflow, the method area and runtime constant pool overflow, direct memory overflow. And a simple introduction of off-heap memory usage.</em></p>
+<a id="more"></a>
 <h2 id="Java堆溢出">Java堆溢出</h2><pre><code><span class="comment">//JVM args: -Xms20m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError</span>
 public <span class="class"><span class="keyword">class</span> <span class="title">TestMemLeak</span> </span>{
     public <span class="literal">static</span> <span class="keyword">void</span> main(<span class="built_in">String</span>[] args) {
@@ -157,8 +158,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
         }
     }
 }
-</code></pre><a id="more"></a>
-<p>-XX:+HeapDumpOnOutOfMemoryError 设置JVM在出现OOM时，对Heap进行转储，可以使用Eclipse MemoryAnalyzer 进行分析。<br>如果对运行中的服务进行dump，可以使用jmap命令：</p>
+</code></pre><p>-XX:+HeapDumpOnOutOfMemoryError 设置JVM在出现OOM时，对Heap进行转储，可以使用Eclipse MemoryAnalyzer 进行分析。<br>如果对运行中的服务进行dump，可以使用jmap命令：</p>
 <pre><code>jmap -dump:live,<span class="keyword">format</span>=b,<span class="keyword">file</span>=heap.bin
 </code></pre><p>使用MAT分析结果会有如下的描述：<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-17/1.png" alt="oom"><br>帮助查找问题所在</p>
 <h2 id="虚拟机栈和本地方法栈溢出">虚拟机栈和本地方法栈溢出</h2><p>HotSpot JVM不区分虚拟机栈和本地方法栈，虽然存在-Xoss设置，但是<em>实际上是无效的</em>。栈容量只有-Xss来确定。<br>虚拟机规范中规定了虚拟机栈和本地方法栈的两种异常：</p>
@@ -275,6 +275,8 @@ us.freeMemory(p);
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2015/04/20/java-gc-reference/">Java内存回收算法和引用类型</a>
+            
           </div>
 
           <div class="post-nav-next post-nav-item">
@@ -340,7 +342,7 @@ us.freeMemory(p);
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -354,7 +356,7 @@ us.freeMemory(p);
 
           <div class="site-state-item site-state-tags">
             
-              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-count">4</span>
               <span class="site-state-item-name">tags</span>
               
           </div>
