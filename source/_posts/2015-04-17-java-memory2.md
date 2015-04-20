@@ -6,6 +6,8 @@ tags: [Java,JVM,OOM]
 **摘要**：*本文介绍了Java内存溢出的四种形式：Java堆溢出、虚拟机栈和本地方法栈溢出、方法区和运行时常量池溢出、直接内存溢出。并对JVM堆外内存使用做了简单了介绍。*
 **Abstract**: *This article describes the four types of memory overflow in Java: Java heap overflow, virtual machine stack and local method stack overflow, the method area and runtime constant pool overflow, direct memory overflow. And a simple introduction of off-heap memory usage.*
 
+<!-- more -->
+
 ## Java堆溢出
 
     //JVM args: -Xms20m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError
@@ -17,8 +19,6 @@ tags: [Java,JVM,OOM]
             }
         }
     }
-
-<!-- more -->
 
 -XX:+HeapDumpOnOutOfMemoryError 设置JVM在出现OOM时，对Heap进行转储，可以使用Eclipse MemoryAnalyzer 进行分析。
 如果对运行中的服务进行dump，可以使用jmap命令：
