@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="GC,JVM,Java," />
+  <meta name="keywords" content="Algorithm,DP,动态规划," />
 
 
 
@@ -41,7 +41,7 @@
   </script>
 
 
-  <title> Java finalize方法 // Q.Y Zuo Believes </title>
+  <title> 动态规划 // Q.Y Zuo Believes </title>
 </head>
 
 <body>
@@ -104,7 +104,7 @@
           
           
             
-              Java finalize方法
+              动态规划
             
           
         </h1>
@@ -112,14 +112,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2015-04-20
+          Posted on 2013-11-09
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; In
             
-              <a href="/categories/Java/">Java</a>
+              <a href="/categories/Algorithm/">Algorithm</a>
 
               
               
@@ -132,8 +132,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/04/20/java-finalize/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/20/java-finalize/"></span>
+            <a href="/2013/11/09/dynamic-programming/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/11/09/dynamic-programming/"></span>
             </a>
           </span>
           
@@ -147,51 +147,25 @@
       
 
       
-        <p><strong>摘要</strong>：本文简单介绍了Java finalize方法，以及运行时是否可能查看对象的GC状态。<br><strong>Abstract</strong>: This article introduces the Java finalize method, and whether it is possible to view the status of the runtime object GC.<br><a id="more"></a></p>
-<p>即使在<a href="/2015/04/20/java-gc-reference/">可达性分析算法</a>中不可达的对象，也并非是非死不可，对象要被回收，至少需要以下两个过程：</p>
-<ul>
-<li>根据是否有必要执行finalize方法进行第一次筛选（如果finalize方法没有被覆盖或者JVM已经调用过，视为<em>没有必要执行</em>）。如果对象被判定为有必要执行finalize方法，则被加入F-Queue队列，稍后由JVM建立的低优先级的Finalizer线程调用其finalize方法（为防止死循环或者调用缓慢阻塞队列中其他对象，JVM不保证等待调用执行完毕）。</li>
-<li>对象在finalize方法中，与GC Roots重新建立了连接，则不会被回收；否则对象将被回收。</li>
+        <a id="more"></a>
+<h2 id="概念">概念</h2><p>适用于动态规划求解的问题，经过分解得到的问题往往不是相互独立的。若用分治算法来解这类问题，子问题常常被计算多次。动态规划的基本思想是，将计算过的子问题存储到一个表中，来避免重复计算。</p>
+<h2 id="动态规划的基本要素">动态规划的基本要素</h2><p>最优子结构：当问题的最优解包含了其子问题的最优解时，称该问题具有最优子结构的性质。<br>重叠子问题：当采用递归的方式计算问题时，相同的子问题被重复计算多次。</p>
+<h2 id="设计动态规划算法的步骤">设计动态规划算法的步骤</h2><ul>
+<li>找出最优解的性质，并刻画其结构特征</li>
+<li>递归定义最优值</li>
+<li>自底向上的方式计算出最优值</li>
+<li>根据计算最优值时得到的信息，构造最优解。</li>
 </ul>
-<p><em>注</em>：任何对象的finalize方法都只会被JVM调用一次，如果对象面临第二次回收过程，finalize方法将不会被再次调用。</p>
-<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FinalizeTest</span> </span>{
-    <span class="keyword">public</span> <span class="keyword">static</span> FinalizeTest SAVE_HOOK = <span class="keyword">null</span>;
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">alive</span><span class="params">()</span> </span>{
-        System.out.println(<span class="string">"I am alive!"</span>);
-    }
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">die</span><span class="params">()</span> </span>{
-        System.out.println(<span class="string">"Die!"</span>);
-    }
-
-    <span class="annotation">@Override</span>
-    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>{
-        <span class="keyword">super</span>.finalize();
-        SAVE_HOOK = <span class="keyword">this</span>;
-        System.out.println(<span class="string">"finalize()"</span>);
-    }
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>{
-        SAVE_HOOK = <span class="keyword">new</span> FinalizeTest();
-        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) {
-            gc();
-            <span class="keyword">if</span> (SAVE_HOOK != <span class="keyword">null</span>) {
-                SAVE_HOOK.alive();
-            } <span class="keyword">else</span> {
-                die();
-            }
-        }
-    }
-
-    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">gc</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>{
-        SAVE_HOOK = <span class="keyword">null</span>;
-        System.gc();
-        Thread.sleep(<span class="number">500</span>);
-    }
-}
-</code></pre><p><em>以上代码验证了finalize()方法只会被JVM调用一次，但不能说明对象是否在运行过程中是否已经被回收掉！换句话说，在运行时判断一个对象是否已经被回收掉是<strong>不可能</strong>的（<a href="http://stackoverflow.com/questions/4223956/check-if-object-can-be-fetched-by-garbage-collector" target="_blank" rel="external">参见这里</a>）。</em></p>
-<p><em>finalize方法可以被try-finally替代，并处理的更好更及时。</em></p>
+<h2 id="动态规划专题">动态规划专题</h2><h3 id="序列型DP">序列型DP</h3><ul>
+<li><a href="http://curlcoder.com/?p=39" target="_blank" rel="external">线段覆盖</a></li>
+<li><a href="http://curlcoder.com/?p=56" target="_blank" rel="external">3027 线段覆盖 2</a></li>
+<li><a href="http://curlcoder.com/?p=63" target="_blank" rel="external">1576 最长严格上升子序列</a></li>
+</ul>
+<h3 id="背包型DP">背包型DP</h3><ul>
+<li><a href="http://curlcoder.com/?p=67" target="_blank" rel="external">0-1 背包问题</a></li>
+<li><a href="http://curlcoder.com/2013/11/18/1068-%E4%B9%8C%E9%BE%9F%E6%A3%8B/" target="_blank" rel="external">1068 乌龟棋</a></li>
+</ul>
+<p>(未完待续)</p>
 
       
     </div>
@@ -200,11 +174,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/GC/"> #GC </a>
+            <a href="/tags/Algorithm/"> #Algorithm </a>
           
-            <a href="/tags/JVM/"> #JVM </a>
+            <a href="/tags/DP/"> #DP </a>
           
-            <a href="/tags/Java/"> #Java </a>
+            <a href="/tags/动态规划/"> #动态规划 </a>
           
         </div>
       
@@ -213,11 +187,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2013/11/09/1214-segment-coverage/">1214 线段覆盖</a>
+            
           </div>
 
           <div class="post-nav-next post-nav-item">
-            
-              <a href="/2015/04/20/java-gc-reference/">Java内存回收算法和引用类型</a>
             
           </div>
         </div>
@@ -322,7 +296,7 @@
           <div class="post-toc">
             
             
-              <p class="post-toc-empty">This post does not have a Table Of Contents</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态规划的基本要素"><span class="nav-number">2.</span> <span class="nav-text">动态规划的基本要素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计动态规划算法的步骤"><span class="nav-number">3.</span> <span class="nav-text">设计动态规划算法的步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态规划专题"><span class="nav-number">4.</span> <span class="nav-text">动态规划专题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#序列型DP"><span class="nav-number">4.1.</span> <span class="nav-text">序列型DP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#背包型DP"><span class="nav-number">4.2.</span> <span class="nav-text">背包型DP</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -881,8 +855,8 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'zuoqycom';
-      var disqus_identifier = '2015/04/20/java-finalize/';
-      var disqus_url = 'http://zuoqy.com/2015/04/20/java-finalize/';
+      var disqus_identifier = '2013/11/09/dynamic-programming/';
+      var disqus_url = 'http://zuoqy.com/2013/11/09/dynamic-programming/';
 
       (function(){
         var dsq = document.createElement('script');

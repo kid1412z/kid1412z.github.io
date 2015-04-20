@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="GC,JVM,Java," />
+  <meta name="keywords" content="Algorithm,DP,动态规划," />
 
 
 
@@ -41,7 +41,7 @@
   </script>
 
 
-  <title> Java finalize方法 // Q.Y Zuo Believes </title>
+  <title> 3027 线段覆盖 2 // Q.Y Zuo Believes </title>
 </head>
 
 <body>
@@ -104,7 +104,7 @@
           
           
             
-              Java finalize方法
+              3027 线段覆盖 2
             
           
         </h1>
@@ -112,14 +112,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2015-04-20
+          Posted on 2013-11-11
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; In
             
-              <a href="/categories/Java/">Java</a>
+              <a href="/categories/编程题解/">编程题解</a>
 
               
               
@@ -132,8 +132,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/04/20/java-finalize/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/20/java-finalize/"></span>
+            <a href="/2013/11/11/3027-segment-coverage2/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/11/11/3027-segment-coverage2/"></span>
             </a>
           </span>
           
@@ -147,52 +147,36 @@
       
 
       
-        <p><strong>摘要</strong>：本文简单介绍了Java finalize方法，以及运行时是否可能查看对象的GC状态。<br><strong>Abstract</strong>: This article introduces the Java finalize method, and whether it is possible to view the status of the runtime object GC.<br><a id="more"></a></p>
-<p>即使在<a href="/2015/04/20/java-gc-reference/">可达性分析算法</a>中不可达的对象，也并非是非死不可，对象要被回收，至少需要以下两个过程：</p>
-<ul>
-<li>根据是否有必要执行finalize方法进行第一次筛选（如果finalize方法没有被覆盖或者JVM已经调用过，视为<em>没有必要执行</em>）。如果对象被判定为有必要执行finalize方法，则被加入F-Queue队列，稍后由JVM建立的低优先级的Finalizer线程调用其finalize方法（为防止死循环或者调用缓慢阻塞队列中其他对象，JVM不保证等待调用执行完毕）。</li>
-<li>对象在finalize方法中，与GC Roots重新建立了连接，则不会被回收；否则对象将被回收。</li>
-</ul>
-<p><em>注</em>：任何对象的finalize方法都只会被JVM调用一次，如果对象面临第二次回收过程，finalize方法将不会被再次调用。</p>
-<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FinalizeTest</span> </span>{
-    <span class="keyword">public</span> <span class="keyword">static</span> FinalizeTest SAVE_HOOK = <span class="keyword">null</span>;
+        <a id="more"></a>
+<h2 id="题目描述_Description"><a href="http://www.wikioi.com/problem/3027/" target="_blank" rel="external">题目描述 Description</a></h2><p>数轴上有n条线段，线段的两端都是整数坐标，坐标范围在0~1000000，每条线段有一个价值，请从n条线段中挑出若干条线段，使得这些线段两两不覆盖（端点可以重合）且线段价值之和最大。<br>n&lt;=1000</p>
+<p>输入描述 Input Description<br>第一行一个整数n，表示有多少条线段。<br>接下来n行每行三个整数, ai bi ci，分别代表第i条线段的左端点ai，右端点bi（保证左端点&lt;右端点）和价值ci。<br>输出描述 Output Description<br>输出能够获得的最大价值<br>样例输入 Sample Input<br>3<br>1 2 1<br>2 3 2<br>1 3 4<br>样例输出 Sample Output<br>4<br>数据范围及提示 Data Size &amp; Hint<br>数据范围<br>对于40%的数据，n≤10；<br>对于100%的数据，n≤1000；<br>0&lt;=ai,bi&lt;=1000000<br>0&lt;=ci&lt;=1000000</p>
+<h2 id="思路：">思路：</h2><p>对线段按照左端点进行排序<br>子问题描述：用v[i] 表示到第i个线段为止的最大价值<br>状态迁移方程： v[i] = max(v[j]) + a[i].value (0&lt;= j &lt; i &amp;&amp; a[j].end &lt;= a[i].start)</p>
+<h2 id="代码示例：">代码示例：</h2><pre><code><span class="built_in">int</span> cmp(<span class="keyword">const</span> <span class="built_in">line</span> lhs, <span class="keyword">const</span> <span class="built_in">line</span> rhs)
+{
+    <span class="keyword">return</span> lhs.start &lt; rhs.start;
+}
 
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">alive</span><span class="params">()</span> </span>{
-        System.out.println(<span class="string">"I am alive!"</span>);
-    }
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">die</span><span class="params">()</span> </span>{
-        System.out.println(<span class="string">"Die!"</span>);
-    }
-
-    <span class="annotation">@Override</span>
-    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>{
-        <span class="keyword">super</span>.finalize();
-        SAVE_HOOK = <span class="keyword">this</span>;
-        System.out.println(<span class="string">"finalize()"</span>);
-    }
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>{
-        SAVE_HOOK = <span class="keyword">new</span> FinalizeTest();
-        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) {
-            gc();
-            <span class="keyword">if</span> (SAVE_HOOK != <span class="keyword">null</span>) {
-                SAVE_HOOK.alive();
-            } <span class="keyword">else</span> {
-                die();
+<span class="built_in">int</span> cover(<span class="built_in">line</span> *a, <span class="built_in">int</span> n)
+{
+    <span class="built_in">sort</span>(a, a + n, cmp);
+    <span class="built_in">int</span> pmax = <span class="number">0</span>;
+    v[<span class="number">0</span>] = a[<span class="number">0</span>].value;
+    <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">1</span>; i &lt; n; i++) {
+        v[i] = a[i].value;
+        <span class="built_in">int</span> <span class="built_in">max</span> = <span class="number">0</span>;
+        <span class="keyword">for</span> (<span class="built_in">int</span> j = <span class="number">0</span>; j &lt; i; j++) {
+            <span class="keyword">if</span> (a[j].end &lt;= a[i].start &amp;&amp; <span class="built_in">max</span> &lt; v[j]) {
+                <span class="built_in">max</span> = v[j];
             }
         }
+        v[i] += <span class="built_in">max</span>;
+        <span class="keyword">if</span> (pmax &lt; v[i]) {
+            pmax = v[i];
+        }
     }
-
-    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">gc</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>{
-        SAVE_HOOK = <span class="keyword">null</span>;
-        System.gc();
-        Thread.sleep(<span class="number">500</span>);
-    }
+    <span class="keyword">return</span> pmax;
 }
-</code></pre><p><em>以上代码验证了finalize()方法只会被JVM调用一次，但不能说明对象是否在运行过程中是否已经被回收掉！换句话说，在运行时判断一个对象是否已经被回收掉是<strong>不可能</strong>的（<a href="http://stackoverflow.com/questions/4223956/check-if-object-can-be-fetched-by-garbage-collector" target="_blank" rel="external">参见这里</a>）。</em></p>
-<p><em>finalize方法可以被try-finally替代，并处理的更好更及时。</em></p>
-
+</code></pre>
       
     </div>
 
@@ -200,11 +184,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/GC/"> #GC </a>
+            <a href="/tags/Algorithm/"> #Algorithm </a>
           
-            <a href="/tags/JVM/"> #JVM </a>
+            <a href="/tags/DP/"> #DP </a>
           
-            <a href="/tags/Java/"> #Java </a>
+            <a href="/tags/动态规划/"> #动态规划 </a>
           
         </div>
       
@@ -213,11 +197,13 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2015/04/16/java-memory1/">Java内存区域</a>
+            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/04/20/java-gc-reference/">Java内存回收算法和引用类型</a>
+              <a href="/2013/11/09/1214-segment-coverage/">1214 线段覆盖</a>
             
           </div>
         </div>
@@ -322,7 +308,7 @@
           <div class="post-toc">
             
             
-              <p class="post-toc-empty">This post does not have a Table Of Contents</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目描述_Description"><span class="nav-number">1.</span> <span class="nav-text">题目描述 Description</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思路："><span class="nav-number">2.</span> <span class="nav-text">思路：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码示例："><span class="nav-number">3.</span> <span class="nav-text">代码示例：</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -881,8 +867,8 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'zuoqycom';
-      var disqus_identifier = '2015/04/20/java-finalize/';
-      var disqus_url = 'http://zuoqy.com/2015/04/20/java-finalize/';
+      var disqus_identifier = '2013/11/11/3027-segment-coverage2/';
+      var disqus_url = 'http://zuoqy.com/2013/11/11/3027-segment-coverage2/';
 
       (function(){
         var dsq = document.createElement('script');
