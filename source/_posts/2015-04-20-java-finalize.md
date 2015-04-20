@@ -11,9 +11,6 @@ tags: [Java,JVM,GC]
 * 根据是否有必要执行finalize方法进行第一次筛选（如果finalize方法没有被覆盖或者JVM已经调用过，视为*没有必要执行*）。如果对象被判定为有必要执行finalize方法，则被加入F-Queue队列，稍后由JVM建立的低优先级的Finalizer线程调用其finalize方法（为防止死循环或者调用缓慢阻塞队列中其他对象，JVM不保证等待调用执行完毕）。
 * 对象在finalize方法中，与GC Roots重新建立了连接，则不会被回收；否则对象将被回收。
 
-在《深入理解Java虚拟机》中
-http://stackoverflow.com/questions/4223956/check-if-object-can-be-fetched-by-garbage-collector
-
 *注*：任何对象的finalize方法都只会被JVM调用一次，如果对象面临第二次回收过程，finalize方法将不会被再次调用。
 
     public class FinalizeTest {
