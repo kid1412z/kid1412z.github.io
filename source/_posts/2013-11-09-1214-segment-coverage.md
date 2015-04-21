@@ -1,7 +1,7 @@
 ---
 title: "1214 线段覆盖"
 date: 2013-11-09 12:24:01
-categories: 编程题解
+categories: "coding gym"
 tags: [DP,动态规划,wikioi]
 ---
 ## [题目描述 Description](http://www.wikioi.com/problem/1214/)

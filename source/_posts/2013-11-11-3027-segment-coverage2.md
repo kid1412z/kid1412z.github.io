@@ -1,7 +1,7 @@
 ---
 title: "3027 线段覆盖 2"
 date: 2013-11-11 11:55:17
-categories: 编程题解
+categories: "coding gym"
 tags: [DP,动态规划,Algorithm]
 ---
 ## [题目描述 Description](http://www.wikioi.com/problem/3027/)

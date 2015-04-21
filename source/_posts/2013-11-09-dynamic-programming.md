@@ -26,9 +26,9 @@ tags: [DP,动态规划,Algorithm]
 
 ### 序列型DP
 
-* [线段覆盖](http://curlcoder.com/?p=39)
-* [3027 线段覆盖 2](http://curlcoder.com/?p=56)
-* [1576 最长严格上升子序列](http://curlcoder.com/?p=63)
+* [线段覆盖](/2013/11/09/1214-segment-coverage/)
+* [3027 线段覆盖 2](/2013/11/11/3027-segment-coverage2/)
+* [1576 最长严格上升子序列](/2013/11/12/1576-longest-inc-subseq/)
 
 ### 背包型DP
 * [0-1 背包问题](http://curlcoder.com/?p=67)
