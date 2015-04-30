@@ -73,7 +73,6 @@ toc_list_number: true
 disqus_shortname: zuoqycom
 google_analytics: UA-53494336-3
 google_site_verification: GgXgmwmTNbQickN-preU_L3kzGIRPxHZeE43Gxd_Fo8
-baidu_analytics: ef618f510657a3517eddbaa91aedf782
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
