@@ -1,0 +1,1239 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+  <meta name="google-site-verification" content="GgXgmwmTNbQickN-preU_L3kzGIRPxHZeE43Gxd_Fo8" />
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.2"/>
+
+
+
+
+  <meta name="keywords" content="Java,容器," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/favicon.ico?v=0.4.2" />
+
+
+
+
+  <title> Java容器类——接口 // Q.Y Zuo Believes </title>
+</head>
+
+<body>
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">Q.Y Zuo Believes</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+
+  <ul id="menu" class="menu">
+     
+    
+      
+      <li class="menu-item menu-item-home">
+        <a href="/">
+          <i class="menu-item-icon icon-home"></i> <br />
+          Home
+        </a>
+      </li>
+    
+      
+      <li class="menu-item menu-item-archives">
+        <a href="/archives">
+          <i class="menu-item-icon icon-archives"></i> <br />
+          Archives
+        </a>
+      </li>
+    
+  </ul>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Java容器类——接口
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2015-05-06
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/05/06/java-containers-interfaces/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/05/06/java-containers-interfaces/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p><strong>摘要</strong>：本文介绍了Java容器类的核心接口，以及容器泛型的使用原则。<br><strong>Abstract</strong>: This article describes the core interfaces of Java Collections, and the principles of using generic.</p>
+<a id="more"></a>
+<p>JDK java.util 包中包含了几个重要的集合类(主要包含实现了Collection接口和Map接口的类)，从本篇文章开始总结JDK中自带的几个重要的容器类。</p>
+<h2 id="Java集合框架核心接口">Java集合框架核心接口</h2><p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-06/1.png" alt="The core collection interfaces"></p>
+<h3 id="Iterable">Iterable</h3><p>实现了Iterable接口的类，可以使用foreach语法迭代，从JDK1.5开始加入。</p>
+<pre><code>package java.lang;
+
+<span class="keyword">import</span> java.util.<span class="type">Iterator</span>;
+
+public <span class="keyword">interface</span> <span class="type">Iterable</span>&lt;T&gt; {
+
+    /**
+     * <span class="type">Returns</span> an <span class="keyword">iterator</span> over a <span class="type">set</span> <span class="keyword">of</span> elements <span class="keyword">of</span> <span class="keyword">type</span> T.
+     *
+     * @<span class="keyword">return</span> an <span class="type">Iterator</span>.
+     */
+    <span class="type">Iterator</span>&lt;T&gt; <span class="keyword">iterator</span>();
+}
+</code></pre><h3 id="Collection">Collection</h3><p>一组对象的集合。没有规定对象的顺序（如果有）和是否允许重复。Java平台不提供此接口的任何直接实现，但提供了更具体的子接口，如Set和List实现。</p>
+<ul>
+<li>一般实现Collection子接口的类需要提供两个标准构造方法：1.无参构造方法（用于创建空集合）2.只有一个Collection类型参数的构造方法（用于创建一个集合副本）。这虽然不是硬性的规定（接口无法限定构造方法），但是每个实现类都遵循了这个原则。</li>
+<li><p>对不支持的操作，应当抛出<em>UnsupportedOperationException</em></p>
+<p>  public interface Collection<e> extends Iterable<e> {</e></e></p>
+<pre><code><span class="comment">// Query Operations</span>
+<span class="function"><span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>;
+<span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>;
+<span class="function"><span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;
+Iterator&lt;E&gt; iterator();   <span class="comment">//from Iterable</span>
+Object[] toArray();
+&lt;T&gt; T[] toArray(T[] a);
+
+<span class="comment">// Modification Operations</span>
+<span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
+<span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;
+
+<span class="comment">// Bulk Operations</span>
+<span class="function"><span class="keyword">boolean</span> <span class="title">containsAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+<span class="function"><span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(Collection&lt;? <span class="keyword">extends</span> E&gt; c)</span></span>;
+<span class="function"><span class="keyword">boolean</span> <span class="title">removeAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+<span class="function"><span class="keyword">boolean</span> <span class="title">retainAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+<span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span>;
+
+<span class="comment">// Comparison and hashing</span>
+<span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span></span>;
+<span class="function"><span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;
+</code></pre><p>  }</p>
+</li>
+</ul>
+<p>这里引入一个小插曲：为什么Collection.add()方法使用了泛型，而remove()方法却使用了Object类型的参数？答案参见这里：<br><a href="http://stackoverflow.com/questions/104799/why-arent-java-collections-remove-methods-generic" target="_blank" rel="external">Why aren’t Java Collections remove methods generic?</a><br><a href="http://smallwig.blogspot.jp/2007/12/why-does-setcontains-take-object-not-e.html" target="_blank" rel="external">Why does Set.contains() take an Object, not an E?</a><br>总结起来有以下几方面的原因：</p>
+<ul>
+<li>当且仅当你需要防止Collection被破坏的时候，才考虑使用泛型约束<blockquote>
+<p>Actually, it’s very simple! If add() took a wrong object, it would break the collection. It would contain things it’s not supposed to! That is not the case for remove(), or contains(). Incidentally, that basic rule — using type parameters to prevent actual damage to the collection only — is followed absolutely consistently in the whole library. –  Kevin Bourrillion</p>
+</blockquote>
+</li>
+<li>在remove上使用泛型限制，可能auto boxing问题</li>
+</ul>
+<p>另外，泛型是编译期的静态类型检查，所以以下的泛型使用方式也是错误的：</p>
+<pre><code><span class="keyword">List</span><span class="preprocessor">&lt;?</span> extends MinCut&gt; <span class="keyword">list</span> = <span class="keyword">new</span> ArrayList&lt;MinCut&gt;();
+</code></pre><p>这将导致除了null，list里不能插入任何对象。</p>
+<h3 id="Set">Set</h3><p>数学集合的抽象，不允许元素重复。</p>
+<pre><code><span class="keyword">package</span> java.util;
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Set</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Collection</span>&lt;<span class="title">E</span>&gt; </span>{
+    <span class="comment">// Query Operations</span>
+    <span class="function"><span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;
+    Object[] toArray();
+    &lt;T&gt; T[] toArray(T[] a);
+
+    <span class="comment">// Modification Operations</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;
+
+    <span class="comment">// Bulk Operations</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">containsAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(Collection&lt;? <span class="keyword">extends</span> E&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">retainAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">removeAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span>;
+
+    <span class="comment">// Comparison and hashing</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;
+}
+</code></pre><h3 id="SortedSet">SortedSet</h3><p>有序对象集合。SortedSet中的对象会根据Comparable接口或提供的Comparator进行排序。</p>
+<pre><code>package java.util;
+
+public interface SortedSet&lt;<span class="keyword">E</span>&gt; extends <span class="keyword">Set</span>&lt;<span class="keyword">E</span>&gt; {
+    Comparator&lt;? super <span class="keyword">E</span>&gt; comparator();
+    SortedSet&lt;<span class="keyword">E</span>&gt; subSet(<span class="keyword">E</span> fromElement, <span class="keyword">E</span> toElement);
+    SortedSet&lt;<span class="keyword">E</span>&gt; headSet(<span class="keyword">E</span> toElement);
+    SortedSet&lt;<span class="keyword">E</span>&gt; tailSet(<span class="keyword">E</span> fromElement);
+    <span class="keyword">E</span> first();
+    <span class="keyword">E</span> last();
+}
+</code></pre><h3 id="NavigableSet">NavigableSet</h3><p>继承SortedSet并且其中的元素可以按照升序和降序访问。</p>
+<pre><code>package java.util;
+
+public interface SortedSet&lt;<span class="keyword">E</span>&gt; extends <span class="keyword">Set</span>&lt;<span class="keyword">E</span>&gt; {
+    Comparator&lt;? super <span class="keyword">E</span>&gt; comparator();
+    SortedSet&lt;<span class="keyword">E</span>&gt; subSet(<span class="keyword">E</span> fromElement, <span class="keyword">E</span> toElement);
+    SortedSet&lt;<span class="keyword">E</span>&gt; headSet(<span class="keyword">E</span> toElement);
+    SortedSet&lt;<span class="keyword">E</span>&gt; tailSet(<span class="keyword">E</span> fromElement);
+    <span class="keyword">E</span> first();
+    <span class="keyword">E</span> last();
+}
+</code></pre><h3 id="List">List</h3><p>有序集合，也称为序列（<em>Sequence</em>）。一般情况下允许元素重复。允许按位置访问。</p>
+<pre><code><span class="keyword">package</span> java.util;
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Collection</span>&lt;<span class="title">E</span>&gt; </span>{
+    <span class="comment">// Query Operations</span>
+    <span class="function"><span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;
+    <span class="function">Iterator&lt;E&gt; <span class="title">iterator</span><span class="params">()</span></span>;
+    Object[] toArray();
+    &lt;T&gt; T[] toArray(T[] a);
+
+    <span class="comment">// Modification Operations</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;
+
+    <span class="comment">// Bulk Modification Operations</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">containsAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(Collection&lt;? extends E&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(<span class="keyword">int</span> index, Collection&lt;? extends E&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">removeAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">retainAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span>;
+
+    <span class="comment">// Comparison and hashing</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;
+
+    <span class="comment">// Positional Access Operations</span>
+    <span class="function">E <span class="title">get</span><span class="params">(<span class="keyword">int</span> index)</span></span>;
+    <span class="function">E <span class="title">set</span><span class="params">(<span class="keyword">int</span> index, E element)</span></span>;
+    <span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> index, E element)</span></span>;
+    <span class="function">E <span class="title">remove</span><span class="params">(<span class="keyword">int</span> index)</span></span>;
+
+    <span class="comment">// Search Operations</span>
+    <span class="function"><span class="keyword">int</span> <span class="title">indexOf</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">int</span> <span class="title">lastIndexOf</span><span class="params">(Object o)</span></span>;
+
+    <span class="comment">// List Iterators</span>
+    <span class="function">ListIterator&lt;E&gt; <span class="title">listIterator</span><span class="params">()</span></span>;
+    <span class="function">ListIterator&lt;E&gt; <span class="title">listIterator</span><span class="params">(<span class="keyword">int</span> index)</span></span>;
+
+    <span class="comment">// View</span>
+    <span class="function">List&lt;E&gt; <span class="title">subList</span><span class="params">(<span class="keyword">int</span> fromIndex, <span class="keyword">int</span> toIndex)</span></span>;
+}
+</code></pre><h3 id="Queue">Queue</h3><p>专为保存加工前的元素的集合。除了基本的Collection操作，队列提供额外的插入、提取和检查操作。</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Collection</span>&lt;<span class="title">E</span>&gt; </span>{
+    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e)</span></span>;
+    <span class="function">E <span class="title">remove</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">poll</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">element</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">peek</span><span class="params">()</span></span>;
+}
+</code></pre><h3 id="BlockingQueue">BlockingQueue</h3><p>阻塞队列</p>
+<pre><code><span class="keyword">package</span> java.util.concurrent;
+
+<span class="keyword">import</span> java.util.Collection;
+<span class="keyword">import</span> java.util.Queue;
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BlockingQueue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; </span>{
+    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">void</span> <span class="title">put</span><span class="params">(E e)</span> <span class="keyword">throws</span> InterruptedException</span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e, <span class="keyword">long</span> timeout, TimeUnit unit)</span>
+        <span class="keyword">throws</span> InterruptedException</span>;
+    <span class="function">E <span class="title">take</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;
+    <span class="function">E <span class="title">poll</span><span class="params">(<span class="keyword">long</span> timeout, TimeUnit unit)</span>
+        <span class="keyword">throws</span> InterruptedException</span>;
+    <span class="function"><span class="keyword">int</span> <span class="title">remainingCapacity</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">int</span> <span class="title">drainTo</span><span class="params">(Collection&lt;? <span class="keyword">super</span> E&gt; c)</span></span>;
+    <span class="function"><span class="keyword">int</span> <span class="title">drainTo</span><span class="params">(Collection&lt;? <span class="keyword">super</span> E&gt; c, <span class="keyword">int</span> maxElements)</span></span>;
+}
+</code></pre><h3 id="TransferQueue">TransferQueue</h3><p>生产者可以等待消费者接收元素的阻塞队列。</p>
+<pre><code><span class="keyword">package</span> java.util.concurrent;
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TransferQueue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">BlockingQueue</span>&lt;<span class="title">E</span>&gt; </span>{
+    <span class="function"><span class="keyword">boolean</span> <span class="title">tryTransfer</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">void</span> <span class="title">transfer</span><span class="params">(E e)</span> <span class="keyword">throws</span> InterruptedException</span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">tryTransfer</span><span class="params">(E e, <span class="keyword">long</span> timeout, TimeUnit unit)</span>
+        <span class="keyword">throws</span> InterruptedException</span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">hasWaitingConsumer</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">int</span> <span class="title">getWaitingConsumerCount</span><span class="params">()</span></span>;
+}
+</code></pre><h3 id="Deque">Deque</h3><p>双端队列，支持在两端插入和删除元素。扩展了Queue接口。</p>
+<pre><code>package java.util;
+
+/<span class="keyword">*</span><span class="keyword">*</span>
+ <span class="keyword">*</span> A linear collection that supports element insertion and removal at
+ <span class="keyword">*</span> both ends.  The name <span class="variable">&lt;i&gt;</span>deque<span class="variable">&lt;/i&gt;</span> is short for <span class="string">"double ended queue"</span>
+ <span class="keyword">*</span> and is usually pronounced <span class="string">"deck"</span>.  Most <span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span>
+ <span class="keyword">*</span> implementations place no fixed limits on the number of elements
+ <span class="keyword">*</span> they may contain, but this interface supports capacity-restricted
+ <span class="keyword">*</span> deques as well as those with no fixed size limit.
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>This interface defines methods to access the elements at both
+ <span class="keyword">*</span> ends of the deque.  Methods are provided to insert, remove, and
+ <span class="keyword">*</span> examine the element.  Each of these methods exists in two forms:
+ <span class="keyword">*</span> one throws an exception if the operation fails, the other returns a
+ <span class="keyword">*</span> special value (either <span class="variable">&lt;tt&gt;</span>null<span class="variable">&lt;/tt&gt;</span> or <span class="variable">&lt;tt&gt;</span>false<span class="variable">&lt;/tt&gt;</span>, depending on
+ <span class="keyword">*</span> the operation).  The latter form of the insert operation is
+ <span class="keyword">*</span> designed specifically for use with capacity-restricted
+ <span class="keyword">*</span> <span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span> implementations; in most implementations, insert
+ <span class="keyword">*</span> operations cannot fail.
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>The twelve methods described above are summarized in the
+ <span class="keyword">*</span> following table:
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>
+ <span class="keyword">*</span> <span class="variable">&lt;table BORDER CELLPADDING=3 CELLSPACING=1&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span><span class="variable">&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER COLSPAN = 2&gt;</span> <span class="variable">&lt;b&gt;</span>First Element (Head)<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER COLSPAN = 2&gt;</span> <span class="variable">&lt;b&gt;</span>Last Element (Tail)<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span><span class="variable">&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER&gt;</span><span class="variable">&lt;em&gt;</span>Throws exception<span class="variable">&lt;/em&gt;</span><span class="variable">&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER&gt;</span><span class="variable">&lt;em&gt;</span>Special value<span class="variable">&lt;/em&gt;</span><span class="variable">&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER&gt;</span><span class="variable">&lt;em&gt;</span>Throws exception<span class="variable">&lt;/em&gt;</span><span class="variable">&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER&gt;</span><span class="variable">&lt;em&gt;</span>Special value<span class="variable">&lt;/em&gt;</span><span class="variable">&lt;/td&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span><span class="variable">&lt;b&gt;</span>Insert<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #addFirst addFirst(e)}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #offerFirst offerFirst(e)}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #addLast addLast(e)}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #offerLast offerLast(e)}&lt;/td&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span><span class="variable">&lt;b&gt;</span>Remove<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #removeFirst removeFirst()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #pollFirst pollFirst()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #removeLast removeLast()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #pollLast pollLast()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span><span class="variable">&lt;b&gt;</span>Examine<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #getFirst getFirst()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #peekFirst peekFirst()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #getLast getLast()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #peekLast peekLast()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
+ <span class="keyword">*</span> <span class="variable">&lt;/table&gt;</span>
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>This interface extends the {<span class="comment">@link Queue} interface.  When a deque is</span>
+ <span class="keyword">*</span> used as a queue, FIFO (First-In-First-Out) behavior results.  Elements are
+ <span class="keyword">*</span> added at the end of the deque and removed from the beginning.  The methods
+ <span class="keyword">*</span> inherited from the <span class="variable">&lt;tt&gt;</span>Queue<span class="variable">&lt;/tt&gt;</span> interface are precisely equivalent to
+ <span class="keyword">*</span> <span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span> methods as indicated in the following table:
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>
+ <span class="keyword">*</span> <span class="variable">&lt;table BORDER CELLPADDING=3 CELLSPACING=1&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER&gt;</span> <span class="variable">&lt;b&gt;</span><span class="variable">&lt;tt&gt;</span>Queue<span class="variable">&lt;/tt&gt;</span> Method<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER&gt;</span> <span class="variable">&lt;b&gt;</span>Equivalent <span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span> Method<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link java.util.Queue#add add(e)}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #addLast addLast(e)}&lt;/td&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link java.util.Queue#offer offer(e)}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #offerLast offerLast(e)}&lt;/td&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link java.util.Queue#remove remove()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #removeFirst removeFirst()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link java.util.Queue#poll poll()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #pollFirst pollFirst()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link java.util.Queue#element element()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #getFirst getFirst()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link java.util.Queue#peek peek()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #peek peekFirst()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
+ <span class="keyword">*</span> <span class="variable">&lt;/table&gt;</span>
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>Deques can also be used as LIFO (Last-In-First-Out) stacks.  This
+ <span class="keyword">*</span> interface should be used in preference to the legacy {<span class="comment">@link Stack} class.</span>
+ <span class="keyword">*</span> <span class="keyword">When</span> a deque is used as a stack, elements are pushed and popped from the
+ <span class="keyword">*</span> beginning of the deque.  Stack methods are precisely equivalent to
+ <span class="keyword">*</span> <span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span> methods as indicated in the table below:
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>
+ <span class="keyword">*</span> <span class="variable">&lt;table BORDER CELLPADDING=3 CELLSPACING=1&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER&gt;</span> <span class="variable">&lt;b&gt;</span>Stack Method<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER&gt;</span> <span class="variable">&lt;b&gt;</span>Equivalent <span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span> Method<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #push push(e)}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #addFirst addFirst(e)}&lt;/td&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #pop pop()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #removeFirst removeFirst()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #peek peek()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #peekFirst peekFirst()}&lt;/td&gt;</span>
+ <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
+ <span class="keyword">*</span> <span class="variable">&lt;/table&gt;</span>
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>Note that the {<span class="comment">@link #peek peek} method works equally well when</span>
+ <span class="keyword">*</span> a deque is used as a queue or a stack; in either case, elements are
+ <span class="keyword">*</span> drawn from the beginning of the deque.
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>This interface provides two methods to remove interior
+ <span class="keyword">*</span> elements, {<span class="comment">@link #removeFirstOccurrence removeFirstOccurrence} and</span>
+ <span class="keyword">*</span> {<span class="comment">@link #removeLastOccurrence removeLastOccurrence}.</span>
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>Unlike the {<span class="comment">@link List} interface, this interface does not</span>
+ <span class="keyword">*</span> provide support for indexed access to elements.
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>While <span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span> implementations are not strictly required
+ <span class="keyword">*</span> to prohibit the insertion of null elements, they are strongly
+ <span class="keyword">*</span> encouraged to do so.  Users of any <span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span> implementations
+ <span class="keyword">*</span> that do allow null elements are strongly encouraged <span class="variable">&lt;i&gt;</span>not<span class="variable">&lt;/i&gt;</span> to
+ <span class="keyword">*</span> take advantage of the ability to insert nulls.  This is so because
+ <span class="keyword">*</span> <span class="variable">&lt;tt&gt;</span>null<span class="variable">&lt;/tt&gt;</span> is used as a special return value by various methods
+ <span class="keyword">*</span> to indicated that the deque is empty.
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span><span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span> implementations generally do not define
+ <span class="keyword">*</span> element-based versions of the <span class="variable">&lt;tt&gt;</span>equals<span class="variable">&lt;/tt&gt;</span> and <span class="variable">&lt;tt&gt;</span>hashCode<span class="variable">&lt;/tt&gt;</span>
+ <span class="keyword">*</span> methods, but instead inherit the identity-based versions from class
+ <span class="keyword">*</span> <span class="variable">&lt;tt&gt;</span>Object<span class="variable">&lt;/tt&gt;</span>.
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>This interface is a member of the <span class="variable">&lt;a
+ * href="{@docRoot}/../technotes/guides/collections/index.html"&gt;</span> Java Collections
+ <span class="keyword">*</span> Framework<span class="variable">&lt;/a&gt;</span>.
+ <span class="keyword">*</span>
+ <span class="keyword">*</span> <span class="comment">@author Doug Lea</span>
+ <span class="keyword">*</span> <span class="comment">@author Josh Bloch</span>
+ <span class="keyword">*</span> <span class="comment">@since  1.6</span>
+ <span class="keyword">*</span> <span class="comment">@param &lt;E&gt; the type of elements held in this collection</span>
+ <span class="keyword">*</span>/
+
+public interface Deque<span class="variable">&lt;E&gt;</span> extends Queue<span class="variable">&lt;E&gt;</span> {
+    void addFirst(E e);
+    void addLast(E e);
+    boolean offerFirst(E e);
+    boolean offerLast(E e);
+    E removeFirst();
+    E removeLast();
+    E pollFirst();
+    E pollLast();
+    E getFirst();
+    E getLast();
+    E peekFirst();
+    E peekLast();
+    boolean removeFirstOccurrence(Object o);
+    boolean removeLastOccurrence(Object o);
+
+    // <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> Queue methods <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>
+    boolean add(E e);
+    boolean offer(E e);
+    E remove();
+    E poll();
+    E element();
+    E peek();
+
+    // <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> Stack methods <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>
+    void push(E e);
+    E pop();
+
+    // <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> Collection methods <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>
+    boolean remove(Object o);
+    boolean contains(Object o);
+    public int size();
+    Iterator<span class="variable">&lt;E&gt;</span> iterator();
+    Iterator<span class="variable">&lt;E&gt;</span> descendingIterator();
+}
+</code></pre><h3 id="BlockingDeque">BlockingDeque</h3><p>阻塞双端队列</p>
+<h3 id="Map">Map</h3><p>键值映射，每个键对应一个值。</p>
+<h3 id="SortedMap">SortedMap</h3><p>按Key有序的Map</p>
+<h3 id="NavigableMap">NavigableMap</h3><p>继承SortedMap，并且其中的元素可以按照Key升序和降序访问。</p>
+<h3 id="ConcurrentMap">ConcurrentMap</h3><p>putIfAbsent、remove和replace方法都具有原子性.</p>
+<h3 id="ConcurrentNavigableMap">ConcurrentNavigableMap</h3><p>元素可以按照Key升序和降序访问。</p>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://docs.oracle.com/javase/7/docs/technotes/guides/collections/reference.html" target="_blank" rel="external">Outline of the Collections Framework</a></li>
+</ul>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/"> #Java </a>
+          
+            <a href="/tags/容器/"> #容器 </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/20/java-finalize/">Java finalize方法</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+      <div class="comments" id="comments">
+        
+          <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+      </div>
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table Of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="Qiyang Zuo" />
+          <p class="site-author-name">Qiyang Zuo</p>
+        </div>
+        <p class="site-description motion-element"></p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            
+              <span class="site-state-item-count">3</span>
+              <span class="site-state-item-name">categories</span>
+              
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">tags</span>
+              
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+              <a href="https://github.com/kid1412z" target="_blank">GitHub</a>
+            </span>
+            
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java集合框架核心接口"><span class="nav-number">1.</span> <span class="nav-text">Java集合框架核心接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Iterable"><span class="nav-number">1.1.</span> <span class="nav-text">Iterable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Collection"><span class="nav-number">1.2.</span> <span class="nav-text">Collection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Set"><span class="nav-number">1.3.</span> <span class="nav-text">Set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SortedSet"><span class="nav-number">1.4.</span> <span class="nav-text">SortedSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NavigableSet"><span class="nav-number">1.5.</span> <span class="nav-text">NavigableSet</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#List"><span class="nav-number">1.6.</span> <span class="nav-text">List</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Queue"><span class="nav-number">1.7.</span> <span class="nav-text">Queue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BlockingQueue"><span class="nav-number">1.8.</span> <span class="nav-text">BlockingQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TransferQueue"><span class="nav-number">1.9.</span> <span class="nav-text">TransferQueue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deque"><span class="nav-number">1.10.</span> <span class="nav-text">Deque</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BlockingDeque"><span class="nav-number">1.11.</span> <span class="nav-text">BlockingDeque</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Map"><span class="nav-number">1.12.</span> <span class="nav-text">Map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SortedMap"><span class="nav-number">1.13.</span> <span class="nav-text">SortedMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NavigableMap"><span class="nav-number">1.14.</span> <span class="nav-text">NavigableMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ConcurrentMap"><span class="nav-number">1.15.</span> <span class="nav-text">ConcurrentMap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ConcurrentNavigableMap"><span class="nav-number">1.16.</span> <span class="nav-text">ConcurrentNavigableMap</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">2.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2015
+  <span class="author">Qiyang Zuo</span> &nbsp;|&nbsp; Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.content img').each(function () {
+        var $image = $(this);
+        var $imageWrapLink = $image.parent('a');
+
+        if ($imageWrapLink.size() < 1) {
+          $imageWrapLink = $image.wrap('<a href="' + this.getAttribute('src') + '"></a>').parent('a');
+        }
+        $imageWrapLink.addClass('fancybox');
+      });
+    });
+    $('.fancybox').fancybox({
+      helpers: {
+        overlay: {
+          locked: false
+        }
+      }
+    });
+  </script>
+
+
+  <script type="text/javascript">
+  function hasMobileUA () {
+    var nav = window.navigator;
+    var ua = nav.userAgent;
+    var pa = /iPad|iPhone|Android|Opera Mini|BlackBerry|webOS|UCWEB|Blazer|PSP|IEMobile|Symbian/g;
+
+    return pa.test(ua);
+  }
+
+  function isDesktop () {
+    return screen.width > 991 && !hasMobileUA();
+  }
+
+  function isTablet () {
+    return screen.width < 992 && screen.width > 767 && hasMobileUA();
+  }
+
+  function isMobile () {
+    return screen.width < 767 && hasMobileUA();
+  }
+
+  function escapeSelector (selector) {
+    return selector.replace(/[!"$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&")
+  }
+</script>
+
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" id="motion.global">
+  $(document).ready(function () {
+    var body = $('body');
+    var isSidebarVisible = false;
+    var sidebarToggle = $('.sidebar-toggle');
+    var sidebarToggleLine1st = $('.sidebar-toggle-line-first')
+    var sidebarToggleLine2nd = $('.sidebar-toggle-line-middle');
+    var sidebarToggleLine3rd = $('.sidebar-toggle-line-last');
+    var sidebar = $('.sidebar');
+
+    var SIDEBAR_WIDTH = '320px';
+    var SIDEBAR_DISPLAY_DURATION = 300;
+
+    var sidebarToogleLineStatusInit = {width: '100%', opacity: 1, left: 0, rotateZ: 0, top: 0};
+
+    var sidebarToggleLine1stStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine1stStatusArrow = {width: '50%', rotateZ: '-45deg', top: '2px'};
+    var sidebarToogleLine1stStatusClose = {width: '100%', rotateZ: '-45deg', top: '5px'};
+
+    var sidebarToggleLine2ndStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine2ndStatusArrow = {width: '90%'};
+    var sidebarToogleLine2ndStatusClose = {opacity: 0};
+
+    var sidebarToggleLine3rdStatusInit = sidebarToogleLineStatusInit;
+    var sidebarToggleLine3rdStatusArrow = {width: '50%', rotateZ: '45deg', top: '-2px'};
+    var sidebarToogleLine3rdStatusClose = {width: '100%', rotateZ: '45deg', top: '-5px'};
+
+    LogoAndMenuMotion();
+    sidebatToggleMotion();
+    postsListMotion();
+    backToTopMotion();
+
+
+    $(document)
+      .on('sidebar.isShowing', function () {
+        isDesktop() && body.velocity(
+          {paddingRight: SIDEBAR_WIDTH},
+          SIDEBAR_DISPLAY_DURATION
+        );
+        sidebarContentMotion();
+      })
+      .on('sidebar.isHiding', function () {});
+
+    function LogoAndMenuMotion() {
+      $.Velocity.RunSequence([
+        { e: $('.brand'), p: { opacity: 1 }, o: { duration: 100 } },
+        { e: $('.logo'), p: { opacity: 1, top: 0 }, o: { duration: 50} },
+        
+        { e: $('.logo-line-before i'), p: { translateX: "100%" }, o: { duration: 500, sequenceQueue: false } },
+        { e: $('.logo-line-after i'), p: { translateX: "-100%" }, o: { duration: 500, sequenceQueue: false } },
+        
+        { e: $('.site-title'), p: { opacity: 1, top: 0 }, o: { duration: 200 } }
+      ]);
+      $('.menu-item').velocity('transition.slideDownIn', {display: null});
+    }
+
+
+    function backToTopMotion () {
+      var b2top = $('.back-to-top');
+      b2top.on('click', function () {
+        body.velocity('scroll');
+      });
+    }
+
+    function sidebarShowMotion () {
+
+      sidebarToggleLine1st.velocity(sidebarToogleLine1stStatusClose);
+      sidebarToggleLine2nd.velocity(sidebarToogleLine2ndStatusClose);
+      sidebarToggleLine3rd.velocity(sidebarToogleLine3rdStatusClose);
+
+      sidebar.velocity({width: SIDEBAR_WIDTH}, {
+        display: 'block',
+        duration: SIDEBAR_DISPLAY_DURATION,
+        complete: function () {
+          sidebar.addClass('sidebar-active');
+          sidebar.trigger('sidebar.didShow');
+        }
+      });
+      sidebar.trigger('sidebar.isShowing');
+    }
+
+    function sidebarHideMotion () {
+      isDesktop() && body.velocity({paddingRight: 0});
+      sidebar.velocity('reverse');
+
+      sidebarToggleLine1st.velocity(sidebarToggleLine1stStatusInit);
+      sidebarToggleLine2nd.velocity(sidebarToggleLine2ndStatusInit);
+      sidebarToggleLine3rd.velocity(sidebarToggleLine3rdStatusInit);
+
+      sidebar.removeClass('sidebar-active');
+      sidebar.trigger('sidebar.isHiding');
+    };
+
+    function sidebarContentMotion () {
+      $('.sidebar .motion-element').velocity(
+        'transition.slideRightIn',
+        {stagger: 50, drag: true}
+      );
+    }
+
+    function postsListMotion () {
+      var postMotionOptions = window.postMotionOptions || {stagger: 300, drag: true};
+      $('.post').velocity('transition.slideDownIn', postMotionOptions);
+    }
+
+    function sidebatToggleMotion () {
+      sidebarToggle.on('click', function () {
+        isSidebarVisible ? sidebarHideMotion() : sidebarShowMotion();
+        isSidebarVisible = !isSidebarVisible;
+      });
+
+      sidebarToggle.hover(function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusArrow);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusArrow);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusArrow);
+      }, function () {
+        if (isSidebarVisible) {return}
+        sidebarToggleLine1st.velocity('stop').velocity(sidebarToggleLine1stStatusInit);
+        sidebarToggleLine2nd.velocity('stop').velocity(sidebarToggleLine2ndStatusInit);
+        sidebarToggleLine3rd.velocity('stop').velocity(sidebarToggleLine3rdStatusInit);
+      });
+    }
+  });
+
+</script>
+
+
+
+
+
+  
+  
+<script type="text/javascript" id="bootstrap.scrollspy.custom">
+  /* ========================================================================
+  * Bootstrap: scrollspy.js v3.3.2
+  * http://getbootstrap.com/javascript/#scrollspy
+  * ========================================================================
+  * Copyright 2011-2015 Twitter, Inc.
+  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+  * ======================================================================== */
+
+  /**
+   * Custom by iissnan
+   *
+   * - Add a `clear.bs.scrollspy` event.
+   * - Esacpe targets selector.
+   */
+
+
+  +function ($) {
+    'use strict';
+
+    // SCROLLSPY CLASS DEFINITION
+    // ==========================
+
+    function ScrollSpy(element, options) {
+      this.$body          = $(document.body)
+      this.$scrollElement = $(element).is(document.body) ? $(window) : $(element)
+      this.options        = $.extend({}, ScrollSpy.DEFAULTS, options)
+      this.selector       = (this.options.target || '') + ' .nav li > a'
+      this.offsets        = []
+      this.targets        = []
+      this.activeTarget   = null
+      this.scrollHeight   = 0
+
+      this.$scrollElement.on('scroll.bs.scrollspy', $.proxy(this.process, this))
+      this.refresh()
+      this.process()
+    }
+
+    ScrollSpy.VERSION  = '3.3.2'
+
+    ScrollSpy.DEFAULTS = {
+      offset: 10
+    }
+
+    ScrollSpy.prototype.getScrollHeight = function () {
+      return this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
+    }
+
+    ScrollSpy.prototype.refresh = function () {
+      var that          = this
+      var offsetMethod  = 'offset'
+      var offsetBase    = 0
+
+      this.offsets      = []
+      this.targets      = []
+      this.scrollHeight = this.getScrollHeight()
+
+      if (!$.isWindow(this.$scrollElement[0])) {
+        offsetMethod = 'position'
+        offsetBase   = this.$scrollElement.scrollTop()
+      }
+
+      this.$body
+        .find(this.selector)
+        .map(function () {
+          var $el   = $(this)
+          var href  = $el.data('target') || $el.attr('href')
+          var $href = /^#./.test(href) && $(escapeSelector(href)) // Need to escape selector.
+
+          return ($href
+            && $href.length
+            && $href.is(':visible')
+            && [[$href[offsetMethod]().top + offsetBase, href]]) || null
+        })
+        .sort(function (a, b) { return a[0] - b[0] })
+        .each(function () {
+          that.offsets.push(this[0])
+          that.targets.push(this[1])
+        })
+
+
+    }
+
+    ScrollSpy.prototype.process = function () {
+      var scrollTop    = this.$scrollElement.scrollTop() + this.options.offset
+      var scrollHeight = this.getScrollHeight()
+      var maxScroll    = this.options.offset + scrollHeight - this.$scrollElement.height()
+      var offsets      = this.offsets
+      var targets      = this.targets
+      var activeTarget = this.activeTarget
+      var i
+
+      if (this.scrollHeight != scrollHeight) {
+        this.refresh()
+      }
+
+      if (scrollTop >= maxScroll) {
+        return activeTarget != (i = targets[targets.length - 1]) && this.activate(i)
+      }
+
+      if (activeTarget && scrollTop < offsets[0]) {
+        $(this.selector).trigger('clear.bs.scrollspy')  // Add a custom event.
+        this.activeTarget = null
+        return this.clear()
+      }
+
+      for (i = offsets.length; i--;) {
+        activeTarget != targets[i]
+          && scrollTop >= offsets[i]
+          && (!offsets[i + 1] || scrollTop <= offsets[i + 1])
+          && this.activate(targets[i])
+      }
+    }
+
+    ScrollSpy.prototype.activate = function (target) {
+      this.activeTarget = target
+
+      this.clear()
+
+      var selector = this.selector +
+        '[data-target="' + target + '"],' +
+        this.selector + '[href="' + target + '"]'
+
+      var active = $(selector)
+        .parents('li')
+        .addClass('active')
+
+      if (active.parent('.dropdown-menu').length) {
+        active = active
+          .closest('li.dropdown')
+          .addClass('active')
+      }
+
+      active.trigger('activate.bs.scrollspy')
+    }
+
+    ScrollSpy.prototype.clear = function () {
+      $(this.selector)
+        .parentsUntil(this.options.target, '.active')
+        .removeClass('active')
+    }
+
+
+    // SCROLLSPY PLUGIN DEFINITION
+    // ===========================
+
+    function Plugin(option) {
+      return this.each(function () {
+        var $this   = $(this)
+        var data    = $this.data('bs.scrollspy')
+        var options = typeof option == 'object' && option
+
+        if (!data) $this.data('bs.scrollspy', (data = new ScrollSpy(this, options)))
+        if (typeof option == 'string') data[option]()
+      })
+    }
+
+    var old = $.fn.scrollspy
+
+    $.fn.scrollspy             = Plugin
+    $.fn.scrollspy.Constructor = ScrollSpy
+
+
+    // SCROLLSPY NO CONFLICT
+    // =====================
+
+    $.fn.scrollspy.noConflict = function () {
+      $.fn.scrollspy = old
+      return this
+    }
+
+
+    // SCROLLSPY DATA-API
+    // ==================
+
+    $(window).on('load.bs.scrollspy.data-api', function () {
+      $('[data-spy="scroll"]').each(function () {
+        var $spy = $(this)
+        Plugin.call($spy, $spy.data())
+      })
+    })
+
+  }(jQuery);
+</script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if ($tocContent.length > 0 && $tocContent.html().trim().length > 0 && isDesktop()) {
+        setTimeout(function () {
+          $('.sidebar-toggle').trigger('click');
+        }, 800);
+      }
+    });
+  </script>
+
+
+
+
+  
+
+  
+  
+  
+
+  
+
+    
+      
+    
+
+    <script type="text/javascript">
+      var disqus_shortname = 'zuoqycom';
+      var disqus_identifier = '2015/05/06/java-containers-interfaces/';
+      var disqus_url = 'http://zuoqy.com/2015/05/06/java-containers-interfaces/';
+
+      (function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }());
+    </script>
+  
+
+
+
+
+  
+  <script type="text/javascript">
+    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+        function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='//www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+    ga('create','UA-53494336-3');ga('send','pageview');
+  </script>
+
+</body>
+</html>
