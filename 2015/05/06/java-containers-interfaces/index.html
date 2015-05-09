@@ -147,34 +147,33 @@ public <span class="keyword">interface</span> <span class="type">Iterable</span>
 </code></pre><h3 id="Collection">Collection</h3><p>一组对象的集合。没有规定对象的顺序（如果有）和是否允许重复。Java平台不提供此接口的任何直接实现，但提供了更具体的子接口，如Set和List实现。</p>
 <ul>
 <li>一般实现Collection子接口的类需要提供两个标准构造方法：1.无参构造方法（用于创建空集合）2.只有一个Collection类型参数的构造方法（用于创建一个集合副本）。这虽然不是硬性的规定（接口无法限定构造方法），但是每个实现类都遵循了这个原则。</li>
-<li><p>对不支持的操作，应当抛出<em>UnsupportedOperationException</em></p>
-<p>  public interface Collection<e> extends Iterable<e> {</e></e></p>
-<pre><code><span class="comment">// Query Operations</span>
-<span class="function"><span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>;
-<span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>;
-<span class="function"><span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;
-Iterator&lt;E&gt; iterator();   <span class="comment">//from Iterable</span>
-Object[] toArray();
-&lt;T&gt; T[] toArray(T[] a);
-
-<span class="comment">// Modification Operations</span>
-<span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
-<span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;
-
-<span class="comment">// Bulk Operations</span>
-<span class="function"><span class="keyword">boolean</span> <span class="title">containsAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
-<span class="function"><span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(Collection&lt;? <span class="keyword">extends</span> E&gt; c)</span></span>;
-<span class="function"><span class="keyword">boolean</span> <span class="title">removeAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
-<span class="function"><span class="keyword">boolean</span> <span class="title">retainAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
-<span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span>;
-
-<span class="comment">// Comparison and hashing</span>
-<span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span></span>;
-<span class="function"><span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;
-</code></pre><p>  }</p>
-</li>
+<li>对不支持的操作，应当抛出<em>UnsupportedOperationException</em></li>
 </ul>
-<p>这里引入一个小插曲：为什么Collection.add()方法使用了泛型，而remove()方法却使用了Object类型的参数？答案参见这里：<br><a href="http://stackoverflow.com/questions/104799/why-arent-java-collections-remove-methods-generic" target="_blank" rel="external">Why aren’t Java Collections remove methods generic?</a><br><a href="http://smallwig.blogspot.jp/2007/12/why-does-setcontains-take-object-not-e.html" target="_blank" rel="external">Why does Set.contains() take an Object, not an E?</a><br>总结起来有以下几方面的原因：</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Collection</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Iterable</span>&lt;<span class="title">E</span>&gt; </span>{
+    <span class="comment">// Query Operations</span>
+    <span class="function"><span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;
+    <span class="function">Iterator&lt;E&gt; <span class="title">iterator</span><span class="params">()</span></span>;   <span class="comment">//from Iterable</span>
+    Object[] toArray();
+    &lt;T&gt; T[] toArray(T[] a);
+
+    <span class="comment">// Modification Operations</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;
+
+    <span class="comment">// Bulk Operations</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">containsAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(Collection&lt;? extends E&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">removeAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">retainAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span>;
+
+    <span class="comment">// Comparison and hashing</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;
+}
+</code></pre><p>这里引入一个小插曲：为什么Collection.add()方法使用了泛型，而remove()方法却使用了Object类型的参数？答案参见这里：<br><a href="http://stackoverflow.com/questions/104799/why-arent-java-collections-remove-methods-generic" target="_blank" rel="external">Why aren’t Java Collections remove methods generic?</a><br><a href="http://smallwig.blogspot.jp/2007/12/why-does-setcontains-take-object-not-e.html" target="_blank" rel="external">Why does Set.contains() take an Object, not an E?</a><br>总结起来有以下几方面的原因：</p>
 <ul>
 <li>当且仅当你需要防止Collection被破坏的时候，才考虑使用泛型约束<blockquote>
 <p>Actually, it’s very simple! If add() took a wrong object, it would break the collection. It would contain things it’s not supposed to! That is not the case for remove(), or contains(). Incidentally, that basic rule — using type parameters to prevent actual damage to the collection only — is followed absolutely consistently in the whole library. –  Kevin Bourrillion</p>
@@ -320,198 +319,42 @@ public interface SortedSet&lt;<span class="keyword">E</span>&gt; extends <span c
     <span class="function"><span class="keyword">int</span> <span class="title">getWaitingConsumerCount</span><span class="params">()</span></span>;
 }
 </code></pre><h3 id="Deque">Deque</h3><p>双端队列，支持在两端插入和删除元素。扩展了Queue接口。</p>
-<pre><code>package java.util;
+<pre><code><span class="keyword">package</span> java.util;
 
-/<span class="keyword">*</span><span class="keyword">*</span>
- <span class="keyword">*</span> A linear collection that supports element insertion and removal at
- <span class="keyword">*</span> both ends.  The name <span class="variable">&lt;i&gt;</span>deque<span class="variable">&lt;/i&gt;</span> is short for <span class="string">"double ended queue"</span>
- <span class="keyword">*</span> and is usually pronounced <span class="string">"deck"</span>.  Most <span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span>
- <span class="keyword">*</span> implementations place no fixed limits on the number of elements
- <span class="keyword">*</span> they may contain, but this interface supports capacity-restricted
- <span class="keyword">*</span> deques as well as those with no fixed size limit.
- <span class="keyword">*</span>
- <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>This interface defines methods to access the elements at both
- <span class="keyword">*</span> ends of the deque.  Methods are provided to insert, remove, and
- <span class="keyword">*</span> examine the element.  Each of these methods exists in two forms:
- <span class="keyword">*</span> one throws an exception if the operation fails, the other returns a
- <span class="keyword">*</span> special value (either <span class="variable">&lt;tt&gt;</span>null<span class="variable">&lt;/tt&gt;</span> or <span class="variable">&lt;tt&gt;</span>false<span class="variable">&lt;/tt&gt;</span>, depending on
- <span class="keyword">*</span> the operation).  The latter form of the insert operation is
- <span class="keyword">*</span> designed specifically for use with capacity-restricted
- <span class="keyword">*</span> <span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span> implementations; in most implementations, insert
- <span class="keyword">*</span> operations cannot fail.
- <span class="keyword">*</span>
- <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>The twelve methods described above are summarized in the
- <span class="keyword">*</span> following table:
- <span class="keyword">*</span>
- <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>
- <span class="keyword">*</span> <span class="variable">&lt;table BORDER CELLPADDING=3 CELLSPACING=1&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span><span class="variable">&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER COLSPAN = 2&gt;</span> <span class="variable">&lt;b&gt;</span>First Element (Head)<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER COLSPAN = 2&gt;</span> <span class="variable">&lt;b&gt;</span>Last Element (Tail)<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span><span class="variable">&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER&gt;</span><span class="variable">&lt;em&gt;</span>Throws exception<span class="variable">&lt;/em&gt;</span><span class="variable">&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER&gt;</span><span class="variable">&lt;em&gt;</span>Special value<span class="variable">&lt;/em&gt;</span><span class="variable">&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER&gt;</span><span class="variable">&lt;em&gt;</span>Throws exception<span class="variable">&lt;/em&gt;</span><span class="variable">&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER&gt;</span><span class="variable">&lt;em&gt;</span>Special value<span class="variable">&lt;/em&gt;</span><span class="variable">&lt;/td&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span><span class="variable">&lt;b&gt;</span>Insert<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #addFirst addFirst(e)}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #offerFirst offerFirst(e)}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #addLast addLast(e)}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #offerLast offerLast(e)}&lt;/td&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span><span class="variable">&lt;b&gt;</span>Remove<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #removeFirst removeFirst()}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #pollFirst pollFirst()}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #removeLast removeLast()}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #pollLast pollLast()}&lt;/td&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span><span class="variable">&lt;b&gt;</span>Examine<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #getFirst getFirst()}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #peekFirst peekFirst()}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #getLast getLast()}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #peekLast peekLast()}&lt;/td&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
- <span class="keyword">*</span> <span class="variable">&lt;/table&gt;</span>
- <span class="keyword">*</span>
- <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>This interface extends the {<span class="comment">@link Queue} interface.  When a deque is</span>
- <span class="keyword">*</span> used as a queue, FIFO (First-In-First-Out) behavior results.  Elements are
- <span class="keyword">*</span> added at the end of the deque and removed from the beginning.  The methods
- <span class="keyword">*</span> inherited from the <span class="variable">&lt;tt&gt;</span>Queue<span class="variable">&lt;/tt&gt;</span> interface are precisely equivalent to
- <span class="keyword">*</span> <span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span> methods as indicated in the following table:
- <span class="keyword">*</span>
- <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>
- <span class="keyword">*</span> <span class="variable">&lt;table BORDER CELLPADDING=3 CELLSPACING=1&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER&gt;</span> <span class="variable">&lt;b&gt;</span><span class="variable">&lt;tt&gt;</span>Queue<span class="variable">&lt;/tt&gt;</span> Method<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER&gt;</span> <span class="variable">&lt;b&gt;</span>Equivalent <span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span> Method<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link java.util.Queue#add add(e)}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #addLast addLast(e)}&lt;/td&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link java.util.Queue#offer offer(e)}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #offerLast offerLast(e)}&lt;/td&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link java.util.Queue#remove remove()}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #removeFirst removeFirst()}&lt;/td&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link java.util.Queue#poll poll()}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #pollFirst pollFirst()}&lt;/td&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link java.util.Queue#element element()}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #getFirst getFirst()}&lt;/td&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link java.util.Queue#peek peek()}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #peek peekFirst()}&lt;/td&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
- <span class="keyword">*</span> <span class="variable">&lt;/table&gt;</span>
- <span class="keyword">*</span>
- <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>Deques can also be used as LIFO (Last-In-First-Out) stacks.  This
- <span class="keyword">*</span> interface should be used in preference to the legacy {<span class="comment">@link Stack} class.</span>
- <span class="keyword">*</span> <span class="keyword">When</span> a deque is used as a stack, elements are pushed and popped from the
- <span class="keyword">*</span> beginning of the deque.  Stack methods are precisely equivalent to
- <span class="keyword">*</span> <span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span> methods as indicated in the table below:
- <span class="keyword">*</span>
- <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>
- <span class="keyword">*</span> <span class="variable">&lt;table BORDER CELLPADDING=3 CELLSPACING=1&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER&gt;</span> <span class="variable">&lt;b&gt;</span>Stack Method<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td ALIGN=CENTER&gt;</span> <span class="variable">&lt;b&gt;</span>Equivalent <span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span> Method<span class="variable">&lt;/b&gt;</span><span class="variable">&lt;/td&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #push push(e)}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #addFirst addFirst(e)}&lt;/td&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #pop pop()}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #removeFirst removeFirst()}&lt;/td&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;tr&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #peek peek()}&lt;/td&gt;</span>
- <span class="keyword">*</span>    <span class="variable">&lt;td&gt;</span>{<span class="comment">@link #peekFirst peekFirst()}&lt;/td&gt;</span>
- <span class="keyword">*</span>  <span class="variable">&lt;/tr&gt;</span>
- <span class="keyword">*</span> <span class="variable">&lt;/table&gt;</span>
- <span class="keyword">*</span>
- <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>Note that the {<span class="comment">@link #peek peek} method works equally well when</span>
- <span class="keyword">*</span> a deque is used as a queue or a stack; in either case, elements are
- <span class="keyword">*</span> drawn from the beginning of the deque.
- <span class="keyword">*</span>
- <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>This interface provides two methods to remove interior
- <span class="keyword">*</span> elements, {<span class="comment">@link #removeFirstOccurrence removeFirstOccurrence} and</span>
- <span class="keyword">*</span> {<span class="comment">@link #removeLastOccurrence removeLastOccurrence}.</span>
- <span class="keyword">*</span>
- <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>Unlike the {<span class="comment">@link List} interface, this interface does not</span>
- <span class="keyword">*</span> provide support for indexed access to elements.
- <span class="keyword">*</span>
- <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>While <span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span> implementations are not strictly required
- <span class="keyword">*</span> to prohibit the insertion of null elements, they are strongly
- <span class="keyword">*</span> encouraged to do so.  Users of any <span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span> implementations
- <span class="keyword">*</span> that do allow null elements are strongly encouraged <span class="variable">&lt;i&gt;</span>not<span class="variable">&lt;/i&gt;</span> to
- <span class="keyword">*</span> take advantage of the ability to insert nulls.  This is so because
- <span class="keyword">*</span> <span class="variable">&lt;tt&gt;</span>null<span class="variable">&lt;/tt&gt;</span> is used as a special return value by various methods
- <span class="keyword">*</span> to indicated that the deque is empty.
- <span class="keyword">*</span>
- <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span><span class="variable">&lt;tt&gt;</span>Deque<span class="variable">&lt;/tt&gt;</span> implementations generally do not define
- <span class="keyword">*</span> element-based versions of the <span class="variable">&lt;tt&gt;</span>equals<span class="variable">&lt;/tt&gt;</span> and <span class="variable">&lt;tt&gt;</span>hashCode<span class="variable">&lt;/tt&gt;</span>
- <span class="keyword">*</span> methods, but instead inherit the identity-based versions from class
- <span class="keyword">*</span> <span class="variable">&lt;tt&gt;</span>Object<span class="variable">&lt;/tt&gt;</span>.
- <span class="keyword">*</span>
- <span class="keyword">*</span> <span class="variable">&lt;p&gt;</span>This interface is a member of the <span class="variable">&lt;a
- * href="{@docRoot}/../technotes/guides/collections/index.html"&gt;</span> Java Collections
- <span class="keyword">*</span> Framework<span class="variable">&lt;/a&gt;</span>.
- <span class="keyword">*</span>
- <span class="keyword">*</span> <span class="comment">@author Doug Lea</span>
- <span class="keyword">*</span> <span class="comment">@author Josh Bloch</span>
- <span class="keyword">*</span> <span class="comment">@since  1.6</span>
- <span class="keyword">*</span> <span class="comment">@param &lt;E&gt; the type of elements held in this collection</span>
- <span class="keyword">*</span>/
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Deque</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; </span>{
+    <span class="function"><span class="keyword">void</span> <span class="title">addFirst</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">void</span> <span class="title">addLast</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">offerFirst</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">offerLast</span><span class="params">(E e)</span></span>;
+    <span class="function">E <span class="title">removeFirst</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">removeLast</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">pollFirst</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">pollLast</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">getFirst</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">getLast</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">peekFirst</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">peekLast</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">removeFirstOccurrence</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">removeLastOccurrence</span><span class="params">(Object o)</span></span>;
 
-public interface Deque<span class="variable">&lt;E&gt;</span> extends Queue<span class="variable">&lt;E&gt;</span> {
-    void addFirst(E e);
-    void addLast(E e);
-    boolean offerFirst(E e);
-    boolean offerLast(E e);
-    E removeFirst();
-    E removeLast();
-    E pollFirst();
-    E pollLast();
-    E getFirst();
-    E getLast();
-    E peekFirst();
-    E peekLast();
-    boolean removeFirstOccurrence(Object o);
-    boolean removeLastOccurrence(Object o);
+    <span class="comment">// *** Queue methods ***</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e)</span></span>;
+    <span class="function">E <span class="title">remove</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">poll</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">element</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">peek</span><span class="params">()</span></span>;
 
-    // <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> Queue methods <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>
-    boolean add(E e);
-    boolean offer(E e);
-    E remove();
-    E poll();
-    E element();
-    E peek();
+    <span class="comment">// *** Stack methods ***</span>
+    <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(E e)</span></span>;
+    <span class="function">E <span class="title">pop</span><span class="params">()</span></span>;
 
-    // <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> Stack methods <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>
-    void push(E e);
-    E pop();
-
-    // <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span> Collection methods <span class="keyword">*</span><span class="keyword">*</span><span class="keyword">*</span>
-    boolean remove(Object o);
-    boolean contains(Object o);
-    public int size();
-    Iterator<span class="variable">&lt;E&gt;</span> iterator();
-    Iterator<span class="variable">&lt;E&gt;</span> descendingIterator();
+    <span class="comment">// *** Collection methods ***</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>;
+    <span class="function">Iterator&lt;E&gt; <span class="title">iterator</span><span class="params">()</span></span>;
+    <span class="function">Iterator&lt;E&gt; <span class="title">descendingIterator</span><span class="params">()</span></span>;
 }
 </code></pre><h3 id="BlockingDeque">BlockingDeque</h3><p>阻塞双端队列</p>
 <h3 id="Map">Map</h3><p>键值映射，每个键对应一个值。</p>
