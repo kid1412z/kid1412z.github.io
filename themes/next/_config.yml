@@ -1,8 +1,8 @@
 menu:
   home: /
-  #categories: /categories
+  categories: /categories
   archives: /archives
-#  tags: /tags
+  tags: /tags
   #about: /about
 
 # Place your favicon.ico to /source directory.
@@ -65,3 +65,4 @@ version: 0.4.2
 
 social:
   GitHub: https://github.com/kid1412z
+  Douban: http://www.douban.com/people/64844277/
