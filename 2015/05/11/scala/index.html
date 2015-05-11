@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="DP,wikioi,动态规划," />
+  <meta name="keywords" content="scala," />
 
 
 
@@ -31,7 +31,7 @@
 
 
 
-  <title> 1576 最长严格上升子序列 // Q.Y Zuo Believes </title>
+  <title> Scala // Q.Y Zuo Believes </title>
 </head>
 
 <body>
@@ -110,7 +110,7 @@
           
           
             
-              1576 最长严格上升子序列
+              Scala
             
           
         </h1>
@@ -118,28 +118,17 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2013-11-12
+          Posted on 2015-05-11
         </span>
 
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/coding-gym/">coding gym</a>
-
-              
-              
-
-            
-          </span>
         
 
         
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2013/11/12/1576-longest-inc-subseq/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/11/12/1576-longest-inc-subseq/"></span>
+            <a href="/2015/05/11/scala/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/05/11/scala/"></span>
             </a>
           </span>
           
@@ -153,31 +142,31 @@
       
 
       
-        <h2 id="题目描述_Description"><a href="http://www.wikioi.com/problem/1576/" target="_blank" rel="external">题目描述 Description</a></h2><p>非常经典的问题，拿来给大家练手了。<br>序列 { 1,2,…,n } 的一个子序列是指序列 { i1, i2, ……, ik },其中 1&lt;=i1 &lt; i2 &lt; …… &lt; ik&lt;=n, 序列 { a1, a2, ……, an } 的一个子序列是指序列 { ai1, ai2, ……, aik },其中 { i1, i2, ……, ik } 是 { 1, 2, ……, n } 的一个子序列.同时,称 k 为此子序列的长度.<br>如果 { ai1, ai2, ……, aik } 满足 ai1 ≤ ai2 ≤ …… ≤ aik,则称之为上升子序列.如果不等号都是严格成立的,则称之为严格上升子序列.同理,如果前面不等关系全部取相反方向,则称之为下降子序列和严格下降子序列.<br>长度最长的上升子序列称为最长上升子序列.本问题对于给定的整数序列,请求出其最长严格上升子序列的长度</p>
+        <p><strong>摘要</strong>：Scala语言要点<br><strong>Abstract</strong>: Simple Scala</p>
 <a id="more"></a>
-<p><strong>输入描述 Input Description</strong><br>第一行，一个整数N。<br>第二行 ，N个整数（N &lt; = 5000）<br><strong>输出描述 Output Description</strong><br>输出K的极大值，即最长严格上升子序列的长度<br>样例输入 Sample Input<br>5<br>9 3 6 2 7<br>样例输出 Sample Output<br>3<br>数据范围及提示 Data Size &amp; Hint<br>【样例解释】<br>最长严格上升子序列为3,6,7</p>
-<h2 id="思路">思路</h2><ol>
-<li>子问题描述：用dp[i] 表示到i位置为止，最长严格上升子序列的长度,a[i] 为数组中的元素</li>
-<li>状态转换： 对于0&lt;=j &lt; i 先求出符合a[j] &lt; a[i] 的最大子序列长度，a[i] = max(a[j]) + 1;<br>因此： dp[i] = max(dp[j]+1. dp[i]) 0&lt;=j &lt; i &amp;&amp; a[j] &lt; a[i]</li>
-</ol>
-<h2 id="代码示例">代码示例</h2><pre><code><span class="function"><span class="keyword">int</span> <span class="title">lis</span><span class="params">(<span class="keyword">int</span> *a, <span class="keyword">int</span> n)</span>
-</span>{
-    <span class="keyword">int</span> res = <span class="number">1</span>;
-    <span class="keyword">int</span> dp[<span class="number">5009</span>]={<span class="number">1</span>};
-    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++) {
-        dp[i] = <span class="number">1</span>;
-        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++) {
-            <span class="keyword">if</span> (a[j] &lt; a[i]) {
-                dp[i] = max(dp[i], dp[j] + <span class="number">1</span>);
-            }
-        }
-        <span class="keyword">if</span>(dp[i] &gt; res){
-            res = dp[i];
-        }
+<h2 id="声明变量和值">声明变量和值</h2><pre><code><span class="variable"><span class="keyword">val</span> value</span> = <span class="number">7</span> <span class="comment">//声明值（常量，无法改变）</span>
+<span class="variable"><span class="keyword">var</span> variable</span> = <span class="number">7</span> <span class="comment">//声明变量</span>
+</code></pre><h2 id="赋值语句">赋值语句</h2><p>赋值语句没有值</p>
+<pre><code><span class="variable">y =</span> <span class="number">1</span> // 值是()
+<span class="variable">x =</span> <span class="variable">y =</span> <span class="number">1</span> //  <span class="variable">x =</span> () ; <span class="variable">y =</span> <span class="number">1</span>
+</code></pre><h2 id="控制结构">控制结构</h2><h3 id="条件表达式">条件表达式</h3><p>条件表达式也有值，if/else没有覆盖到的返回<em>无用值</em>(Unit类，等同于void，用<em>()</em>表示)</p>
+<pre><code><span class="variable"><span class="keyword">val</span> s</span> = <span class="keyword">if</span> (x &gt; <span class="number">0</span>) <span class="number">1</span> <span class="keyword">else</span> -<span class="number">1</span> <span class="comment">//所有值都有定义</span>
+<span class="keyword">if</span> (x &gt; <span class="number">0</span>) <span class="number">1</span>  <span class="comment">//else缺失等同于  if (x &gt; 0) 1 else ()</span>
+</code></pre><h3 id="块表达式">块表达式</h3><p>包含在{}之间的语句集合为块表达式，块表达式也有值，取最后一个语句的值。</p>
+<pre><code><span class="variable"><span class="keyword">val</span> distance</span> = {<span class="variable"><span class="keyword">val</span> dx</span> = x - x0; <span class="variable"><span class="keyword">val</span> dy</span> = y - y0; sqrt(dx * dx + dy * dy}
+</code></pre><h3 id="循环">循环</h3><pre><code><span class="function"><span class="title">for</span><span class="params">(i &lt;- 表达式)</span></span> <span class="comment">//遍历右边表达式所有值</span>
+<span class="function"><span class="title">for</span><span class="params">(i &lt;- <span class="number">1</span> to n)</span></span>  <span class="comment">// i = 1,2...n</span>
+<span class="function"><span class="title">for</span><span class="params">(i &lt;- <span class="number">1</span> until n)</span></span> <span class="comment">// i = 1,2...n-1</span>
+</code></pre><p>scala 没有提供 break 和 continue，可以通过以下方式：</p>
+<pre><code>import scala.util.control.Breaks._
+breakable {
+    <span class="keyword">for</span> (<span class="keyword">...</span>) {
+        <span class="keyword">if</span> (<span class="keyword">...</span>) <span class="keyword">break</span>;
+        <span class="keyword">...</span>
     }
-    <span class="keyword">return</span> res;
 }
-</code></pre>
+</code></pre><p>但以上方式使用异常抛出和捕获的形式实现，效率较低。</p>
+
       
     </div>
 
@@ -185,11 +174,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/DP/"> #DP </a>
-          
-            <a href="/tags/wikioi/"> #wikioi </a>
-          
-            <a href="/tags/动态规划/"> #动态规划 </a>
+            <a href="/tags/scala/"> #scala </a>
           
         </div>
       
@@ -198,13 +183,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/04/16/java-memory1/">Java内存区域</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2013/11/11/3027-segment-coverage2/">3027 线段覆盖 2</a>
+              <a href="/2015/05/06/java-containers-interfaces/">Java容器类——接口</a>
             
           </div>
         </div>
@@ -313,7 +296,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目描述_Description"><span class="nav-number">1.</span> <span class="nav-text">题目描述 Description</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思路"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码示例"><span class="nav-number">3.</span> <span class="nav-text">代码示例</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#声明变量和值"><span class="nav-number">1.</span> <span class="nav-text">声明变量和值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#赋值语句"><span class="nav-number">2.</span> <span class="nav-text">赋值语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制结构"><span class="nav-number">3.</span> <span class="nav-text">控制结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#条件表达式"><span class="nav-number">3.1.</span> <span class="nav-text">条件表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#块表达式"><span class="nav-number">3.2.</span> <span class="nav-text">块表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环"><span class="nav-number">3.3.</span> <span class="nav-text">循环</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -872,8 +855,8 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'zuoqycom';
-      var disqus_identifier = '2013/11/12/1576-longest-inc-subseq/';
-      var disqus_url = 'http://zuoqy.com/2013/11/12/1576-longest-inc-subseq/';
+      var disqus_identifier = '2015/05/11/scala/';
+      var disqus_url = 'http://zuoqy.com/2015/05/11/scala/';
 
       (function(){
         var dsq = document.createElement('script');
