@@ -78,3 +78,11 @@ google_site_verification: GgXgmwmTNbQickN-preU_L3kzGIRPxHZeE43Gxd_Fo8
 deploy:
   type: git
   repo: https://github.com/kid1412z/kid1412z.github.io.git
+
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+
+sitemap:
+    path: sitemap.xml
