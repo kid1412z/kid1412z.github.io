@@ -1,0 +1,808 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><![CDATA[Q.Y Zuo Believes]]></title>
+  
+  <link href="/atom.xml" rel="self"/>
+  <link href="http://zuoqy.com/"/>
+  <updated>2015-05-11T14:15:53.000Z</updated>
+  <id>http://zuoqy.com/</id>
+  
+  <author>
+    <name><![CDATA[Qiyang Zuo]]></name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Scala]]></title>
+    <link href="http://zuoqy.com/2015/05/11/scala/"/>
+    <id>http://zuoqy.com/2015/05/11/scala/</id>
+    <published>2015-05-11T12:34:22.000Z</published>
+    <updated>2015-05-11T14:15:53.000Z</updated>
+    <content type="html"><![CDATA[<p><strong>摘要</strong>：Scala语言要点<br><strong>Abstract</strong>: Simple Scala</p>
+<a id="more"></a>
+<h2 id="声明变量和值">声明变量和值</h2><pre><code><span class="variable"><span class="keyword">val</span> value</span> = <span class="number">7</span> <span class="comment">//声明值（常量，无法改变）</span>
+<span class="variable"><span class="keyword">var</span> variable</span> = <span class="number">7</span> <span class="comment">//声明变量</span>
+</code></pre><h2 id="赋值语句">赋值语句</h2><p>赋值语句没有值</p>
+<pre><code><span class="variable">y =</span> <span class="number">1</span> // 值是()
+<span class="variable">x =</span> <span class="variable">y =</span> <span class="number">1</span> //  <span class="variable">x =</span> () ; <span class="variable">y =</span> <span class="number">1</span>
+</code></pre><h2 id="控制结构">控制结构</h2><h3 id="条件表达式">条件表达式</h3><p>条件表达式也有值，if/else没有覆盖到的返回<em>无用值</em>(Unit类，等同于void，用<em>()</em>表示)</p>
+<pre><code><span class="variable"><span class="keyword">val</span> s</span> = <span class="keyword">if</span> (x &gt; <span class="number">0</span>) <span class="number">1</span> <span class="keyword">else</span> -<span class="number">1</span> <span class="comment">//所有值都有定义</span>
+<span class="keyword">if</span> (x &gt; <span class="number">0</span>) <span class="number">1</span>  <span class="comment">//else缺失等同于  if (x &gt; 0) 1 else ()</span>
+</code></pre><h3 id="块表达式">块表达式</h3><p>包含在{}之间的语句集合为块表达式，块表达式也有值，取最后一个语句的值。</p>
+<pre><code><span class="variable"><span class="keyword">val</span> distance</span> = {<span class="variable"><span class="keyword">val</span> dx</span> = x - x0; <span class="variable"><span class="keyword">val</span> dy</span> = y - y0; sqrt(dx * dx + dy * dy}
+</code></pre><h3 id="循环">循环</h3><pre><code><span class="function"><span class="title">for</span><span class="params">(i &lt;- 表达式)</span></span> <span class="comment">//遍历右边表达式所有值</span>
+<span class="function"><span class="title">for</span><span class="params">(i &lt;- <span class="number">1</span> to n)</span></span>  <span class="comment">// i = 1,2...n</span>
+<span class="function"><span class="title">for</span><span class="params">(i &lt;- <span class="number">1</span> until n)</span></span> <span class="comment">// i = 1,2...n-1</span>
+</code></pre><p>scala 没有提供 break 和 continue，可以通过以下方式：</p>
+<pre><code>import scala.util.control.Breaks._
+breakable {
+    <span class="keyword">for</span> (<span class="keyword">...</span>) {
+        <span class="keyword">if</span> (<span class="keyword">...</span>) <span class="keyword">break</span>;
+        <span class="keyword">...</span>
+    }
+}
+</code></pre><p>但以上方式使用异常抛出和捕获的形式实现，效率较低。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><strong>摘要</strong>：Scala语言要点<br><strong>Abstract</strong>: Simple Scala</p>]]>
+    
+    </summary>
+    
+      <category term="scala" scheme="http://zuoqy.com/tags/scala/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Java容器类——接口]]></title>
+    <link href="http://zuoqy.com/2015/05/06/java-containers-interfaces/"/>
+    <id>http://zuoqy.com/2015/05/06/java-containers-interfaces/</id>
+    <published>2015-05-06T07:20:43.000Z</published>
+    <updated>2015-05-09T16:30:53.000Z</updated>
+    <content type="html"><![CDATA[<p><strong>摘要</strong>：本文介绍了Java容器类的核心接口，以及容器泛型的使用原则。<br><strong>Abstract</strong>: This article describes the core interfaces of Java Collections, and the principles of using generic.</p>
+<a id="more"></a>
+<p>JDK java.util 包中包含了几个重要的集合类(主要包含实现了Collection接口和Map接口的类)，从本篇文章开始总结JDK中自带的几个重要的容器类。</p>
+<h2 id="Java集合框架核心接口">Java集合框架核心接口</h2><p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-06/1.png" alt="The core collection interfaces"></p>
+<h3 id="Iterable">Iterable</h3><p>实现了Iterable接口的类，可以使用foreach语法迭代，从JDK1.5开始加入。</p>
+<pre><code>package java.lang;
+
+<span class="keyword">import</span> java.util.<span class="type">Iterator</span>;
+
+public <span class="keyword">interface</span> <span class="type">Iterable</span>&lt;T&gt; {
+
+    /**
+     * <span class="type">Returns</span> an <span class="keyword">iterator</span> over a <span class="type">set</span> <span class="keyword">of</span> elements <span class="keyword">of</span> <span class="keyword">type</span> T.
+     *
+     * @<span class="keyword">return</span> an <span class="type">Iterator</span>.
+     */
+    <span class="type">Iterator</span>&lt;T&gt; <span class="keyword">iterator</span>();
+}
+</code></pre><h3 id="Collection">Collection</h3><p>一组对象的集合。没有规定对象的顺序（如果有）和是否允许重复。Java平台不提供此接口的任何直接实现，但提供了更具体的子接口，如Set和List实现。</p>
+<ul>
+<li>一般实现Collection子接口的类需要提供两个标准构造方法：1.无参构造方法（用于创建空集合）2.只有一个Collection类型参数的构造方法（用于创建一个集合副本）。这虽然不是硬性的规定（接口无法限定构造方法），但是每个实现类都遵循了这个原则。</li>
+<li>对不支持的操作，应当抛出<em>UnsupportedOperationException</em></li>
+</ul>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Collection</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Iterable</span>&lt;<span class="title">E</span>&gt; </span>{
+    <span class="comment">// Query Operations</span>
+    <span class="function"><span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;
+    <span class="function">Iterator&lt;E&gt; <span class="title">iterator</span><span class="params">()</span></span>;   <span class="comment">//from Iterable</span>
+    Object[] toArray();
+    &lt;T&gt; T[] toArray(T[] a);
+
+    <span class="comment">// Modification Operations</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;
+
+    <span class="comment">// Bulk Operations</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">containsAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(Collection&lt;? extends E&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">removeAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">retainAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span>;
+
+    <span class="comment">// Comparison and hashing</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;
+}
+</code></pre><p>这里引入一个小插曲：为什么Collection.add()方法使用了泛型，而remove()方法却使用了Object类型的参数？答案参见这里：<br><a href="http://stackoverflow.com/questions/104799/why-arent-java-collections-remove-methods-generic" target="_blank" rel="external">Why aren’t Java Collections remove methods generic?</a><br><a href="http://smallwig.blogspot.jp/2007/12/why-does-setcontains-take-object-not-e.html" target="_blank" rel="external">Why does Set.contains() take an Object, not an E?</a><br>总结起来有以下几方面的原因：</p>
+<ul>
+<li>当且仅当你需要防止Collection被破坏的时候，才考虑使用泛型约束<blockquote>
+<p>Actually, it’s very simple! If add() took a wrong object, it would break the collection. It would contain things it’s not supposed to! That is not the case for remove(), or contains(). Incidentally, that basic rule — using type parameters to prevent actual damage to the collection only — is followed absolutely consistently in the whole library. –  Kevin Bourrillion</p>
+</blockquote>
+</li>
+<li>在remove上使用泛型限制，可能auto boxing问题</li>
+</ul>
+<p>另外，泛型是编译期的静态类型检查，所以以下的泛型使用方式也是错误的：</p>
+<pre><code><span class="keyword">List</span><span class="preprocessor">&lt;?</span> extends MinCut&gt; <span class="keyword">list</span> = <span class="keyword">new</span> ArrayList&lt;MinCut&gt;();
+</code></pre><p>这将导致除了null，list里不能插入任何对象。</p>
+<h3 id="Set">Set</h3><p>数学集合的抽象，不允许元素重复。</p>
+<pre><code><span class="keyword">package</span> java.util;
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Set</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Collection</span>&lt;<span class="title">E</span>&gt; </span>{
+    <span class="comment">// Query Operations</span>
+    <span class="function"><span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;
+    Object[] toArray();
+    &lt;T&gt; T[] toArray(T[] a);
+
+    <span class="comment">// Modification Operations</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;
+
+    <span class="comment">// Bulk Operations</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">containsAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(Collection&lt;? <span class="keyword">extends</span> E&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">retainAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">removeAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span>;
+
+    <span class="comment">// Comparison and hashing</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;
+}
+</code></pre><h3 id="SortedSet">SortedSet</h3><p>有序对象集合。SortedSet中的对象会根据Comparable接口或提供的Comparator进行排序。</p>
+<pre><code>package java.util;
+
+public interface SortedSet&lt;<span class="keyword">E</span>&gt; extends <span class="keyword">Set</span>&lt;<span class="keyword">E</span>&gt; {
+    Comparator&lt;? super <span class="keyword">E</span>&gt; comparator();
+    SortedSet&lt;<span class="keyword">E</span>&gt; subSet(<span class="keyword">E</span> fromElement, <span class="keyword">E</span> toElement);
+    SortedSet&lt;<span class="keyword">E</span>&gt; headSet(<span class="keyword">E</span> toElement);
+    SortedSet&lt;<span class="keyword">E</span>&gt; tailSet(<span class="keyword">E</span> fromElement);
+    <span class="keyword">E</span> first();
+    <span class="keyword">E</span> last();
+}
+</code></pre><h3 id="NavigableSet">NavigableSet</h3><p>继承SortedSet并且其中的元素可以按照升序和降序访问。</p>
+<pre><code>package java.util;
+
+public interface SortedSet&lt;<span class="keyword">E</span>&gt; extends <span class="keyword">Set</span>&lt;<span class="keyword">E</span>&gt; {
+    Comparator&lt;? super <span class="keyword">E</span>&gt; comparator();
+    SortedSet&lt;<span class="keyword">E</span>&gt; subSet(<span class="keyword">E</span> fromElement, <span class="keyword">E</span> toElement);
+    SortedSet&lt;<span class="keyword">E</span>&gt; headSet(<span class="keyword">E</span> toElement);
+    SortedSet&lt;<span class="keyword">E</span>&gt; tailSet(<span class="keyword">E</span> fromElement);
+    <span class="keyword">E</span> first();
+    <span class="keyword">E</span> last();
+}
+</code></pre><h3 id="List">List</h3><p>有序集合，也称为序列（<em>Sequence</em>）。一般情况下允许元素重复。允许按位置访问。</p>
+<pre><code><span class="keyword">package</span> java.util;
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Collection</span>&lt;<span class="title">E</span>&gt; </span>{
+    <span class="comment">// Query Operations</span>
+    <span class="function"><span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;
+    <span class="function">Iterator&lt;E&gt; <span class="title">iterator</span><span class="params">()</span></span>;
+    Object[] toArray();
+    &lt;T&gt; T[] toArray(T[] a);
+
+    <span class="comment">// Modification Operations</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;
+
+    <span class="comment">// Bulk Modification Operations</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">containsAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(Collection&lt;? extends E&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(<span class="keyword">int</span> index, Collection&lt;? extends E&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">removeAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">retainAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
+    <span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span>;
+
+    <span class="comment">// Comparison and hashing</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;
+
+    <span class="comment">// Positional Access Operations</span>
+    <span class="function">E <span class="title">get</span><span class="params">(<span class="keyword">int</span> index)</span></span>;
+    <span class="function">E <span class="title">set</span><span class="params">(<span class="keyword">int</span> index, E element)</span></span>;
+    <span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> index, E element)</span></span>;
+    <span class="function">E <span class="title">remove</span><span class="params">(<span class="keyword">int</span> index)</span></span>;
+
+    <span class="comment">// Search Operations</span>
+    <span class="function"><span class="keyword">int</span> <span class="title">indexOf</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">int</span> <span class="title">lastIndexOf</span><span class="params">(Object o)</span></span>;
+
+    <span class="comment">// List Iterators</span>
+    <span class="function">ListIterator&lt;E&gt; <span class="title">listIterator</span><span class="params">()</span></span>;
+    <span class="function">ListIterator&lt;E&gt; <span class="title">listIterator</span><span class="params">(<span class="keyword">int</span> index)</span></span>;
+
+    <span class="comment">// View</span>
+    <span class="function">List&lt;E&gt; <span class="title">subList</span><span class="params">(<span class="keyword">int</span> fromIndex, <span class="keyword">int</span> toIndex)</span></span>;
+}
+</code></pre><h3 id="Queue">Queue</h3><p>专为保存加工前的元素的集合。除了基本的Collection操作，队列提供额外的插入、提取和检查操作。</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Collection</span>&lt;<span class="title">E</span>&gt; </span>{
+    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e)</span></span>;
+    <span class="function">E <span class="title">remove</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">poll</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">element</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">peek</span><span class="params">()</span></span>;
+}
+</code></pre><h3 id="BlockingQueue">BlockingQueue</h3><p>阻塞队列</p>
+<pre><code><span class="keyword">package</span> java.util.concurrent;
+
+<span class="keyword">import</span> java.util.Collection;
+<span class="keyword">import</span> java.util.Queue;
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BlockingQueue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; </span>{
+    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">void</span> <span class="title">put</span><span class="params">(E e)</span> <span class="keyword">throws</span> InterruptedException</span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e, <span class="keyword">long</span> timeout, TimeUnit unit)</span>
+        <span class="keyword">throws</span> InterruptedException</span>;
+    <span class="function">E <span class="title">take</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;
+    <span class="function">E <span class="title">poll</span><span class="params">(<span class="keyword">long</span> timeout, TimeUnit unit)</span>
+        <span class="keyword">throws</span> InterruptedException</span>;
+    <span class="function"><span class="keyword">int</span> <span class="title">remainingCapacity</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">int</span> <span class="title">drainTo</span><span class="params">(Collection&lt;? <span class="keyword">super</span> E&gt; c)</span></span>;
+    <span class="function"><span class="keyword">int</span> <span class="title">drainTo</span><span class="params">(Collection&lt;? <span class="keyword">super</span> E&gt; c, <span class="keyword">int</span> maxElements)</span></span>;
+}
+</code></pre><h3 id="TransferQueue">TransferQueue</h3><p>生产者可以等待消费者接收元素的阻塞队列。</p>
+<pre><code><span class="keyword">package</span> java.util.concurrent;
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TransferQueue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">BlockingQueue</span>&lt;<span class="title">E</span>&gt; </span>{
+    <span class="function"><span class="keyword">boolean</span> <span class="title">tryTransfer</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">void</span> <span class="title">transfer</span><span class="params">(E e)</span> <span class="keyword">throws</span> InterruptedException</span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">tryTransfer</span><span class="params">(E e, <span class="keyword">long</span> timeout, TimeUnit unit)</span>
+        <span class="keyword">throws</span> InterruptedException</span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">hasWaitingConsumer</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">int</span> <span class="title">getWaitingConsumerCount</span><span class="params">()</span></span>;
+}
+</code></pre><h3 id="Deque">Deque</h3><p>双端队列，支持在两端插入和删除元素。扩展了Queue接口。</p>
+<pre><code><span class="keyword">package</span> java.util;
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Deque</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; </span>{
+    <span class="function"><span class="keyword">void</span> <span class="title">addFirst</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">void</span> <span class="title">addLast</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">offerFirst</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">offerLast</span><span class="params">(E e)</span></span>;
+    <span class="function">E <span class="title">removeFirst</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">removeLast</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">pollFirst</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">pollLast</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">getFirst</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">getLast</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">peekFirst</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">peekLast</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">removeFirstOccurrence</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">removeLastOccurrence</span><span class="params">(Object o)</span></span>;
+
+    <span class="comment">// *** Queue methods ***</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e)</span></span>;
+    <span class="function">E <span class="title">remove</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">poll</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">element</span><span class="params">()</span></span>;
+    <span class="function">E <span class="title">peek</span><span class="params">()</span></span>;
+
+    <span class="comment">// *** Stack methods ***</span>
+    <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(E e)</span></span>;
+    <span class="function">E <span class="title">pop</span><span class="params">()</span></span>;
+
+    <span class="comment">// *** Collection methods ***</span>
+    <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;
+    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>;
+    <span class="function">Iterator&lt;E&gt; <span class="title">iterator</span><span class="params">()</span></span>;
+    <span class="function">Iterator&lt;E&gt; <span class="title">descendingIterator</span><span class="params">()</span></span>;
+}
+</code></pre><h3 id="BlockingDeque">BlockingDeque</h3><p>阻塞双端队列</p>
+<h3 id="Map">Map</h3><p>键值映射，每个键对应一个值。</p>
+<h3 id="SortedMap">SortedMap</h3><p>按Key有序的Map</p>
+<h3 id="NavigableMap">NavigableMap</h3><p>继承SortedMap，并且其中的元素可以按照Key升序和降序访问。</p>
+<h3 id="ConcurrentMap">ConcurrentMap</h3><p>putIfAbsent、remove和replace方法都具有原子性.</p>
+<h3 id="ConcurrentNavigableMap">ConcurrentNavigableMap</h3><p>元素可以按照Key升序和降序访问。</p>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://docs.oracle.com/javase/7/docs/technotes/guides/collections/reference.html" target="_blank" rel="external">Outline of the Collections Framework</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><strong>摘要</strong>：本文介绍了Java容器类的核心接口，以及容器泛型的使用原则。<br><strong>Abstract</strong>: This article describes the core interfaces of Java Collections, and the principles of using generic.</p>]]>
+    
+    </summary>
+    
+      <category term="Collections" scheme="http://zuoqy.com/tags/Collections/"/>
+    
+      <category term="Java" scheme="http://zuoqy.com/tags/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Java finalize方法]]></title>
+    <link href="http://zuoqy.com/2015/04/20/java-finalize/"/>
+    <id>http://zuoqy.com/2015/04/20/java-finalize/</id>
+    <published>2015-04-20T02:49:05.000Z</published>
+    <updated>2015-04-20T08:47:01.000Z</updated>
+    <content type="html"><![CDATA[<p><strong>摘要</strong>：本文简单介绍了Java finalize方法，以及运行时是否可能查看对象的GC状态。<br><strong>Abstract</strong>: This article introduces the Java finalize method, and whether it is possible to view the status of the runtime object GC.<br><a id="more"></a></p>
+<p>即使在<a href="/2015/04/20/java-gc-reference/">可达性分析算法</a>中不可达的对象，也并非是非死不可，对象要被回收，至少需要以下两个过程：</p>
+<ul>
+<li>根据是否有必要执行finalize方法进行第一次筛选（如果finalize方法没有被覆盖或者JVM已经调用过，视为<em>没有必要执行</em>）。如果对象被判定为有必要执行finalize方法，则被加入F-Queue队列，稍后由JVM建立的低优先级的Finalizer线程调用其finalize方法（为防止死循环或者调用缓慢阻塞队列中其他对象，JVM不保证等待调用执行完毕）。</li>
+<li>对象在finalize方法中，与GC Roots重新建立了连接，则不会被回收；否则对象将被回收。</li>
+</ul>
+<p><em>注</em>：任何对象的finalize方法都只会被JVM调用一次，如果对象面临第二次回收过程，finalize方法将不会被再次调用。</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FinalizeTest</span> </span>{
+    <span class="keyword">public</span> <span class="keyword">static</span> FinalizeTest SAVE_HOOK = <span class="keyword">null</span>;
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">alive</span><span class="params">()</span> </span>{
+        System.out.println(<span class="string">"I am alive!"</span>);
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">die</span><span class="params">()</span> </span>{
+        System.out.println(<span class="string">"Die!"</span>);
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>{
+        <span class="keyword">super</span>.finalize();
+        SAVE_HOOK = <span class="keyword">this</span>;
+        System.out.println(<span class="string">"finalize()"</span>);
+    }
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>{
+        SAVE_HOOK = <span class="keyword">new</span> FinalizeTest();
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) {
+            gc();
+            <span class="keyword">if</span> (SAVE_HOOK != <span class="keyword">null</span>) {
+                SAVE_HOOK.alive();
+            } <span class="keyword">else</span> {
+                die();
+            }
+        }
+    }
+
+    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">gc</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>{
+        SAVE_HOOK = <span class="keyword">null</span>;
+        System.gc();
+        Thread.sleep(<span class="number">500</span>);
+    }
+}
+</code></pre><p><em>以上代码验证了finalize()方法只会被JVM调用一次，但不能说明对象是否在运行过程中是否已经被回收掉！换句话说，在运行时判断一个对象是否已经被回收掉是<strong>不可能</strong>的（<a href="http://stackoverflow.com/questions/4223956/check-if-object-can-be-fetched-by-garbage-collector" target="_blank" rel="external">参见这里</a>）。</em></p>
+<p><em>finalize方法可以被try-finally替代，并处理的更好更及时。</em></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><strong>摘要</strong>：本文简单介绍了Java finalize方法，以及运行时是否可能查看对象的GC状态。<br><strong>Abstract</strong>: This article introduces the Java finalize method, and whether it is possible to view the status of the runtime object GC.<br>]]>
+    
+    </summary>
+    
+      <category term="GC" scheme="http://zuoqy.com/tags/GC/"/>
+    
+      <category term="JVM" scheme="http://zuoqy.com/tags/JVM/"/>
+    
+      <category term="Java" scheme="http://zuoqy.com/tags/Java/"/>
+    
+      <category term="Java" scheme="http://zuoqy.com/categories/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Java内存回收算法和引用类型]]></title>
+    <link href="http://zuoqy.com/2015/04/20/java-gc-reference/"/>
+    <id>http://zuoqy.com/2015/04/20/java-gc-reference/</id>
+    <published>2015-04-20T01:52:24.000Z</published>
+    <updated>2015-04-20T07:24:45.000Z</updated>
+    <content type="html"><![CDATA[<p><strong>摘要</strong>：<em>本文介绍了两种内存回收算法和4种Java引用类型。</em><br><strong>Abstract</strong>: <em>This article introduced two kinds of Garbage Collection Algorithm and four kinds of reference type in Java.</em></p>
+<a id="more"></a>
+<h2 id="内存回收算法">内存回收算法</h2><h3 id="引用计数(Reference_Counting)">引用计数(Reference Counting)</h3><p>给对象添加一个引用计数器，当有一个对象引用它，计数值加1；当引用失效时，计数值减1；任何时刻，计数为0的对象可回收。<br>主流的JVM并没有选用该算法，主要原因是：<em>无法解决循环引用的问题</em>。</p>
+<h3 id="可达性分析(Reachability_Analysis)">可达性分析(Reachability Analysis)</h3><p>通过一系列的称为<em>GC Roots</em>的的对象作为起始点，向下搜索（搜索路径为<strong>引用链</strong> (<em>Reference Chain</em>)），当对象没有任何引用链与GC Roots相连时，对象可回收。<br>一般以下对象可作为GC Roots：</p>
+<ul>
+<li>虚拟机栈中本地变量表所引用的对象</li>
+<li>方法区中类静态属性所引用的对象</li>
+<li>方法区中常量引用的对象</li>
+<li>本地方法栈引用的对象</li>
+</ul>
+<h2 id="引用(Reference)">引用(Reference)</h2><p>JDK1.2之前<strong>引用</strong>的定义：如果内存中存储的数值是另一块内存的起始地址，则这块内存代表一个引用。<br>JDK1.2之后，<strong>引用</strong>引用分为强引用(Strong Reference)、软引用(Soft Reference)、弱引用(Weak Reference)、虚引用(Phantom Reference)四种（依次减弱）。</p>
+<h3 id="强引用">强引用</h3><p>类似Object obj = new Object()这类引用，只要引用还存在，对象就不会被回收。</p>
+<h3 id="软引用">软引用</h3><p>用来描述有用但非必须的对象。OOM之前，JVM会在这些对象范围中进行第二次回收。</p>
+<h3 id="弱引用">弱引用</h3><p>弱引用指向的对象只能生存到下一次垃圾回收之前，无论当前内存是否足够，都会回收掉被弱引用关联的对象。</p>
+<h3 id="虚引用">虚引用</h3><p>虚引用也称为幽灵引用或者幻影引用，它使最弱的一种引用关系。虚引用的存在，不会对对象的生存时间构成影响，也无法通过虚引用取得对象实例。<br>为对象设置虚引用管理的唯一目的是能在这个对象<strong>执行了finalize方法，准备好被垃圾回收时</strong>(不能在运行时通过幽灵引用判断对象是否已经被GC[2])收到一个系统通知。</p>
+<blockquote>
+<p>A Phantom Reference can’t tell when an Object was GCed. It is just a signal which says that an Object has been finalized and is ready for GC.</p>
+</blockquote>
+<h2 id="Reference">Reference</h2><ul>
+<li><em>《深入理解Java虚拟机》</em></li>
+<li><em><a href="http://stackoverflow.com/questions/4223956/check-if-object-can-be-fetched-by-garbage-collector" target="_blank" rel="external">有关是否能在运行时得知对象是否已经被GC在StackOverflow上的讨论</a></em></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><strong>摘要</strong>：<em>本文介绍了两种内存回收算法和4种Java引用类型。</em><br><strong>Abstract</strong>: <em>This article introduced two kinds of Garbage Collection Algorithm and four kinds of reference type in Java.</em></p>]]>
+    
+    </summary>
+    
+      <category term="GC" scheme="http://zuoqy.com/tags/GC/"/>
+    
+      <category term="JVM" scheme="http://zuoqy.com/tags/JVM/"/>
+    
+      <category term="Java" scheme="http://zuoqy.com/tags/Java/"/>
+    
+      <category term="Java" scheme="http://zuoqy.com/categories/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Java内存溢出(Java OutOfMemoryError)]]></title>
+    <link href="http://zuoqy.com/2015/04/17/java-memory2/"/>
+    <id>http://zuoqy.com/2015/04/17/java-memory2/</id>
+    <published>2015-04-17T06:59:40.000Z</published>
+    <updated>2015-04-20T03:04:25.000Z</updated>
+    <content type="html"><![CDATA[<p><strong>摘要</strong>：<em>本文介绍了Java内存溢出的四种形式：Java堆溢出、虚拟机栈和本地方法栈溢出、方法区和运行时常量池溢出、直接内存溢出。并对JVM堆外内存使用做了简单了介绍。</em><br><strong>Abstract</strong>: <em>This article describes the four types of memory overflow in Java: Java heap overflow, virtual machine stack and local method stack overflow, the method area and runtime constant pool overflow, direct memory overflow. And a simple introduction of off-heap memory usage.</em></p>
+<a id="more"></a>
+<h2 id="Java堆溢出">Java堆溢出</h2><pre><code><span class="comment">//JVM args: -Xms20m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError</span>
+public <span class="class"><span class="keyword">class</span> <span class="title">TestMemLeak</span> </span>{
+    public <span class="literal">static</span> <span class="keyword">void</span> main(<span class="built_in">String</span>[] args) {
+        <span class="built_in">List</span>&lt;<span class="built_in">Object</span>&gt; list = <span class="keyword">new</span> ArrayList&lt;<span class="built_in">Object</span>&gt;();
+        <span class="keyword">while</span>(<span class="keyword">true</span>) {
+            list.add(<span class="keyword">new</span> <span class="built_in">Object</span>());
+        }
+    }
+}
+</code></pre><p>-XX:+HeapDumpOnOutOfMemoryError 设置JVM在出现OOM时，对Heap进行转储，可以使用Eclipse MemoryAnalyzer 进行分析。<br>如果对运行中的服务进行dump，可以使用jmap命令：</p>
+<pre><code>jmap -dump:live,<span class="keyword">format</span>=b,<span class="keyword">file</span>=heap.bin
+</code></pre><p>使用MAT分析结果会有如下的描述：<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-17/1.png" alt="oom"><br>帮助查找问题所在</p>
+<h2 id="虚拟机栈和本地方法栈溢出">虚拟机栈和本地方法栈溢出</h2><p>HotSpot JVM不区分虚拟机栈和本地方法栈，虽然存在-Xoss设置，但是<em>实际上是无效的</em>。栈容量只有-Xss来确定。<br>虚拟机规范中规定了虚拟机栈和本地方法栈的两种异常：</p>
+<h3 id="StackOverflowError:">StackOverflowError:</h3><p>线程请求的栈深度大于虚拟机允许的最大深度。</p>
+<pre><code><span class="comment">//JVM args: -Xss256k (规定最小栈大小是160k)</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TestSOF</span> {
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
+        test();
+    }
+    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">test</span> <span class="params">()</span> </span>{
+        test();
+    }
+}
+</code></pre><h3 id="OutOfMemoryError:">OutOfMemoryError:</h3><p>虚拟机扩展栈的大小时，不能申请到足够的内存空间。可通过不断创建线程的方式，使JVM出现内存溢出的错误。</p>
+<h2 id="方法区和运行时常量池溢出">方法区和运行时常量池溢出</h2><pre><code><span class="comment">//JVM args: -XX:PermSize=2M -XX:MaxPermSize=4M</span>
+public <span class="class"><span class="keyword">class</span> <span class="title">TestConstancePoolOOM</span> </span>{
+    public <span class="literal">static</span> <span class="keyword">void</span> main(<span class="built_in">String</span>[] args) {
+        <span class="built_in">int</span> i = <span class="number">0</span>;
+        <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; list = <span class="keyword">new</span> ArrayList&lt;<span class="built_in">String</span>&gt;();
+        <span class="keyword">while</span>(<span class="keyword">true</span>) {
+            list.add(<span class="built_in">String</span>.valueOf(i++).intern());
+        }
+    }
+}
+</code></pre><p>以上代码在JDK1.6运行时会抛<em>java.lang.OutOfMemoryError: PermGen space</em>错误。Jdk1.7不会出现此错误。<em>TODO</em><br>String.intern方法检查当前String是否在常量池中，如果存在，返回该对象；否则将当前对象放入常量池并返回其引用；</p>
+<h2 id="直接内存溢出">直接内存溢出</h2><p>JVM通过参数 -XX:MaxDirectMemorySize 指定可用直接内存的大小，如果不指定，则默认与-Xms最大对内存大小相同<br>Java使用直接内存有两种方法：一种是使用sun.misc.UnSafe类来申请直接内存；另外就是直接调用nio的ByteBuffer.allocateDirect()方法。</p>
+<h3 id="sun-misc-Unsafe申请直接内存：">sun.misc.Unsafe申请直接内存：</h3><p>直接使用以下代码申请直接内存空间：</p>
+<pre><code><span class="keyword">Unsafe</span> <span class="keyword">unsafe</span> = <span class="keyword">Unsafe</span>.getUnsafe();
+<span class="keyword">unsafe</span>.allocateMemory(<span class="number">1024</span>*<span class="number">1024</span>);
+</code></pre><p>会报如下的错误：</p>
+<pre><code>Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java<span class="class">.lang</span><span class="class">.SecurityException</span>: Unsafe
+    at sun<span class="class">.misc</span><span class="class">.Unsafe</span><span class="class">.getUnsafe</span>(Unsafe<span class="class">.java</span>:<span class="number">90</span>)
+    at DirectMemoryOOM.<span class="function"><span class="title">main</span><span class="params">(DirectMemoryOOM.java:<span class="number">9</span>)</span></span>
+    at sun<span class="class">.reflect</span><span class="class">.NativeMethodAccessorImpl</span><span class="class">.invoke0</span>(Native Method)
+    at sun<span class="class">.reflect</span><span class="class">.NativeMethodAccessorImpl</span><span class="class">.invoke</span>(NativeMethodAccessorImpl<span class="class">.java</span>:<span class="number">57</span>)
+    at sun<span class="class">.reflect</span><span class="class">.DelegatingMethodAccessorImpl</span><span class="class">.invoke</span>(DelegatingMethodAccessorImpl<span class="class">.java</span>:<span class="number">43</span>)
+    at java<span class="class">.lang</span><span class="class">.reflect</span><span class="class">.Method</span><span class="class">.invoke</span>(Method<span class="class">.java</span>:<span class="number">606</span>)
+    at com<span class="class">.intellij</span><span class="class">.rt</span><span class="class">.execution</span><span class="class">.application</span><span class="class">.AppMain</span><span class="class">.main</span>(AppMain<span class="class">.java</span>:<span class="number">140</span>)
+</code></pre><p>官方的解释是：</p>
+<blockquote>
+<p>Although the class and all methods are public, use of this class is limited because only trusted code can obtain instances of it.</p>
+</blockquote>
+<p>解决方案就是使用反射：</p>
+<pre><code>Field <span class="variable">f =</span> Unsafe.class.getDeclaredField(<span class="string">"theUnsafe"</span>);
+f.setAccessible(<span class="constant">true</span>);
+Unsafe <span class="variable">us =</span> (Unsafe) f.get(<span class="constant">null</span>);
+long <span class="variable">p =</span> us.allocateMemory(<span class="number">1000</span>);
+us.freeMemory(p);
+</code></pre><p>直接内存溢出代码如下：</p>
+<pre><code><span class="comment">//JVM args: -Xms10m -Xmx10m -XX:MaxDirectMemorySize=10m</span>
+<span class="keyword">public</span> <span class="keyword">class</span> DirectMemoryOOM {
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) <span class="keyword">throws</span> NoSuchFieldException, IllegalAccessException {
+        Field f = Unsafe.<span class="keyword">class</span>.getDeclaredFields()[<span class="number">0</span>];
+        f.setAccessible(<span class="keyword">true</span>);
+        Unsafe us = (Unsafe) f.get(<span class="keyword">null</span>);
+        <span class="keyword">long</span> <span class="keyword">size</span> = <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">1024</span>;
+        <span class="keyword">while</span> (<span class="keyword">true</span>) {
+            <span class="keyword">long</span> p = us.allocateMemory(<span class="keyword">size</span>);
+            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">size</span>; i++) {
+                us.putByte(p + i, <span class="keyword">Byte</span>.MAX_VALUE);
+            }
+        }
+    }
+}
+</code></pre><p>上述代码在MacOS jdk1.7上运行，内存分配会暴涨并开始使用交换分区，但不会报OOM错误。<br>在<a href="http://stackoverflow.com/questions/28670700/java-unsafe-memory-allocation-limit" target="_blank" rel="external">StackOverFlow</a>上的回答是直接调用了操作系统的malloc函数，从而不受虚拟机参数的限制。呃，太凶险了。尽信书不如无书，周志明的《深入理解JAVA虚拟机》也有BUG。</p>
+<h3 id="Java_NIO申请直接内存：">Java NIO申请直接内存：</h3><p>其实有了Java NIO之后，使用直接内存比Unsafe要方便的多：</p>
+<pre><code><span class="comment">//JVM args: -Xms10m -Xmx10m -XX:MaxDirectMemorySize=10m</span>
+<span class="keyword">public</span> <span class="keyword">class</span> DirectMemoryOOM {
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) <span class="keyword">throws</span> NoSuchFieldException, IllegalAccessException {
+        <span class="keyword">int</span> <span class="keyword">size</span> = <span class="number">1024</span> * <span class="number">1024</span>;
+        System.out.<span class="keyword">println</span>(sun.misc.VM.maxDirectMemory());
+        <span class="keyword">while</span> (<span class="keyword">true</span>) {
+            ByteBuffer.allocateDirect(<span class="keyword">size</span>);
+        }
+    }
+}
+</code></pre><p>上面这段程序很快就可以造成OOM错误，JVM退出。翻了一下ByteBuffer.allocateDirect()的实现，里面就是用的Unsafe.allocateMemory()函数。这难道不很奇怪？<br>原来是我没有仔细看，JDK1.7 java.nio.Bits line:123 调用了Bits.reserveMemory()，这个方法对申请内存大小进行了检查，超出之后抛出OOM错误。</p>
+<pre><code><span class="comment">// These methods should be called whenever direct memory is allocated or</span>
+<span class="comment">// freed.  They allow the user to control the amount of direct memory</span>
+<span class="comment">// which a process may access.  All sizes are specified in bytes.</span>
+<span class="keyword">static</span> <span class="keyword">void</span> reserveMemory(<span class="keyword">long</span> <span class="keyword">size</span>, <span class="keyword">int</span> cap) {
+    ...
+    <span class="keyword">synchronized</span> (Bits.<span class="keyword">class</span>) {
+                <span class="keyword">if</span> (totalCapacity + cap &gt; maxMemory)
+                    <span class="keyword">throw</span> <span class="keyword">new</span> OutOfMemoryError(<span class="string">"Direct buffer memory"</span>);
+                reservedMemory += <span class="keyword">size</span>;
+                totalCapacity += cap;
+                <span class="keyword">count</span>++;
+    }
+    ...
+}
+</code></pre><p>并且，在Bits.java中，也有根据-XX:MaxDirectMemorySize=<size>初始化的代码：</size></p>
+<pre><code><span class="comment">// initialization if it is launched with "-XX:MaxDirectMemorySize=&lt;size&gt;".</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="keyword">long</span> maxMemory = VM.maxDirectMemory();
+</code></pre><p>参见：<a href="http://stackoverflow.com/questions/29702028/why-xxmaxdirectmemorysize-cant-limit-unsafe-allocatememory" target="_blank" rel="external">StackOverFlow</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><strong>摘要</strong>：<em>本文介绍了Java内存溢出的四种形式：Java堆溢出、虚拟机栈和本地方法栈溢出、方法区和运行时常量池溢出、直接内存溢出。并对JVM堆外内存使用做了简单了介绍。</em><br><strong>Abstract</strong>: <em>This article describes the four types of memory overflow in Java: Java heap overflow, virtual machine stack and local method stack overflow, the method area and runtime constant pool overflow, direct memory overflow. And a simple introduction of off-heap memory usage.</em></p>]]>
+    
+    </summary>
+    
+      <category term="JVM" scheme="http://zuoqy.com/tags/JVM/"/>
+    
+      <category term="Java" scheme="http://zuoqy.com/tags/Java/"/>
+    
+      <category term="OOM" scheme="http://zuoqy.com/tags/OOM/"/>
+    
+      <category term="Java" scheme="http://zuoqy.com/categories/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Java内存区域]]></title>
+    <link href="http://zuoqy.com/2015/04/16/java-memory1/"/>
+    <id>http://zuoqy.com/2015/04/16/java-memory1/</id>
+    <published>2015-04-16T13:38:41.000Z</published>
+    <updated>2015-04-20T03:04:07.000Z</updated>
+    <content type="html"><![CDATA[<p><strong>摘要</strong>：本文主要介绍了Java运行时数据区域的划分、各个区域的职能、对象内存分配和定位方法。<br><strong>Abstract</strong>: This article describes the division of the Java runtime data area, the functions of the corresponding region, the object memory allocation and positioning methods.</p>
+<a id="more"></a>
+<h2 id="运行时数据区域">运行时数据区域</h2><p>JVM在程序运行过程中，会把内存划分成以下区域：<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-16/1.png" alt="img"></p>
+<h3 id="程序计数器">程序计数器</h3><p>每个线程都有独立存储的程序计数器，互不影响，独立存储，属于<em>线程私有</em>内存。如果线程执行的是Java方法，计数器记录的是正在执行的虚拟机字节指令的地址；如果正在执行的时Native方法，这个计数器的值则为空(Undefined)。<br>此内存区域是唯一一个在JVM规范中没有规定任何OutOfMemoryError情况的区域。</p>
+<h3 id="Java虚拟机栈(Java_Virtual_Machine_Stacks)">Java虚拟机栈(Java Virtual Machine Stacks)</h3><p>虚拟机栈描述的时Java方法执行的内存模型，每个方法在执行的时候都会创建一个栈帧(Stack Frame)用于存储局部变量表、操作数栈、动态链接、方法出口等信息。<br>局部变量表存放了<em>编译期</em>可知的各种基本数据类型、对象引用、和返回地址类型。其所需的内存空间在<em>编译期</em>分配，运行时不会改变局部变量表的大小。<br>异常状况：1）StackOverflowError: 线程请求的栈深度大于JVM允许的深度。2）OutOfMemoryError:虚拟机栈动态扩展的时候无法申请到足够的内存。</p>
+<h3 id="本地方法栈(Native_Method_Stack)">本地方法栈(Native Method Stack)</h3><p>本地方法栈为虚拟机使用到的Native方法提供栈空间，本地方法栈也有上述两种异常情况。</p>
+<h3 id="Java堆">Java堆</h3><p>Java堆是被所有线程共享的一块内存区域，在虚拟机启动时创建。几乎所有的对象实例都在这里分配内存。（逃逸分析和标量替换允许在栈上分配对象内存）<br>Java堆是垃圾收集器管理的主要区域，也被成为GC堆。从内存分代回收的角度看，Java堆可以细分为：新生代和老年代；从内存分配的角度看，Java堆可能分出多个线程私有的分配缓冲区(Thread Local Allocation Buffer, TLAB)</p>
+<h3 id="方法区(Method_Area)">方法区(Method Area)</h3><p>线程共享内存区域，用于存储虚拟机加载的类信息、常量、静态变量、及时编译器编译后的代码等数据。HotSpot JVM用永久代(Permanent Generation)实现方法区，但两者并不等价。但这种实现方法容易导致内存溢出（可通过-XX:MaxPermSize设置永久代上限），新版的JDK1.7 Hotspot 已经把原本放在永久带的字符串常量池移出。<br>这个区域的内存回收主要针对类型的卸载和常量池的回收。异常情况：OutOfMemoryError.</p>
+<h3 id="直接内存(Direct_Memory)">直接内存(Direct Memory)</h3><p>直接内存不是JVM运行时数据区域，但在Java NIO中引入了基于Channel和Buffer的I/O方式，可以直接使用Native函数库分配<em>堆外内存</em>。申请直接内存大小超过限制，同样会有OutOfMemory异常。</p>
+<h3 id="新生对象内存分配方式">新生对象内存分配方式</h3><ul>
+<li>指针碰撞(Bump The Pointer): 指针作为分配和未分配的界限，要求JAVA堆规整。</li>
+<li>空闲列表(Free List): Java堆不规整。</li>
+</ul>
+<p>为了解决以上两种分配方式并发安全问题，可以采用：</p>
+<ul>
+<li>CAS失败重试</li>
+<li>本地线程分配缓冲TLAB (配置参数：-XX:+/-UseTLAB)(只有本地缓冲用完，需要重新分配的时候才需要同步锁定)</li>
+</ul>
+<h2 id="对象的创建">对象的创建</h2><h3 id="对象的内存布局">对象的内存布局</h3><p>对象的内存布局可以分为三块：对象头(Header)、实例数据（Instance Data）、对齐填充（Padding）。</p>
+<h4 id="对象头">对象头</h4><ul>
+<li>运行时数据：HashCode、GC分代、锁状态标识、线程持有的锁、偏向线程ID、偏向时间戳。这部分数据的长度与虚拟机位数相同。官方称为<em>“MarkWord”</em></li>
+<li>类型指针：确定对象是哪个类的实例。（不一定所有的虚拟机都通过保留类型指针来确定对象的类型）</li>
+</ul>
+<h4 id="实例数据">实例数据</h4><p>存放代码中定义的各种类型的字段内容，顺序收到JVM内存分配策略的影响，相同长度的字段往往相邻分配。</p>
+<h4 id="对齐填充">对齐填充</h4><p>Hotspot虚拟机要求对象的大小是8字节的整数倍，不够的用Padding字段补全。</p>
+<h3 id="对象的访问定位">对象的访问定位</h3><ul>
+<li>句柄：reference中包含了对象的句柄地址，句柄中包含对象各部分的地址<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-16/2.png" alt="img"></li>
+<li>直接指针：reference中直接存储对象的地址（Hotspot实现）<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-16/2.png" alt="img"></li>
+</ul>
+<h2 id="References">References</h2><ul>
+<li>图片来自：《深入理解Java虚拟机》</li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><strong>摘要</strong>：本文主要介绍了Java运行时数据区域的划分、各个区域的职能、对象内存分配和定位方法。<br><strong>Abstract</strong>: This article describes the division of the Java runtime data area, the functions of the corresponding region, the object memory allocation and positioning methods.</p>]]>
+    
+    </summary>
+    
+      <category term="JVM" scheme="http://zuoqy.com/tags/JVM/"/>
+    
+      <category term="Java" scheme="http://zuoqy.com/tags/Java/"/>
+    
+      <category term="Java" scheme="http://zuoqy.com/categories/Java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[1576 最长严格上升子序列]]></title>
+    <link href="http://zuoqy.com/2013/11/12/1576-longest-inc-subseq/"/>
+    <id>http://zuoqy.com/2013/11/12/1576-longest-inc-subseq/</id>
+    <published>2013-11-12T04:40:39.000Z</published>
+    <updated>2015-04-21T09:34:14.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="题目描述_Description"><a href="http://www.wikioi.com/problem/1576/" target="_blank" rel="external">题目描述 Description</a></h2><p>非常经典的问题，拿来给大家练手了。<br>序列 { 1,2,…,n } 的一个子序列是指序列 { i1, i2, ……, ik },其中 1&lt;=i1 &lt; i2 &lt; …… &lt; ik&lt;=n, 序列 { a1, a2, ……, an } 的一个子序列是指序列 { ai1, ai2, ……, aik },其中 { i1, i2, ……, ik } 是 { 1, 2, ……, n } 的一个子序列.同时,称 k 为此子序列的长度.<br>如果 { ai1, ai2, ……, aik } 满足 ai1 ≤ ai2 ≤ …… ≤ aik,则称之为上升子序列.如果不等号都是严格成立的,则称之为严格上升子序列.同理,如果前面不等关系全部取相反方向,则称之为下降子序列和严格下降子序列.<br>长度最长的上升子序列称为最长上升子序列.本问题对于给定的整数序列,请求出其最长严格上升子序列的长度</p>
+<a id="more"></a>
+<p><strong>输入描述 Input Description</strong><br>第一行，一个整数N。<br>第二行 ，N个整数（N &lt; = 5000）<br><strong>输出描述 Output Description</strong><br>输出K的极大值，即最长严格上升子序列的长度<br>样例输入 Sample Input<br>5<br>9 3 6 2 7<br>样例输出 Sample Output<br>3<br>数据范围及提示 Data Size &amp; Hint<br>【样例解释】<br>最长严格上升子序列为3,6,7</p>
+<h2 id="思路">思路</h2><ol>
+<li>子问题描述：用dp[i] 表示到i位置为止，最长严格上升子序列的长度,a[i] 为数组中的元素</li>
+<li>状态转换： 对于0&lt;=j &lt; i 先求出符合a[j] &lt; a[i] 的最大子序列长度，a[i] = max(a[j]) + 1;<br>因此： dp[i] = max(dp[j]+1. dp[i]) 0&lt;=j &lt; i &amp;&amp; a[j] &lt; a[i]</li>
+</ol>
+<h2 id="代码示例">代码示例</h2><pre><code><span class="function"><span class="keyword">int</span> <span class="title">lis</span><span class="params">(<span class="keyword">int</span> *a, <span class="keyword">int</span> n)</span>
+</span>{
+    <span class="keyword">int</span> res = <span class="number">1</span>;
+    <span class="keyword">int</span> dp[<span class="number">5009</span>]={<span class="number">1</span>};
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++) {
+        dp[i] = <span class="number">1</span>;
+        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++) {
+            <span class="keyword">if</span> (a[j] &lt; a[i]) {
+                dp[i] = max(dp[i], dp[j] + <span class="number">1</span>);
+            }
+        }
+        <span class="keyword">if</span>(dp[i] &gt; res){
+            res = dp[i];
+        }
+    }
+    <span class="keyword">return</span> res;
+}
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="题目描述_Description"><a href="http://www.wikioi.com/problem/1576/">题目描述 Description</a></h2><p>非常经典的问题，拿来给大家练手了。<br>序列 { 1,2,…,n } 的一个子序列是指序列 { i1, i2, ……, ik },其中 1&lt;=i1 &lt; i2 &lt; …… &lt; ik&lt;=n, 序列 { a1, a2, ……, an } 的一个子序列是指序列 { ai1, ai2, ……, aik },其中 { i1, i2, ……, ik } 是 { 1, 2, ……, n } 的一个子序列.同时,称 k 为此子序列的长度.<br>如果 { ai1, ai2, ……, aik } 满足 ai1 ≤ ai2 ≤ …… ≤ aik,则称之为上升子序列.如果不等号都是严格成立的,则称之为严格上升子序列.同理,如果前面不等关系全部取相反方向,则称之为下降子序列和严格下降子序列.<br>长度最长的上升子序列称为最长上升子序列.本问题对于给定的整数序列,请求出其最长严格上升子序列的长度</p>]]>
+    
+    </summary>
+    
+      <category term="DP" scheme="http://zuoqy.com/tags/DP/"/>
+    
+      <category term="wikioi" scheme="http://zuoqy.com/tags/wikioi/"/>
+    
+      <category term="动态规划" scheme="http://zuoqy.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
+    
+      <category term="coding gym" scheme="http://zuoqy.com/categories/coding-gym/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[3027 线段覆盖 2]]></title>
+    <link href="http://zuoqy.com/2013/11/11/3027-segment-coverage2/"/>
+    <id>http://zuoqy.com/2013/11/11/3027-segment-coverage2/</id>
+    <published>2013-11-11T03:55:17.000Z</published>
+    <updated>2015-04-21T09:29:29.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="题目描述_Description"><a href="http://www.wikioi.com/problem/3027/" target="_blank" rel="external">题目描述 Description</a></h2><p>数轴上有n条线段，线段的两端都是整数坐标，坐标范围在0~1000000，每条线段有一个价值，请从n条线段中挑出若干条线段，使得这些线段两两不覆盖（端点可以重合）且线段价值之和最大。<br>n&lt;=1000</p>
+<a id="more"></a>
+<p>输入描述 Input Description<br>第一行一个整数n，表示有多少条线段。<br>接下来n行每行三个整数, ai bi ci，分别代表第i条线段的左端点ai，右端点bi（保证左端点&lt;右端点）和价值ci。<br>输出描述 Output Description<br>输出能够获得的最大价值<br>样例输入 Sample Input<br>3<br>1 2 1<br>2 3 2<br>1 3 4<br>样例输出 Sample Output<br>4<br>数据范围及提示 Data Size &amp; Hint<br>数据范围<br>对于40%的数据，n≤10；<br>对于100%的数据，n≤1000；<br>0&lt;=ai,bi&lt;=1000000<br>0&lt;=ci&lt;=1000000</p>
+<h2 id="思路：">思路：</h2><p>对线段按照左端点进行排序<br>子问题描述：用v[i] 表示到第i个线段为止的最大价值<br>状态迁移方程： v[i] = max(v[j]) + a[i].value (0&lt;= j &lt; i &amp;&amp; a[j].end &lt;= a[i].start)</p>
+<h2 id="代码示例：">代码示例：</h2><pre><code><span class="built_in">int</span> cmp(<span class="keyword">const</span> <span class="built_in">line</span> lhs, <span class="keyword">const</span> <span class="built_in">line</span> rhs)
+{
+    <span class="keyword">return</span> lhs.start &lt; rhs.start;
+}
+
+<span class="built_in">int</span> cover(<span class="built_in">line</span> *a, <span class="built_in">int</span> n)
+{
+    <span class="built_in">sort</span>(a, a + n, cmp);
+    <span class="built_in">int</span> pmax = <span class="number">0</span>;
+    v[<span class="number">0</span>] = a[<span class="number">0</span>].value;
+    <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">1</span>; i &lt; n; i++) {
+        v[i] = a[i].value;
+        <span class="built_in">int</span> <span class="built_in">max</span> = <span class="number">0</span>;
+        <span class="keyword">for</span> (<span class="built_in">int</span> j = <span class="number">0</span>; j &lt; i; j++) {
+            <span class="keyword">if</span> (a[j].end &lt;= a[i].start &amp;&amp; <span class="built_in">max</span> &lt; v[j]) {
+                <span class="built_in">max</span> = v[j];
+            }
+        }
+        v[i] += <span class="built_in">max</span>;
+        <span class="keyword">if</span> (pmax &lt; v[i]) {
+            pmax = v[i];
+        }
+    }
+    <span class="keyword">return</span> pmax;
+}
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="题目描述_Description"><a href="http://www.wikioi.com/problem/3027/">题目描述 Description</a></h2><p>数轴上有n条线段，线段的两端都是整数坐标，坐标范围在0~1000000，每条线段有一个价值，请从n条线段中挑出若干条线段，使得这些线段两两不覆盖（端点可以重合）且线段价值之和最大。<br>n&lt;=1000</p>]]>
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://zuoqy.com/tags/Algorithm/"/>
+    
+      <category term="DP" scheme="http://zuoqy.com/tags/DP/"/>
+    
+      <category term="动态规划" scheme="http://zuoqy.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
+    
+      <category term="coding gym" scheme="http://zuoqy.com/categories/coding-gym/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[1214 线段覆盖]]></title>
+    <link href="http://zuoqy.com/2013/11/09/1214-segment-coverage/"/>
+    <id>http://zuoqy.com/2013/11/09/1214-segment-coverage/</id>
+    <published>2013-11-09T04:24:01.000Z</published>
+    <updated>2015-04-21T09:29:46.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="题目描述_Description"><a href="http://www.wikioi.com/problem/1214/" target="_blank" rel="external">题目描述 Description</a></h2><p>给定x轴上的N（0&lt;N&lt;100）条线段，每个线段由它的二个端点a_I和b_I确定，I=1,2,……N.这些坐标都是区间（－999，999）的整数。有些线段之间会相互交叠或覆盖。请你编写一个程序，从给出的线段中去掉尽量少的线段，使得剩下的线段两两之间没有内部公共点。所谓的内部公共点是指一个点同时属于两条线段且至少在其中一条线段的内部（即除去端点的部分）。</p>
+<a id="more"></a>
+<p>输入描述 Input Description<br>输入第一行是一个整数N。接下来有N行，每行有二个空格隔开的整数，表示一条线段的二个端点的坐标。<br><strong>输出描述 Output Description</strong><br>输出第一行是一个整数表示最多剩下的线段数。<br><strong>样例输入 Sample Input</strong><br>3<br>6 3<br>1 3<br>2 5<br><strong>样例输出 Sample Output</strong><br>2</p>
+<h2 id="动态规划思路:">动态规划思路:</h2><p>最优子结构：到j为止最多的线段数<br>子问题重叠：用f[j]数组存放重叠计算的子问题</p>
+<ol>
+<li>对输入的数据，把左端点放在左边</li>
+<li>按左端点坐标从小到大排序</li>
+<li>用数组f[j]存放到线段j为止，最多留下的线段数目，初始都是1。</li>
+<li>按顺序扫描线段，如果线段j的左端点大于等于之前线段的右端点，到j最多线段数为f[i] + 1， 如果有多个这样的情况，就取f[i] + 1（i = 1….j-1）中最大的一个。</li>
+</ol>
+<h2 id="代码示例:">代码示例:</h2><pre><code><span class="built_in">int</span> n;
+cin &gt;&gt; n;
+<span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; n; i++){
+    cin &gt;&gt; lines[i].start;
+    cin &gt;&gt; lines[i].end;
+    f[i] = <span class="number">1</span>;
+    <span class="keyword">if</span>(lines[i].start &gt; lines[i].end){
+        swap(lines[i].start, lines[i].end);
+    }
+}
+qsort(lines, n, sizeof(<span class="built_in">line</span>),cmp);
+<span class="keyword">for</span>(<span class="built_in">int</span> j = <span class="number">1</span>; j &lt; n; j++){<span class="comment">//scan all</span>
+    <span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; j; i++){ 
+        <span class="keyword">if</span>(lines[i].end &lt;= lines[j].start){<span class="comment">//如果与前面的不重叠</span>
+            f[j] = <span class="built_in">max</span>(f[j], f[i] + <span class="number">1</span>); <span class="comment">// 取最多的线段数</span>
+        }
+    }
+}
+<span class="built_in">int</span> <span class="built_in">max</span> = <span class="number">0</span>;
+<span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; n; i++){
+    <span class="keyword">if</span>(f[i] &gt; <span class="built_in">max</span>){
+        <span class="built_in">max</span> = f[i];
+    }
+}
+cout &lt;&lt; <span class="built_in">max</span> &lt;&lt; endl;
+</code></pre>]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="题目描述_Description"><a href="http://www.wikioi.com/problem/1214/">题目描述 Description</a></h2><p>给定x轴上的N（0&lt;N&lt;100）条线段，每个线段由它的二个端点a_I和b_I确定，I=1,2,……N.这些坐标都是区间（－999，999）的整数。有些线段之间会相互交叠或覆盖。请你编写一个程序，从给出的线段中去掉尽量少的线段，使得剩下的线段两两之间没有内部公共点。所谓的内部公共点是指一个点同时属于两条线段且至少在其中一条线段的内部（即除去端点的部分）。</p>]]>
+    
+    </summary>
+    
+      <category term="DP" scheme="http://zuoqy.com/tags/DP/"/>
+    
+      <category term="wikioi" scheme="http://zuoqy.com/tags/wikioi/"/>
+    
+      <category term="动态规划" scheme="http://zuoqy.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
+    
+      <category term="coding gym" scheme="http://zuoqy.com/categories/coding-gym/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[动态规划]]></title>
+    <link href="http://zuoqy.com/2013/11/09/dynamic-programming/"/>
+    <id>http://zuoqy.com/2013/11/09/dynamic-programming/</id>
+    <published>2013-11-09T04:09:50.000Z</published>
+    <updated>2015-04-21T10:05:37.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="概念">概念</h2><p>适用于动态规划求解的问题，经过分解得到的问题往往不是相互独立的。若用分治算法来解这类问题，子问题常常被计算多次。动态规划的基本思想是，将计算过的子问题存储到一个表中，来避免重复计算。</p>
+<h2 id="动态规划的基本要素">动态规划的基本要素</h2><p>最优子结构：当问题的最优解包含了其子问题的最优解时，称该问题具有最优子结构的性质。<br>重叠子问题：当采用递归的方式计算问题时，相同的子问题被重复计算多次。</p>
+<h2 id="设计动态规划算法的步骤">设计动态规划算法的步骤</h2><ul>
+<li>找出最优解的性质，并刻画其结构特征</li>
+<li>递归定义最优值</li>
+<li>自底向上的方式计算出最优值</li>
+<li>根据计算最优值时得到的信息，构造最优解。</li>
+</ul>
+<a id="more"></a>
+<h2 id="动态规划专题">动态规划专题</h2><h3 id="序列型DP">序列型DP</h3><ul>
+<li><a href="/2013/11/09/1214-segment-coverage/">线段覆盖</a></li>
+<li><a href="/2013/11/11/3027-segment-coverage2/">3027 线段覆盖 2</a></li>
+<li><a href="/2013/11/12/1576-longest-inc-subseq/">1576 最长严格上升子序列</a></li>
+</ul>
+<h3 id="背包型DP">背包型DP</h3><ul>
+<li><a href="http://curlcoder.com/?p=67" target="_blank" rel="external">0-1 背包问题</a></li>
+<li><a href="http://curlcoder.com/2013/11/18/1068-%E4%B9%8C%E9%BE%9F%E6%A3%8B/" target="_blank" rel="external">1068 乌龟棋</a></li>
+</ul>
+<p>(未完待续)</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="概念">概念</h2><p>适用于动态规划求解的问题，经过分解得到的问题往往不是相互独立的。若用分治算法来解这类问题，子问题常常被计算多次。动态规划的基本思想是，将计算过的子问题存储到一个表中，来避免重复计算。</p>
+<h2 id="动态规划的基本要素">动态规划的基本要素</h2><p>最优子结构：当问题的最优解包含了其子问题的最优解时，称该问题具有最优子结构的性质。<br>重叠子问题：当采用递归的方式计算问题时，相同的子问题被重复计算多次。</p>
+<h2 id="设计动态规划算法的步骤">设计动态规划算法的步骤</h2><ul>
+<li>找出最优解的性质，并刻画其结构特征</li>
+<li>递归定义最优值</li>
+<li>自底向上的方式计算出最优值</li>
+<li>根据计算最优值时得到的信息，构造最优解。</li>
+</ul>]]>
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://zuoqy.com/tags/Algorithm/"/>
+    
+      <category term="DP" scheme="http://zuoqy.com/tags/DP/"/>
+    
+      <category term="动态规划" scheme="http://zuoqy.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
+    
+      <category term="Algorithm" scheme="http://zuoqy.com/categories/Algorithm/"/>
+    
+  </entry>
+  
+</feed>
