@@ -146,6 +146,161 @@
       
         <p><strong>摘要</strong>：Scala语言要点<br><strong>Abstract</strong>: Simple Scala</p>
 <a id="more"></a>
+<h2 id="关键字">关键字</h2><table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">abstract</td>
+<td style="text-align:center">case</td>
+<td style="text-align:center">catch</td>
+<td style="text-align:center">class</td>
+</tr>
+<tr>
+<td style="text-align:center">def</td>
+<td style="text-align:center">do</td>
+<td style="text-align:center">else</td>
+<td style="text-align:center">extends</td>
+</tr>
+<tr>
+<td style="text-align:center">false</td>
+<td style="text-align:center">final</td>
+<td style="text-align:center">finally</td>
+<td style="text-align:center">for</td>
+</tr>
+<tr>
+<td style="text-align:center">forSome</td>
+<td style="text-align:center">if</td>
+<td style="text-align:center">implicit</td>
+<td style="text-align:center">import</td>
+</tr>
+<tr>
+<td style="text-align:center">lazy</td>
+<td style="text-align:center">match</td>
+<td style="text-align:center">new</td>
+<td style="text-align:center">null</td>
+</tr>
+<tr>
+<td style="text-align:center">object</td>
+<td style="text-align:center">override</td>
+<td style="text-align:center">package</td>
+<td style="text-align:center">private</td>
+</tr>
+<tr>
+<td style="text-align:center">protected</td>
+<td style="text-align:center">return</td>
+<td style="text-align:center">sealed</td>
+<td style="text-align:center">super</td>
+</tr>
+<tr>
+<td style="text-align:center">this</td>
+<td style="text-align:center">throw</td>
+<td style="text-align:center">trait</td>
+<td style="text-align:center">try</td>
+</tr>
+<tr>
+<td style="text-align:center">true</td>
+<td style="text-align:center">type</td>
+<td style="text-align:center">val</td>
+<td style="text-align:center">var</td>
+</tr>
+<tr>
+<td style="text-align:center">while</td>
+<td style="text-align:center">with</td>
+<td style="text-align:center">yield</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">-</td>
+<td style="text-align:center">:</td>
+<td style="text-align:center">=</td>
+<td style="text-align:center">=&gt;</td>
+</tr>
+<tr>
+<td style="text-align:center">&lt;-</td>
+<td style="text-align:center">&lt;:</td>
+<td style="text-align:center">&lt;%</td>
+<td style="text-align:center">&gt;:</td>
+</tr>
+<tr>
+<td style="text-align:center">#</td>
+<td style="text-align:center">@</td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<h2 id="数据类型">数据类型</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">dataType</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Byte</td>
+<td style="text-align:center">8 bit signed value. Range from -128 to 127</td>
+</tr>
+<tr>
+<td style="text-align:center">Short</td>
+<td style="text-align:center">16 bit signed value. Range -32768 to 32767</td>
+</tr>
+<tr>
+<td style="text-align:center">Int</td>
+<td style="text-align:center">32 bit signed value. Range -2147483648 to 2147483647</td>
+</tr>
+<tr>
+<td style="text-align:center">Long</td>
+<td style="text-align:center">64 bit signed value. -9223372036854775808 to 9223372036854775807</td>
+</tr>
+<tr>
+<td style="text-align:center">Float</td>
+<td style="text-align:center">32 bit IEEE 754 single-precision float</td>
+</tr>
+<tr>
+<td style="text-align:center">Double</td>
+<td style="text-align:center">64 bit IEEE 754 double-precision float</td>
+</tr>
+<tr>
+<td style="text-align:center">Char</td>
+<td style="text-align:center">16 bit unsigned Unicode character. Range from U+0000 to U+FFFF</td>
+</tr>
+<tr>
+<td style="text-align:center">String</td>
+<td style="text-align:center">A sequence of Chars</td>
+</tr>
+<tr>
+<td style="text-align:center">Boolean</td>
+<td style="text-align:center">Either the literal true or the literal false</td>
+</tr>
+<tr>
+<td style="text-align:center">Unit</td>
+<td style="text-align:center">Corresponds to no value</td>
+</tr>
+<tr>
+<td style="text-align:center">Null</td>
+<td style="text-align:center">null or empty reference</td>
+</tr>
+<tr>
+<td style="text-align:center">Nothing</td>
+<td style="text-align:center">The subtype of every other type; includes no values</td>
+</tr>
+<tr>
+<td style="text-align:center">Any</td>
+<td style="text-align:center">The supertype of any type; any object is of type <em>Any</em></td>
+</tr>
+<tr>
+<td style="text-align:center">AnyRef</td>
+<td style="text-align:center">The supertype of any reference type</td>
+</tr>
+</tbody>
+</table>
 <h2 id="声明变量和值">声明变量和值</h2><pre><code><span class="variable"><span class="keyword">val</span> value</span> = <span class="number">7</span> <span class="comment">//声明值（常量，无法改变）</span>
 <span class="variable"><span class="keyword">var</span> variable</span> = <span class="number">7</span> <span class="comment">//声明变量</span>
 </code></pre><h2 id="赋值语句">赋值语句</h2><p>赋值语句没有值</p>
@@ -168,7 +323,90 @@ breakable {
     }
 }
 </code></pre><p>但以上方式使用异常抛出和捕获的形式实现，效率较低。</p>
+<h2 id="函数(Functions)">函数(Functions)</h2><h3 id="函数定义">函数定义</h3><pre><code><span class="function"><span class="keyword">def</span> <span class="title">functionName</span> <span class="params">([list of parameters])</span> :</span> [<span class="keyword">return</span> type] = {
+   function body
+   <span class="keyword">return</span> [expr]
+}
+</code></pre><p>参数列表（List of parameters）和返回值类型（return type）是可选的。例如：</p>
+<pre><code><span class="function"><span class="keyword">def</span> <span class="title">addInt</span><span class="params">( a:Int, b:Int )</span> :</span> Int = {
+  var sum:Int = <span class="number">0</span>
+  sum = a + b
 
+  <span class="keyword">return</span> sum
+}
+<span class="function"><span class="keyword">def</span> <span class="title">printMe</span><span class="params">( )</span> :</span> Unit = {
+    println(<span class="string">"Hello, Scala!"</span>)
+}  
+</code></pre><h3 id="函数调用">函数调用</h3><pre><code>[instance.]<span class="function"><span class="title">functionName</span><span class="params">( list of parameters )</span></span>
+</code></pre><h4 id="换名调用（Functions_Call-by-Name）">换名调用（Functions Call-by-Name）</h4><p>一般情况下，调用一个函数的时候，需要传入确定的参数；scala可以把函数作为参数，使得参数的值可以在运行时确定。<br>scala允许在函数声明和调用该函数参数的地方省略(), 但保留=&gt;</p>
+<pre><code><span class="class"><span class="keyword">object</span> <span class="title">Test</span> {</span>
+   <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) {
+        delayed(time());
+   }
+
+   <span class="function"><span class="keyword">def</span> <span class="title">time</span>(</span>) = {
+      println(<span class="string">"Getting time in nano seconds"</span>)
+      <span class="type">System</span>.nanoTime
+   }
+   <span class="comment">//换名调用</span>
+   <span class="function"><span class="keyword">def</span> <span class="title">delayed</span>(</span> t: =&gt; <span class="type">Long</span> ) = {
+      println(<span class="string">"In delayed method"</span>)
+      println(<span class="string">"Param: "</span> + t)
+      t
+   }
+   <span class="comment">//普通调用</span>
+   <span class="function"><span class="keyword">def</span> <span class="title">delayed</span>(</span> t():=&gt;<span class="type">Long</span> ) = {
+       ...
+       t()
+   }
+}
+</code></pre><h4 id="有名实参（Functions_with_Named_Arguments）">有名实参（Functions with Named Arguments）</h4><pre><code>object Test {
+   <span class="keyword">def</span> main(args: Array[String]) {
+        printInt(b=<span class="number">5</span>, a=<span class="number">7</span>); 
+   }
+   <span class="keyword">def</span> printInt( a:<span class="keyword">Int</span>, b:<span class="keyword">Int</span> ) = {
+      <span class="keyword">println</span>(<span class="string">"Value of a : "</span> + a );
+      <span class="keyword">println</span>(<span class="string">"Value of b : "</span> + b );
+   }
+}
+</code></pre><p>命名实参的方式允许不按照顺序传入参数。</p>
+<h4 id="可变参数（Function_with_Variable_Arguments）">可变参数（Function with Variable Arguments）</h4><pre><code><span class="class"><span class="keyword">object</span> <span class="title">Test</span> {</span>
+   <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) {
+        printStrings(<span class="string">"Hello"</span>, <span class="string">"Scala"</span>, <span class="string">"Python"</span>);
+   }
+   <span class="function"><span class="keyword">def</span> <span class="title">printStrings</span>(</span> args:<span class="type">String</span>* ) = {
+      <span class="keyword">var</span> i : <span class="type">Int</span> = <span class="number">0</span>;
+      <span class="keyword">for</span>( arg &lt;- args ){
+         println(<span class="string">"Arg value["</span> + i + <span class="string">"] = "</span> + arg );
+         i = i + <span class="number">1</span>;
+      }
+   }
+}
+</code></pre><h4 id="递归函数（Recursion_Functions）">递归函数（Recursion Functions）</h4><pre><code><span class="class"><span class="keyword">object</span> <span class="title">Test</span> {</span>
+   <span class="function"><span class="keyword">def</span> <span class="title">main</span>(</span>args: <span class="type">Array</span>[<span class="type">String</span>]) {
+      <span class="keyword">for</span> (i &lt;- <span class="number">1</span> to <span class="number">10</span>)
+         println( <span class="string">"Factorial of "</span> + i + <span class="string">": = "</span> + factorial(i) )
+   }
+
+   <span class="function"><span class="keyword">def</span> <span class="title">factorial</span>(</span>n: <span class="type">BigInt</span>): <span class="type">BigInt</span> = {  
+      <span class="keyword">if</span> (n &lt;= <span class="number">1</span>)
+         <span class="number">1</span>  
+      <span class="keyword">else</span>    
+      n * factorial(n - <span class="number">1</span>)
+   }
+}
+</code></pre><h4 id="默认参数（Default_Parameter_Values）">默认参数（Default Parameter Values）</h4><pre><code>object Test {
+   <span class="keyword">def</span> main(args: Array[String]) {
+        <span class="keyword">println</span>( <span class="string">"Returned Value : "</span> + addInt() );
+   }
+   <span class="keyword">def</span> addInt( a:<span class="keyword">Int</span>=<span class="number">5</span>, b:<span class="keyword">Int</span>=<span class="number">7</span> ) : <span class="keyword">Int</span> = {
+      var sum:<span class="keyword">Int</span> = <span class="number">0</span>
+      sum = a + b
+
+      <span class="keyword">return</span> sum
+   }
+}
+</code></pre><h4 id="高阶函数（Higher-Order_Functions）">高阶函数（Higher-Order Functions）</h4>
       
     </div>
 
@@ -305,7 +543,7 @@ breakable {
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#声明变量和值"><span class="nav-number">1.</span> <span class="nav-text">声明变量和值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#赋值语句"><span class="nav-number">2.</span> <span class="nav-text">赋值语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制结构"><span class="nav-number">3.</span> <span class="nav-text">控制结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#条件表达式"><span class="nav-number">3.1.</span> <span class="nav-text">条件表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#块表达式"><span class="nav-number">3.2.</span> <span class="nav-text">块表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环"><span class="nav-number">3.3.</span> <span class="nav-text">循环</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#关键字"><span class="nav-number">1.</span> <span class="nav-text">关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据类型"><span class="nav-number">2.</span> <span class="nav-text">数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#声明变量和值"><span class="nav-number">3.</span> <span class="nav-text">声明变量和值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#赋值语句"><span class="nav-number">4.</span> <span class="nav-text">赋值语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制结构"><span class="nav-number">5.</span> <span class="nav-text">控制结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#条件表达式"><span class="nav-number">5.1.</span> <span class="nav-text">条件表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#块表达式"><span class="nav-number">5.2.</span> <span class="nav-text">块表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环"><span class="nav-number">5.3.</span> <span class="nav-text">循环</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数(Functions)"><span class="nav-number">6.</span> <span class="nav-text">函数(Functions)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#函数定义"><span class="nav-number">6.1.</span> <span class="nav-text">函数定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数调用"><span class="nav-number">6.2.</span> <span class="nav-text">函数调用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#换名调用（Functions_Call-by-Name）"><span class="nav-number">6.2.1.</span> <span class="nav-text">换名调用（Functions Call-by-Name）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#有名实参（Functions_with_Named_Arguments）"><span class="nav-number">6.2.2.</span> <span class="nav-text">有名实参（Functions with Named Arguments）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可变参数（Function_with_Variable_Arguments）"><span class="nav-number">6.2.3.</span> <span class="nav-text">可变参数（Function with Variable Arguments）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#递归函数（Recursion_Functions）"><span class="nav-number">6.2.4.</span> <span class="nav-text">递归函数（Recursion Functions）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#默认参数（Default_Parameter_Values）"><span class="nav-number">6.2.5.</span> <span class="nav-text">默认参数（Default Parameter Values）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#高阶函数（Higher-Order_Functions）"><span class="nav-number">6.2.6.</span> <span class="nav-text">高阶函数（Higher-Order Functions）</span></a></li></ol></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
