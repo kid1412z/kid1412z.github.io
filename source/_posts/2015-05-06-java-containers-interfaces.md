@@ -1,6 +1,6 @@
 title: "Java容器类——接口"
 date: 2015-05-06 15:20:43
-categories:
+categories: Java
 tags: [Java,Collections]
 ---
 **摘要**：本文介绍了Java容器类的核心接口，以及容器泛型的使用原则。
