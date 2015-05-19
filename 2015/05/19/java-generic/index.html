@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="DP,wikioi,动态规划," />
+  <meta name="keywords" content="Java,generic," />
 
 
 
@@ -33,7 +33,7 @@
 
 
 
-  <title> 1214 线段覆盖 | Q.Y Zuo Believes </title>
+  <title> 深入Java泛型 | Q.Y Zuo Believes </title>
 </head>
 
 <body>
@@ -112,7 +112,7 @@
           
           
             
-              1214 线段覆盖
+              深入Java泛型
             
           
         </h1>
@@ -120,14 +120,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2013-11-09
+          Posted on 2015-05-19
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; In
             
-              <a href="/categories/coding-gym/">coding gym</a>
+              <a href="/categories/Java/">Java</a>
 
               
               
@@ -140,8 +140,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2013/11/09/1214-segment-coverage/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/11/09/1214-segment-coverage/"></span>
+            <a href="/2015/05/19/java-generic/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/05/19/java-generic/"></span>
             </a>
           </span>
           
@@ -155,42 +155,99 @@
       
 
       
-        <h2 id="题目描述_Description"><a href="http://www.wikioi.com/problem/1214/" target="_blank" rel="external">题目描述 Description</a></h2><p>给定x轴上的N（0&lt;N&lt;100）条线段，每个线段由它的二个端点a_I和b_I确定，I=1,2,……N.这些坐标都是区间（－999，999）的整数。有些线段之间会相互交叠或覆盖。请你编写一个程序，从给出的线段中去掉尽量少的线段，使得剩下的线段两两之间没有内部公共点。所谓的内部公共点是指一个点同时属于两条线段且至少在其中一条线段的内部（即除去端点的部分）。</p>
-<a id="more"></a>
-<p>输入描述 Input Description<br>输入第一行是一个整数N。接下来有N行，每行有二个空格隔开的整数，表示一条线段的二个端点的坐标。<br><strong>输出描述 Output Description</strong><br>输出第一行是一个整数表示最多剩下的线段数。<br><strong>样例输入 Sample Input</strong><br>3<br>6 3<br>1 3<br>2 5<br><strong>样例输出 Sample Output</strong><br>2</p>
-<h2 id="动态规划思路:">动态规划思路:</h2><p>最优子结构：到j为止最多的线段数<br>子问题重叠：用f[j]数组存放重叠计算的子问题</p>
-<ol>
-<li>对输入的数据，把左端点放在左边</li>
-<li>按左端点坐标从小到大排序</li>
-<li>用数组f[j]存放到线段j为止，最多留下的线段数目，初始都是1。</li>
-<li>按顺序扫描线段，如果线段j的左端点大于等于之前线段的右端点，到j最多线段数为f[i] + 1， 如果有多个这样的情况，就取f[i] + 1（i = 1….j-1）中最大的一个。</li>
-</ol>
-<h2 id="代码示例:">代码示例:</h2><pre><code><span class="built_in">int</span> n;
-cin &gt;&gt; n;
-<span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; n; i++){
-    cin &gt;&gt; lines[i].start;
-    cin &gt;&gt; lines[i].end;
-    f[i] = <span class="number">1</span>;
-    <span class="keyword">if</span>(lines[i].start &gt; lines[i].end){
-        swap(lines[i].start, lines[i].end);
-    }
+        <p><strong>摘要</strong>：本文参考Oracle的文档，系统介绍了Java泛型和使用中应注意的问题。<br><strong>Abstract</strong>:<br><a id="more"></a></p>
+<h2 id="为什么使用泛型">为什么使用泛型</h2><p>简而言之，泛型就是在定义类、接口、方法的时候，可以把类型（types）作为参数。类型参数使相同的逻辑能够复用在不同类型的输入上。</p>
+<h3 id="使用泛型的好处：">使用泛型的好处：</h3><ul>
+<li>编译期强类型检查（编译期错误排查难度小于运行时错误）</li>
+<li>去除类型转换</li>
+</ul>
+<pre><code><span class="built_in">List</span> <span class="built_in">list</span> <span class="subst">=</span> <span class="literal">new</span> ArrayList();
+<span class="built_in">list</span><span class="built_in">.</span>add(<span class="string">"hello"</span>);
+<span class="built_in">String</span> s <span class="subst">=</span> (<span class="built_in">String</span>) <span class="built_in">list</span><span class="built_in">.</span>get(<span class="number">0</span>);
+
+<span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span> <span class="built_in">list</span> <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span>();
+<span class="built_in">list</span><span class="built_in">.</span>add(<span class="string">"hello"</span>);
+<span class="built_in">String</span> s <span class="subst">=</span> <span class="built_in">list</span><span class="built_in">.</span>get(<span class="number">0</span>);   <span class="comment">// no cast</span>
+</code></pre><ul>
+<li>方便开发泛型算法</li>
+</ul>
+<h2 id="泛型类型（Generic_Types）">泛型类型（Generic Types）</h2><p>泛型类型是通用类或者接口的参数化类型。</p>
+<h3 id="简单的Box类">简单的Box类</h3><pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Box</span> {
+    <span class="keyword">private</span> Object <span class="keyword">object</span>;
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(Object <span class="keyword">object</span>)</span> </span>{ <span class="keyword">this</span>.<span class="keyword">object</span> = <span class="keyword">object</span>; }
+    <span class="function"><span class="keyword">public</span> Object <span class="title">get</span><span class="params">()</span> </span>{ <span class="keyword">return</span> <span class="keyword">object</span>; }
 }
-qsort(lines, n, sizeof(<span class="built_in">line</span>),cmp);
-<span class="keyword">for</span>(<span class="built_in">int</span> j = <span class="number">1</span>; j &lt; n; j++){<span class="comment">//scan all</span>
-    <span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; j; i++){ 
-        <span class="keyword">if</span>(lines[i].end &lt;= lines[j].start){<span class="comment">//如果与前面的不重叠</span>
-            f[j] = <span class="built_in">max</span>(f[j], f[i] + <span class="number">1</span>); <span class="comment">// 取最多的线段数</span>
-        }
-    }
+</code></pre><p>因为类中的方法接受的参数类型是Object，所以可以接受任何类型的输入参数，。但是在编译期没有办法验证Box类是否被正确的使用了。如果期望从Box中获得一个Integer而却往Box中放入String类型的值，则会出现运行时错误。</p>
+<h3 id="泛型版本的Box类">泛型版本的Box类</h3><p>泛型类/接口的定义如下：</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">name</span>&lt;<span class="title">T1</span>, <span class="title">T2</span>, ..., <span class="title">Tn</span>&gt; </span>{ <span class="comment">/* ... */</span> }
+<span class="class"><span class="keyword">interface</span> <span class="title">name</span>&lt;<span class="title">T1</span>, <span class="title">T2</span>, ..., <span class="title">Tn</span>&gt; </span>{ <span class="comment">/* ... */</span> }
+</code></pre><p>尖括号中包含类型参数声明，分别是T1,T2…Tn</p>
+<pre><code><span class="comment">/**
+ * Generic version of the Box class.
+ * @param &lt;T&gt; the type of the value being boxed
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Box</span>&lt;<span class="title">T</span>&gt; </span>{
+    <span class="comment">// T stands for "Type"</span>
+    <span class="keyword">private</span> T t;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="keyword">set</span>(T t) { <span class="keyword">this</span>.t = t; }
+    <span class="keyword">public</span> T <span class="keyword">get</span>() { <span class="keyword">return</span> t; }
 }
-<span class="built_in">int</span> <span class="built_in">max</span> = <span class="number">0</span>;
-<span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; n; i++){
-    <span class="keyword">if</span>(f[i] &gt; <span class="built_in">max</span>){
-        <span class="built_in">max</span> = f[i];
-    }
+</code></pre><p>正如上面代码所示，Object类型被替换为T，T是一个类型变量，代表任意非原始类型（non-primitive）。 作为一个例子，并没有问题，但是结合JDK源码，get方法一般不限定泛型，<a href="http://stackoverflow.com/questions/857420/what-are-the-reasons-why-map-getobject-key-is-not-fully-generic" target="_blank" rel="external">详见这里</a>。不要滥用泛型！</p>
+<h3 id="类型参数命名惯例">类型参数命名惯例</h3><ul>
+<li>E - Element (used extensively by the Java Collections Framework)</li>
+<li>K - Key</li>
+<li>N - Number</li>
+<li>T - Type</li>
+<li>V - Value</li>
+<li>S,U,V etc. - 2nd, 3rd, 4th types</li>
+</ul>
+<h3 id="调用和实例化泛型类型">调用和实例化泛型类型</h3><pre><code><span class="built_in">Box</span>&lt;<span class="built_in">Integer</span>&gt; integerBox = new <span class="built_in">Box</span>&lt;<span class="built_in">Integer</span>&gt;();
+</code></pre><blockquote>
+<p><strong>类型形参（Type Parameter）</strong>和<strong>类型实参（Type Argument）</strong>：Box<t>中的T时类型形参，Box<integer>中的Integer时类型实参。在能区分两者的语境中，经常不做区分的称为类型参数。</integer></t></p>
+</blockquote>
+<p><a id="the-diamond" href="#the-diamond"></a></p>
+<h3 id="The_Diamond">The Diamond</h3><p>在JDK7及以后的版本，调用和初始化泛型可以省略构造方法类型实参：</p>
+<pre><code><span class="built_in">Box</span>&lt;<span class="built_in">Integer</span>&gt; integerBox = new <span class="built_in">Box</span>&lt;&gt;();
+</code></pre><p>更多内容请参见<a href="#type-inference">类型推断（Type Inference）</a></p>
+<h3 id="多个类型参数">多个类型参数</h3><pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Pair</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; </span>{
+    <span class="function"><span class="keyword">public</span> K <span class="title">getKey</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">public</span> V <span class="title">getValue</span><span class="params">()</span></span>;
 }
-cout &lt;&lt; <span class="built_in">max</span> &lt;&lt; endl;
-</code></pre>
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrderedPair</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Pair</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; </span>{
+
+    <span class="keyword">private</span> K key;
+    <span class="keyword">private</span> V value;
+
+    <span class="function"><span class="keyword">public</span> <span class="title">OrderedPair</span><span class="params">(K key, V value)</span> </span>{
+    <span class="keyword">this</span>.key = key;
+    <span class="keyword">this</span>.value = value;
+    }
+
+    <span class="function"><span class="keyword">public</span> K <span class="title">getKey</span><span class="params">()</span>    </span>{ <span class="keyword">return</span> key; }
+    <span class="function"><span class="keyword">public</span> V <span class="title">getValue</span><span class="params">()</span> </span>{ <span class="keyword">return</span> value; }
+}
+</code></pre><p>可以这样实例化OrderedPair：</p>
+<pre><code><span class="built_in">Pair</span><span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">Integer</span><span class="subst">&gt;</span> p1 <span class="subst">=</span> <span class="literal">new</span> OrderedPair<span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">Integer</span><span class="subst">&gt;</span>(<span class="string">"Even"</span>, <span class="number">8</span>);
+<span class="built_in">Pair</span><span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">String</span><span class="subst">&gt;</span>  p2 <span class="subst">=</span> <span class="literal">new</span> OrderedPair<span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">String</span><span class="subst">&gt;</span>(<span class="string">"hello"</span>, <span class="string">"world"</span>);
+</code></pre><p>正如在<a href="#the-diamond">The Diamond</a>一节中所述的，可以将初始化构造方法类型参数省略：</p>
+<pre><code>OrderedPair<span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">Integer</span><span class="subst">&gt;</span> p1 <span class="subst">=</span> <span class="literal">new</span> OrderedPair<span class="subst">&lt;&gt;</span>(<span class="string">"Even"</span>, <span class="number">8</span>);
+OrderedPair<span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">String</span><span class="subst">&gt;</span>  p2 <span class="subst">=</span> <span class="literal">new</span> OrderedPair<span class="subst">&lt;&gt;</span>(<span class="string">"hello"</span>, <span class="string">"world"</span>);
+</code></pre><h3 id="参数化类型嵌套">参数化类型嵌套</h3><pre><code>OrderedPair<span class="subst">&lt;</span><span class="built_in">String</span>, Box<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;&gt;</span> p <span class="subst">=</span> <span class="literal">new</span> OrderedPair<span class="subst">&lt;&gt;</span>(<span class="string">"primes"</span>, <span class="literal">new</span> Box<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span>(<span class="attribute">...</span>));
+</code></pre><h2 id="原始类型（Raw_Types）">原始类型（Raw Types）</h2><p>原始类型是没有任何类型实参的泛型类或泛型接口。例如:Box类定义如下：</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Box</span>&lt;<span class="title">T</span>&gt; </span>{
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="keyword">set</span>(T t) { <span class="comment">/* ... */</span> }
+    <span class="comment">// ...</span>
+}
+</code></pre><p>如果类型实参被省略，则创建一个原始类型的Box：</p>
+<pre><code><span class="built_in">Box</span> rawBox = new <span class="built_in">Box</span>();
+</code></pre><p>上面的代码中，Box是Box<t>的原始类型。JDK5及之前的代码不支持泛型，为了向后兼容设置的。</t></p>
+<p>未完待续。。。</p>
+<p><a id="type-inference" href="#type-inference"></a></p>
+<h2 id="类型推断（Type_Inference）">类型推断（Type Inference）</h2><h2 id="参考">参考</h2><p><a href="https://docs.oracle.com/javase/tutorial/java/generics/index.html" target="_blank" rel="external">https://docs.oracle.com/javase/tutorial/java/generics/index.html</a></p>
+
       
     </div>
 
@@ -198,11 +255,9 @@ cout &lt;&lt; <span class="built_in">max</span> &lt;&lt; endl;
       
         <div class="post-tags">
           
-            <a href="/tags/DP/"> #DP </a>
+            <a href="/tags/Java/"> #Java </a>
           
-            <a href="/tags/wikioi/"> #wikioi </a>
-          
-            <a href="/tags/动态规划/"> #动态规划 </a>
+            <a href="/tags/generic/"> #generic </a>
           
         </div>
       
@@ -211,13 +266,11 @@ cout &lt;&lt; <span class="built_in">max</span> &lt;&lt; endl;
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2013/11/11/3027-segment-coverage2/">3027 线段覆盖 2</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2013/11/09/dynamic-programming/">动态规划</a>
+              <a href="/2015/05/11/scala/">Scala</a>
             
           </div>
         </div>
@@ -333,7 +386,7 @@ cout &lt;&lt; <span class="built_in">max</span> &lt;&lt; endl;
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目描述_Description"><span class="nav-number">1.</span> <span class="nav-text">题目描述 Description</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态规划思路:"><span class="nav-number">2.</span> <span class="nav-text">动态规划思路:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码示例:"><span class="nav-number">3.</span> <span class="nav-text">代码示例:</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么使用泛型"><span class="nav-number">1.</span> <span class="nav-text">为什么使用泛型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用泛型的好处："><span class="nav-number">1.1.</span> <span class="nav-text">使用泛型的好处：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型类型（Generic_Types）"><span class="nav-number">2.</span> <span class="nav-text">泛型类型（Generic Types）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简单的Box类"><span class="nav-number">2.1.</span> <span class="nav-text">简单的Box类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#泛型版本的Box类"><span class="nav-number">2.2.</span> <span class="nav-text">泛型版本的Box类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类型参数命名惯例"><span class="nav-number">2.3.</span> <span class="nav-text">类型参数命名惯例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调用和实例化泛型类型"><span class="nav-number">2.4.</span> <span class="nav-text">调用和实例化泛型类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The_Diamond"><span class="nav-number">2.5.</span> <span class="nav-text">The Diamond</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多个类型参数"><span class="nav-number">2.6.</span> <span class="nav-text">多个类型参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数化类型嵌套"><span class="nav-number">2.7.</span> <span class="nav-text">参数化类型嵌套</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#原始类型（Raw_Types）"><span class="nav-number">3.</span> <span class="nav-text">原始类型（Raw Types）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型推断（Type_Inference）"><span class="nav-number">4.</span> <span class="nav-text">类型推断（Type Inference）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -892,8 +945,8 @@ cout &lt;&lt; <span class="built_in">max</span> &lt;&lt; endl;
 
     <script type="text/javascript">
       var disqus_shortname = 'zuoqycom';
-      var disqus_identifier = '2013/11/09/1214-segment-coverage/';
-      var disqus_url = 'http://zuoqy.com/2013/11/09/1214-segment-coverage/';
+      var disqus_identifier = '2015/05/19/java-generic/';
+      var disqus_url = 'http://zuoqy.com/2015/05/19/java-generic/';
 
       (function(){
         var dsq = document.createElement('script');

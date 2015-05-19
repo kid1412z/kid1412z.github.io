@@ -2,8 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://zuoqy.com/2015/05/19/java-generic/</loc>
+    <lastmod>2015-05-19T15:09:44.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://zuoqy.com/2015/05/11/scala/</loc>
-    <lastmod>2015-05-18T11:06:48.000Z</lastmod>
+    <lastmod>2015-05-19T13:35:29.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://zuoqy.com/2015/05/06/java-containers-interfaces/</loc>
+    <lastmod>2015-05-19T13:35:15.000Z</lastmod>
   </url>
   
   <url>
@@ -14,11 +24,6 @@
   <url>
     <loc>http://zuoqy.com/tags/index.html</loc>
     <lastmod>2015-05-10T14:59:58.000Z</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://zuoqy.com/2015/05/06/java-containers-interfaces/</loc>
-    <lastmod>2015-05-09T16:30:53.000Z</lastmod>
   </url>
   
   <url>

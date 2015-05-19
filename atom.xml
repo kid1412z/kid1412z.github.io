@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2015-05-18T11:06:48.000Z</updated>
+  <updated>2015-05-19T15:09:44.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -15,11 +15,123 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[深入Java泛型]]></title>
+    <link href="http://zuoqy.com/2015/05/19/java-generic/"/>
+    <id>http://zuoqy.com/2015/05/19/java-generic/</id>
+    <published>2015-05-19T13:34:22.000Z</published>
+    <updated>2015-05-19T15:09:44.000Z</updated>
+    <content type="html"><![CDATA[<p><strong>摘要</strong>：本文参考Oracle的文档，系统介绍了Java泛型和使用中应注意的问题。<br><strong>Abstract</strong>:<br><a id="more"></a></p>
+<h2 id="为什么使用泛型">为什么使用泛型</h2><p>简而言之，泛型就是在定义类、接口、方法的时候，可以把类型（types）作为参数。类型参数使相同的逻辑能够复用在不同类型的输入上。</p>
+<h3 id="使用泛型的好处：">使用泛型的好处：</h3><ul>
+<li>编译期强类型检查（编译期错误排查难度小于运行时错误）</li>
+<li>去除类型转换</li>
+</ul>
+<pre><code><span class="built_in">List</span> <span class="built_in">list</span> <span class="subst">=</span> <span class="literal">new</span> ArrayList();
+<span class="built_in">list</span><span class="built_in">.</span>add(<span class="string">"hello"</span>);
+<span class="built_in">String</span> s <span class="subst">=</span> (<span class="built_in">String</span>) <span class="built_in">list</span><span class="built_in">.</span>get(<span class="number">0</span>);
+
+<span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span> <span class="built_in">list</span> <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span>();
+<span class="built_in">list</span><span class="built_in">.</span>add(<span class="string">"hello"</span>);
+<span class="built_in">String</span> s <span class="subst">=</span> <span class="built_in">list</span><span class="built_in">.</span>get(<span class="number">0</span>);   <span class="comment">// no cast</span>
+</code></pre><ul>
+<li>方便开发泛型算法</li>
+</ul>
+<h2 id="泛型类型（Generic_Types）">泛型类型（Generic Types）</h2><p>泛型类型是通用类或者接口的参数化类型。</p>
+<h3 id="简单的Box类">简单的Box类</h3><pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Box</span> {
+    <span class="keyword">private</span> Object <span class="keyword">object</span>;
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(Object <span class="keyword">object</span>)</span> </span>{ <span class="keyword">this</span>.<span class="keyword">object</span> = <span class="keyword">object</span>; }
+    <span class="function"><span class="keyword">public</span> Object <span class="title">get</span><span class="params">()</span> </span>{ <span class="keyword">return</span> <span class="keyword">object</span>; }
+}
+</code></pre><p>因为类中的方法接受的参数类型是Object，所以可以接受任何类型的输入参数，。但是在编译期没有办法验证Box类是否被正确的使用了。如果期望从Box中获得一个Integer而却往Box中放入String类型的值，则会出现运行时错误。</p>
+<h3 id="泛型版本的Box类">泛型版本的Box类</h3><p>泛型类/接口的定义如下：</p>
+<pre><code><span class="class"><span class="keyword">class</span> <span class="title">name</span>&lt;<span class="title">T1</span>, <span class="title">T2</span>, ..., <span class="title">Tn</span>&gt; </span>{ <span class="comment">/* ... */</span> }
+<span class="class"><span class="keyword">interface</span> <span class="title">name</span>&lt;<span class="title">T1</span>, <span class="title">T2</span>, ..., <span class="title">Tn</span>&gt; </span>{ <span class="comment">/* ... */</span> }
+</code></pre><p>尖括号中包含类型参数声明，分别是T1,T2…Tn</p>
+<pre><code><span class="comment">/**
+ * Generic version of the Box class.
+ * @param &lt;T&gt; the type of the value being boxed
+ */</span>
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Box</span>&lt;<span class="title">T</span>&gt; </span>{
+    <span class="comment">// T stands for "Type"</span>
+    <span class="keyword">private</span> T t;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="keyword">set</span>(T t) { <span class="keyword">this</span>.t = t; }
+    <span class="keyword">public</span> T <span class="keyword">get</span>() { <span class="keyword">return</span> t; }
+}
+</code></pre><p>正如上面代码所示，Object类型被替换为T，T是一个类型变量，代表任意非原始类型（non-primitive）。 作为一个例子，并没有问题，但是结合JDK源码，get方法一般不限定泛型，<a href="http://stackoverflow.com/questions/857420/what-are-the-reasons-why-map-getobject-key-is-not-fully-generic" target="_blank" rel="external">详见这里</a>。不要滥用泛型！</p>
+<h3 id="类型参数命名惯例">类型参数命名惯例</h3><ul>
+<li>E - Element (used extensively by the Java Collections Framework)</li>
+<li>K - Key</li>
+<li>N - Number</li>
+<li>T - Type</li>
+<li>V - Value</li>
+<li>S,U,V etc. - 2nd, 3rd, 4th types</li>
+</ul>
+<h3 id="调用和实例化泛型类型">调用和实例化泛型类型</h3><pre><code><span class="built_in">Box</span>&lt;<span class="built_in">Integer</span>&gt; integerBox = new <span class="built_in">Box</span>&lt;<span class="built_in">Integer</span>&gt;();
+</code></pre><blockquote>
+<p><strong>类型形参（Type Parameter）</strong>和<strong>类型实参（Type Argument）</strong>：Box<t>中的T时类型形参，Box<integer>中的Integer时类型实参。在能区分两者的语境中，经常不做区分的称为类型参数。</integer></t></p>
+</blockquote>
+<p><a id="the-diamond" href="#the-diamond"></a></p>
+<h3 id="The_Diamond">The Diamond</h3><p>在JDK7及以后的版本，调用和初始化泛型可以省略构造方法类型实参：</p>
+<pre><code><span class="built_in">Box</span>&lt;<span class="built_in">Integer</span>&gt; integerBox = new <span class="built_in">Box</span>&lt;&gt;();
+</code></pre><p>更多内容请参见<a href="#type-inference">类型推断（Type Inference）</a></p>
+<h3 id="多个类型参数">多个类型参数</h3><pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Pair</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; </span>{
+    <span class="function"><span class="keyword">public</span> K <span class="title">getKey</span><span class="params">()</span></span>;
+    <span class="function"><span class="keyword">public</span> V <span class="title">getValue</span><span class="params">()</span></span>;
+}
+
+<span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrderedPair</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Pair</span>&lt;<span class="title">K</span>, <span class="title">V</span>&gt; </span>{
+
+    <span class="keyword">private</span> K key;
+    <span class="keyword">private</span> V value;
+
+    <span class="function"><span class="keyword">public</span> <span class="title">OrderedPair</span><span class="params">(K key, V value)</span> </span>{
+    <span class="keyword">this</span>.key = key;
+    <span class="keyword">this</span>.value = value;
+    }
+
+    <span class="function"><span class="keyword">public</span> K <span class="title">getKey</span><span class="params">()</span>    </span>{ <span class="keyword">return</span> key; }
+    <span class="function"><span class="keyword">public</span> V <span class="title">getValue</span><span class="params">()</span> </span>{ <span class="keyword">return</span> value; }
+}
+</code></pre><p>可以这样实例化OrderedPair：</p>
+<pre><code><span class="built_in">Pair</span><span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">Integer</span><span class="subst">&gt;</span> p1 <span class="subst">=</span> <span class="literal">new</span> OrderedPair<span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">Integer</span><span class="subst">&gt;</span>(<span class="string">"Even"</span>, <span class="number">8</span>);
+<span class="built_in">Pair</span><span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">String</span><span class="subst">&gt;</span>  p2 <span class="subst">=</span> <span class="literal">new</span> OrderedPair<span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">String</span><span class="subst">&gt;</span>(<span class="string">"hello"</span>, <span class="string">"world"</span>);
+</code></pre><p>正如在<a href="#the-diamond">The Diamond</a>一节中所述的，可以将初始化构造方法类型参数省略：</p>
+<pre><code>OrderedPair<span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">Integer</span><span class="subst">&gt;</span> p1 <span class="subst">=</span> <span class="literal">new</span> OrderedPair<span class="subst">&lt;&gt;</span>(<span class="string">"Even"</span>, <span class="number">8</span>);
+OrderedPair<span class="subst">&lt;</span><span class="built_in">String</span>, <span class="built_in">String</span><span class="subst">&gt;</span>  p2 <span class="subst">=</span> <span class="literal">new</span> OrderedPair<span class="subst">&lt;&gt;</span>(<span class="string">"hello"</span>, <span class="string">"world"</span>);
+</code></pre><h3 id="参数化类型嵌套">参数化类型嵌套</h3><pre><code>OrderedPair<span class="subst">&lt;</span><span class="built_in">String</span>, Box<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;&gt;</span> p <span class="subst">=</span> <span class="literal">new</span> OrderedPair<span class="subst">&lt;&gt;</span>(<span class="string">"primes"</span>, <span class="literal">new</span> Box<span class="subst">&lt;</span><span class="built_in">Integer</span><span class="subst">&gt;</span>(<span class="attribute">...</span>));
+</code></pre><h2 id="原始类型（Raw_Types）">原始类型（Raw Types）</h2><p>原始类型是没有任何类型实参的泛型类或泛型接口。例如:Box类定义如下：</p>
+<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Box</span>&lt;<span class="title">T</span>&gt; </span>{
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="keyword">set</span>(T t) { <span class="comment">/* ... */</span> }
+    <span class="comment">// ...</span>
+}
+</code></pre><p>如果类型实参被省略，则创建一个原始类型的Box：</p>
+<pre><code><span class="built_in">Box</span> rawBox = new <span class="built_in">Box</span>();
+</code></pre><p>上面的代码中，Box是Box<t>的原始类型。JDK5及之前的代码不支持泛型，为了向后兼容设置的。</t></p>
+<p>未完待续。。。</p>
+<p><a id="type-inference" href="#type-inference"></a></p>
+<h2 id="类型推断（Type_Inference）">类型推断（Type Inference）</h2><h2 id="参考">参考</h2><p><a href="https://docs.oracle.com/javase/tutorial/java/generics/index.html" target="_blank" rel="external">https://docs.oracle.com/javase/tutorial/java/generics/index.html</a></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><strong>摘要</strong>：本文参考Oracle的文档，系统介绍了Java泛型和使用中应注意的问题。<br><strong>Abstract</strong>:<br>]]>
+    
+    </summary>
+    
+      <category term="Java" scheme="http://zuoqy.com/tags/Java/"/>
+    
+      <category term="generic" scheme="http://zuoqy.com/tags/generic/"/>
+    
+      <category term="Java" scheme="http://zuoqy.com/categories/Java/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[Scala]]></title>
     <link href="http://zuoqy.com/2015/05/11/scala/"/>
     <id>http://zuoqy.com/2015/05/11/scala/</id>
     <published>2015-05-11T12:34:22.000Z</published>
-    <updated>2015-05-18T11:06:48.000Z</updated>
+    <updated>2015-05-19T13:35:29.000Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：Scala语言要点<br><strong>Abstract</strong>: Simple Scala</p>
 <a id="more"></a>
 <h2 id="关键字">关键字</h2><table>
@@ -385,6 +497,8 @@ breakable {
     
       <category term="scala" scheme="http://zuoqy.com/tags/scala/"/>
     
+      <category term="scala" scheme="http://zuoqy.com/categories/scala/"/>
+    
   </entry>
   
   <entry>
@@ -392,7 +506,7 @@ breakable {
     <link href="http://zuoqy.com/2015/05/06/java-containers-interfaces/"/>
     <id>http://zuoqy.com/2015/05/06/java-containers-interfaces/</id>
     <published>2015-05-06T07:20:43.000Z</published>
-    <updated>2015-05-09T16:30:53.000Z</updated>
+    <updated>2015-05-19T13:35:15.000Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：本文介绍了Java容器类的核心接口，以及容器泛型的使用原则。<br><strong>Abstract</strong>: This article describes the core interfaces of Java Collections, and the principles of using generic.</p>
 <a id="more"></a>
 <p>JDK java.util 包中包含了几个重要的集合类(主要包含实现了Collection接口和Map接口的类)，从本篇文章开始总结JDK中自带的几个重要的容器类。</p>
@@ -641,6 +755,8 @@ public interface SortedSet&lt;<span class="keyword">E</span>&gt; extends <span c
       <category term="Collections" scheme="http://zuoqy.com/tags/Collections/"/>
     
       <category term="Java" scheme="http://zuoqy.com/tags/Java/"/>
+    
+      <category term="Java" scheme="http://zuoqy.com/categories/Java/"/>
     
   </entry>
   
