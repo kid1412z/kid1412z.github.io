@@ -3,8 +3,8 @@ date: 2015-05-19 21:34:22
 categories: Java
 tags: [Java,generic]
 ---
-**摘要**：本文参考Oracle的文档，系统介绍了Java泛型和使用中应注意的问题。
-**Abstract**:
+**摘要**：泛型可以将某些类型相关的错误从运行时提前到编译时显现，相比C++的模板类，Java泛型有许多独特之处，本文将详细介绍Java泛型。
+**Abstract**: Java generics add stability to your code by making some bugs about types be detected early on complie-time。Compared to C ++ template classes, Java generics has many unique features, this article will detail Java generics.
 <!-- more -->
 ## 为什么使用泛型
 
