@@ -469,6 +469,52 @@ boxTest方法会接受什么类型的参数？如果传入Box<Integer>或者Box<
 
 ### 目标类型
 
+Java编译器利用目标类型推断泛型方法调用时的参数类型。表达式的目标类型是Java编译器根据表达式出现的位置，**期望的表达式的类型**。例如：有Collections.emptyList()方法的声明如下：
+
+    static <T> List<T> emptyList();
+
+若有以下的赋值语句：
+
+    List<String> listOne = Collections.emptyList();
+
+则期望的结果类型是List<String>；此类型即为目标类型。因为方法emptyList返回一个List<T>类型的值，编译器推断类型形参T一定是String。此机制Java SE 7 和 Java SE 8 都适用当然你也可以显示的指定泛型方法的类型参数：
+
+    List<String> listOne = Collections.<String>emptyList();
+
+当然，这在上下文语境中并**不是必须的**。但在下面的情况下：
+
+    void processStringList(List<String> stringList) {
+        // process stringList
+    }
+
+将设你想调用方法processStringList，传入一个空list，在Java SE 7中，下面的语句会出现编译错误：
+
+    processStringList(Collections.emptyList());
+
+错误大致是：
+
+    List<Object> cannot be converted to List<String>
+    
+编译器需要类型实参T，所以被默认当成List<Object>，进而emptyList方法返回List<Object>类型的结果，和processStringList方法的参数类型不兼容。因此，在Java SE 7中，必须指定类型参数的值的值：
+
+    processStringList(Collections.<String>emptyList());
+
+这种情况在Java SE 8中将不复存在，在Java SE 8中，*目标类型*的范围被扩展到包括方法参数。即可以通过形参的类型参数推断返回值的类型参数。
+因为形参是List<String>,Collections。emptyList返回List<T>类型的结果，List<String>被作为目标类型，编译器推断T为String类型。因此，下面的语句在Java SE 8中可以编译通过：
+
+    processStringList(Collections.emptyList());
+    
+## 通配符（Wildcard）
+
+泛型编程中，把问号（?）称为*通配符*，表示未知类型。通配符在很多情况下会用到：类型参数、属性、局部变量，甚至是返回类型（尽管明确的返回值类型才是好的编程习惯）。但*绝不会用于*：泛型方法调用的类型实参、泛型类实例化、超类型（supertype）。
+
+### 有上界的通配符
+
+### 无界通配符
+
+### 有下届的通配符
+
+
 <a id="type-erasure" href="#type-inference"></a>
 ## 类型擦除（Type Erasure）
 
