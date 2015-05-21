@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2015-05-20T14:37:14.000Z</updated>
+  <updated>2015-05-21T14:38:55.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://zuoqy.com/2015/05/19/java-generic/"/>
     <id>http://zuoqy.com/2015/05/19/java-generic/</id>
     <published>2015-05-19T13:34:22.000Z</published>
-    <updated>2015-05-20T14:37:14.000Z</updated>
+    <updated>2015-05-21T14:38:55.000Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：泛型可以将某些类型相关的错误从运行时提前到编译时显现，相比C++的模板类，Java泛型有许多独特之处，本文将详细介绍Java泛型。<br><strong>Abstract</strong>: Java generics add stability to your code by making some bugs about types be detected early on complie-time. Compared to C ++ template classes, Java generics has many unique features, this article will detail Java generics.<br><a id="more"></a></p>
 <h2 id="为什么使用泛型">为什么使用泛型</h2><p>简而言之，泛型就是在定义类、接口、方法的时候，可以把类型（types）作为参数。类型参数使相同的逻辑能够复用在不同类型的输入上。</p>
 <h3 id="使用泛型的好处：">使用泛型的好处：</h3><ul>
@@ -340,7 +340,26 @@ Serializable s = pick(<span class="string">"d"</span>, new ArrayList&lt;String&g
 <blockquote>
 <p>注意：类型推断算法只使用<em>调用参数</em>、<em>目标类型</em>和<em>明显知道类型的返回值</em>来推断类型实参，推断算法不会使用当前程序之后的程序段对类型做推断。</p>
 </blockquote>
-<h3 id="目标类型">目标类型</h3><p><a id="type-erasure" href="#type-inference"></a></p>
+<h3 id="目标类型">目标类型</h3><p>Java编译器利用目标类型推断泛型方法调用时的参数类型。表达式的目标类型是Java编译器根据表达式出现的位置，<strong>期望的表达式的类型</strong>。例如：有Collections.emptyList()方法的声明如下：</p>
+<pre><code>static <span class="tag">&lt;<span class="title">T</span>&gt;</span> List<span class="tag">&lt;<span class="title">T</span>&gt;</span> emptyList();
+</code></pre><p>若有以下的赋值语句：</p>
+<pre><code><span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; listOne = Collections.emptyList();
+</code></pre><p>则期望的结果类型是List<string>；此类型即为目标类型。因为方法emptyList返回一个List<t>类型的值，编译器推断类型形参T一定是String。此机制Java SE 7 和 Java SE 8 都适用当然你也可以显示的指定泛型方法的类型参数：</t></string></p>
+<pre><code><span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; listOne = Collections.&lt;<span class="built_in">String</span>&gt;emptyList();
+</code></pre><p>当然，这在上下文语境中并<strong>不是必须的</strong>。但在下面的情况下：</p>
+<pre><code><span class="keyword">void</span> processStringList(<span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; stringList) {
+    <span class="comment">// process stringList</span>
+}
+</code></pre><p>将设你想调用方法processStringList，传入一个空list，在Java SE 7中，下面的语句会出现编译错误：</p>
+<pre><code>processStringList<span class="list">(<span class="keyword">Collections</span>.emptyList<span class="list">()</span>)</span><span class="comment">;</span>
+</code></pre><p>错误大致是：</p>
+<pre><code><span class="built_in">List</span>&lt;<span class="built_in">Object</span>&gt; cannot be converted to <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt;
+</code></pre><p>编译器需要类型实参T，所以被默认当成List<object>，进而emptyList方法返回List<object>类型的结果，和processStringList方法的参数类型不兼容。因此，在Java SE 7中，必须指定类型参数的值的值：</object></object></p>
+<pre><code>processStringList<span class="list">(<span class="keyword">Collections</span>.&lt;String&gt;emptyList<span class="list">()</span>)</span><span class="comment">;</span>
+</code></pre><p>这种情况在Java SE 8中将不复存在，在Java SE 8中，<em>目标类型</em>的范围被扩展到包括方法参数。即可以通过形参的类型参数推断返回值的类型参数。<br>因为形参是List<string>,Collections。emptyList返回List<t>类型的结果，List<string>被作为目标类型，编译器推断T为String类型。因此，下面的语句在Java SE 8中可以编译通过：</string></t></string></p>
+<pre><code>processStringList<span class="list">(<span class="keyword">Collections</span>.emptyList<span class="list">()</span>)</span><span class="comment">;</span>
+</code></pre><h2 id="通配符（Wildcard）">通配符（Wildcard）</h2><p>泛型编程中，把问号（?）称为<em>通配符</em>，表示未知类型。通配符在很多情况下会用到：类型参数、属性、局部变量，甚至是返回类型（尽管明确的返回值类型才是好的编程习惯）。但<em>绝不会用于</em>：泛型方法调用的类型实参、泛型类实例化、超类型（supertype）。</p>
+<h3 id="有上界的通配符">有上界的通配符</h3><h3 id="无界通配符">无界通配符</h3><h3 id="有下届的通配符">有下届的通配符</h3><p><a id="type-erasure" href="#type-inference"></a></p>
 <h2 id="类型擦除（Type_Erasure）">类型擦除（Type Erasure）</h2><p><a id="wildcards-and-subtyping" href="#wildcards-and-subtyping"></a></p>
 <h2 id="通配符和子类型">通配符和子类型</h2><p>未完待续。。。</p>
 <h2 id="参考">参考</h2><p><a href="https://docs.oracle.com/javase/tutorial/java/generics/index.html" target="_blank" rel="external">https://docs.oracle.com/javase/tutorial/java/generics/index.html</a></p>
