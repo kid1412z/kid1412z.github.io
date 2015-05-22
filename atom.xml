@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2015-05-21T14:38:55.000Z</updated>
+  <updated>2015-05-22T15:33:15.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://zuoqy.com/2015/05/19/java-generic/"/>
     <id>http://zuoqy.com/2015/05/19/java-generic/</id>
     <published>2015-05-19T13:34:22.000Z</published>
-    <updated>2015-05-21T14:38:55.000Z</updated>
+    <updated>2015-05-22T15:33:15.000Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：泛型可以将某些类型相关的错误从运行时提前到编译时显现，相比C++的模板类，Java泛型有许多独特之处，本文将详细介绍Java泛型。<br><strong>Abstract</strong>: Java generics add stability to your code by making some bugs about types be detected early on complie-time. Compared to C ++ template classes, Java generics has many unique features, this article will detail Java generics.<br><a id="more"></a></p>
 <h2 id="为什么使用泛型">为什么使用泛型</h2><p>简而言之，泛型就是在定义类、接口、方法的时候，可以把类型（types）作为参数。类型参数使相同的逻辑能够复用在不同类型的输入上。</p>
 <h3 id="使用泛型的好处：">使用泛型的好处：</h3><ul>
@@ -359,7 +359,26 @@ Serializable s = pick(<span class="string">"d"</span>, new ArrayList&lt;String&g
 </code></pre><p>这种情况在Java SE 8中将不复存在，在Java SE 8中，<em>目标类型</em>的范围被扩展到包括方法参数。即可以通过形参的类型参数推断返回值的类型参数。<br>因为形参是List<string>,Collections。emptyList返回List<t>类型的结果，List<string>被作为目标类型，编译器推断T为String类型。因此，下面的语句在Java SE 8中可以编译通过：</string></t></string></p>
 <pre><code>processStringList<span class="list">(<span class="keyword">Collections</span>.emptyList<span class="list">()</span>)</span><span class="comment">;</span>
 </code></pre><h2 id="通配符（Wildcard）">通配符（Wildcard）</h2><p>泛型编程中，把问号（?）称为<em>通配符</em>，表示未知类型。通配符在很多情况下会用到：类型参数、属性、局部变量，甚至是返回类型（尽管明确的返回值类型才是好的编程习惯）。但<em>绝不会用于</em>：泛型方法调用的类型实参、泛型类实例化、超类型（supertype）。</p>
-<h3 id="有上界的通配符">有上界的通配符</h3><h3 id="无界通配符">无界通配符</h3><h3 id="有下届的通配符">有下届的通配符</h3><p><a id="type-erasure" href="#type-inference"></a></p>
+<h3 id="有上界的通配符">有上界的通配符</h3><p>你可以通过上界通配符减轻泛型对变量类型的限制。例如，你希望一个泛型方法同时能处理List<integer>, List<double> 和 List<number>，你可以使用上界通配符。<br>应使用<em>?</em>和<em>extends</em>关键字（无论接口还是类），例如List&lt;? extends Number&gt;。 List<number> 比List&lt;? extends Number&gt;的限制更严格。因为前者的匹配类型只有Number类型，而后者任何Number和Number的子类型都适用。<br>下面的process方法可以处理类型是任何Foo类或者Foo类的子类型。</number></number></double></integer></p>
+<pre><code><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(List&lt;? extends Foo&gt; <span class="built_in">list</span>)</span> </span>{
+    <span class="keyword">for</span> (Foo elem : <span class="built_in">list</span>) {
+        <span class="comment">// ...</span>
+    }
+}
+</code></pre><p>下面的sumOfList方法, List<integer>和List<double>都适用：</double></integer></p>
+<pre><code>public static double sumOfList(<span class="keyword">List</span>&lt;? extends Number&gt; <span class="keyword">list</span>) {
+    double s = 0.0;
+    <span class="keyword">for</span> (Number <span class="keyword">n</span> : <span class="keyword">list</span>)
+        s += <span class="keyword">n</span>.doubleValue();
+    <span class="keyword">return</span> s;
+}
+
+<span class="keyword">List</span>&lt;Integer&gt; <span class="keyword">li</span> = Arrays.asList(1, 2, 3);
+System.<span class="keyword">out</span>.println(<span class="string">"sum = "</span> + sumOfList(<span class="keyword">li</span>));
+
+<span class="keyword">List</span>&lt;Double&gt; ld = Arrays.asList(1.2, 2.3, 3.5);
+System.<span class="keyword">out</span>.println(<span class="string">"sum = "</span> + sumOfList(ld));
+</code></pre><h3 id="无界通配符">无界通配符</h3><h3 id="有下界的通配符">有下界的通配符</h3><p><a id="type-erasure" href="#type-inference"></a></p>
 <h2 id="类型擦除（Type_Erasure）">类型擦除（Type Erasure）</h2><p><a id="wildcards-and-subtyping" href="#wildcards-and-subtyping"></a></p>
 <h2 id="通配符和子类型">通配符和子类型</h2><p>未完待续。。。</p>
 <h2 id="参考">参考</h2><p><a href="https://docs.oracle.com/javase/tutorial/java/generics/index.html" target="_blank" rel="external">https://docs.oracle.com/javase/tutorial/java/generics/index.html</a></p>
