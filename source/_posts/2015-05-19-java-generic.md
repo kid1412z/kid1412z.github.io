@@ -510,9 +510,34 @@ Java编译器利用目标类型推断泛型方法调用时的参数类型。表�
 
 ### 有上界的通配符
 
+你可以通过上界通配符减轻泛型对变量类型的限制。例如，你希望一个泛型方法同时能处理List<Integer>, List<Double> 和 List<Number>，你可以使用上界通配符。
+应使用*?*和*extends*关键字（无论接口还是类），例如List<? extends Number>。 List<Number> 比List<? extends Number>的限制更严格。因为前者的匹配类型只有Number类型，而后者任何Number和Number的子类型都适用。
+下面的process方法可以处理类型是任何Foo类或者Foo类的子类型。
+
+    public static void process(List<? extends Foo> list) {
+        for (Foo elem : list) {
+            // ...
+        }
+    }
+
+下面的sumOfList方法, List<Integer>和List<Double>都适用：
+
+    public static double sumOfList(List<? extends Number> list) {
+        double s = 0.0;
+        for (Number n : list)
+            s += n.doubleValue();
+        return s;
+    }
+    
+    List<Integer> li = Arrays.asList(1, 2, 3);
+    System.out.println("sum = " + sumOfList(li));
+    
+    List<Double> ld = Arrays.asList(1.2, 2.3, 3.5);
+    System.out.println("sum = " + sumOfList(ld));
+
 ### 无界通配符
 
-### 有下届的通配符
+### 有下界的通配符
 
 
 <a id="type-erasure" href="#type-inference"></a>
