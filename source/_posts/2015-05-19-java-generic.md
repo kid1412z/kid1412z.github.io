@@ -541,11 +541,13 @@ Java编译器利用目标类型推断泛型方法调用时的参数类型。表�
 * 如果你正在写可以使用Object类提供的功能来实现的方法。
 * 当使用泛型类中的不依赖于类型参数的方法时，例如List.size和List.clear. Class<?>经常被使用，因为Class<T>类中的大部分方法和类型参数T无关。
 
+
     public static void printList(List<Object> list) {
         for (Object elem : list)
             System.out.println(elem + " ");
         System.out.println();
     }
+
 
 如果上面的printList目的是打印任何类型的对象列表的话，是实现不了的。原因是List<Integer>, List<String>, List<Double>等都不是List<Object>的子类型。如果需要打印任何类型的对象，需要使用通配符：
 
@@ -562,11 +564,11 @@ Java编译器利用目标类型推断泛型方法调用时的参数类型。表�
     printList(li);
     printList(ls);
 
-> 需要注意List<Object> 和 List<?>是不同的，你可以向List<Object>中插入任何Object的子类型的对象，但是你只能向List<?>中插入null。更多关于通配符应该在什么情况下使用，请参见[通配符使用指南](#guideline)
+> 需要注意List<Object> 和 List<?>是不同的，你可以向List<Object>中插入任何Object的子类型的对象，但是你只能向List<?>中插入null。更多关于通配符应该在什么情况下使用，请参见[通配符使用指南](#wildcards-guideline)
 
 ### 有下界的通配符
 
-<a id="wildcards-guideline" href="wildcards-guideline"></a>
+<a id="wildcards-guideline" href="#wildcards-guideline"></a>
 ### 通配符使用指南
 <a id="type-erasure" href="#type-inference"></a>
 ## 类型擦除（Type Erasure）
