@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2015-05-22T15:33:15.000Z</updated>
+  <updated>2015-05-23T15:57:12.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://zuoqy.com/2015/05/19/java-generic/"/>
     <id>http://zuoqy.com/2015/05/19/java-generic/</id>
     <published>2015-05-19T13:34:22.000Z</published>
-    <updated>2015-05-22T15:33:15.000Z</updated>
+    <updated>2015-05-23T15:57:12.000Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：泛型可以将某些类型相关的错误从运行时提前到编译时显现，相比C++的模板类，Java泛型有许多独特之处，本文将详细介绍Java泛型。<br><strong>Abstract</strong>: Java generics add stability to your code by making some bugs about types be detected early on complie-time. Compared to C ++ template classes, Java generics has many unique features, this article will detail Java generics.<br><a id="more"></a></p>
 <h2 id="为什么使用泛型">为什么使用泛型</h2><p>简而言之，泛型就是在定义类、接口、方法的时候，可以把类型（types）作为参数。类型参数使相同的逻辑能够复用在不同类型的输入上。</p>
 <h3 id="使用泛型的好处：">使用泛型的好处：</h3><ul>
@@ -378,7 +378,12 @@ System.<span class="keyword">out</span>.println(<span class="string">"sum = "</s
 
 <span class="keyword">List</span>&lt;Double&gt; ld = Arrays.asList(1.2, 2.3, 3.5);
 System.<span class="keyword">out</span>.println(<span class="string">"sum = "</span> + sumOfList(ld));
-</code></pre><h3 id="无界通配符">无界通配符</h3><h3 id="有下界的通配符">有下界的通配符</h3><p><a id="type-erasure" href="#type-inference"></a></p>
+</code></pre><h3 id="无界通配符">无界通配符</h3><p>无界通配符用一个单独的<em>?</em>表示，例如List&lt;?&gt;表示未知类型的List，一般无界通配符用于以下两个场景：</p>
+<ul>
+<li>如果你正在写可以使用Object类提供的功能来实现的方法。</li>
+<li>当使用泛型类中的不依赖于类型参数的方法时，例如List.size和List.clear.</li>
+</ul>
+<h3 id="有下界的通配符">有下界的通配符</h3><p><a id="type-erasure" href="#type-inference"></a></p>
 <h2 id="类型擦除（Type_Erasure）">类型擦除（Type Erasure）</h2><p><a id="wildcards-and-subtyping" href="#wildcards-and-subtyping"></a></p>
 <h2 id="通配符和子类型">通配符和子类型</h2><p>未完待续。。。</p>
 <h2 id="参考">参考</h2><p><a href="https://docs.oracle.com/javase/tutorial/java/generics/index.html" target="_blank" rel="external">https://docs.oracle.com/javase/tutorial/java/generics/index.html</a></p>

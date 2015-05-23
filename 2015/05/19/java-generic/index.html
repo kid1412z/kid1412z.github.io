@@ -513,7 +513,12 @@ System.<span class="keyword">out</span>.println(<span class="string">"sum = "</s
 
 <span class="keyword">List</span>&lt;Double&gt; ld = Arrays.asList(1.2, 2.3, 3.5);
 System.<span class="keyword">out</span>.println(<span class="string">"sum = "</span> + sumOfList(ld));
-</code></pre><h3 id="无界通配符">无界通配符</h3><h3 id="有下界的通配符">有下界的通配符</h3><p><a id="type-erasure" href="#type-inference"></a></p>
+</code></pre><h3 id="无界通配符">无界通配符</h3><p>无界通配符用一个单独的<em>?</em>表示，例如List&lt;?&gt;表示未知类型的List，一般无界通配符用于以下两个场景：</p>
+<ul>
+<li>如果你正在写可以使用Object类提供的功能来实现的方法。</li>
+<li>当使用泛型类中的不依赖于类型参数的方法时，例如List.size和List.clear.</li>
+</ul>
+<h3 id="有下界的通配符">有下界的通配符</h3><p><a id="type-erasure" href="#type-inference"></a></p>
 <h2 id="类型擦除（Type_Erasure）">类型擦除（Type Erasure）</h2><p><a id="wildcards-and-subtyping" href="#wildcards-and-subtyping"></a></p>
 <h2 id="通配符和子类型">通配符和子类型</h2><p>未完待续。。。</p>
 <h2 id="参考">参考</h2><p><a href="https://docs.oracle.com/javase/tutorial/java/generics/index.html" target="_blank" rel="external">https://docs.oracle.com/javase/tutorial/java/generics/index.html</a></p>
