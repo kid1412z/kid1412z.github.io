@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2015-05-23T15:57:12.000Z</updated>
+  <updated>2015-05-23T16:52:18.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://zuoqy.com/2015/05/19/java-generic/"/>
     <id>http://zuoqy.com/2015/05/19/java-generic/</id>
     <published>2015-05-19T13:34:22.000Z</published>
-    <updated>2015-05-23T15:57:12.000Z</updated>
+    <updated>2015-05-23T16:52:18.000Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：泛型可以将某些类型相关的错误从运行时提前到编译时显现，相比C++的模板类，Java泛型有许多独特之处，本文将详细介绍Java泛型。<br><strong>Abstract</strong>: Java generics add stability to your code by making some bugs about types be detected early on complie-time. Compared to C ++ template classes, Java generics has many unique features, this article will detail Java generics.<br><a id="more"></a></p>
 <h2 id="为什么使用泛型">为什么使用泛型</h2><p>简而言之，泛型就是在定义类、接口、方法的时候，可以把类型（types）作为参数。类型参数使相同的逻辑能够复用在不同类型的输入上。</p>
 <h3 id="使用泛型的好处：">使用泛型的好处：</h3><ul>
@@ -381,9 +381,30 @@ System.<span class="keyword">out</span>.println(<span class="string">"sum = "</s
 </code></pre><h3 id="无界通配符">无界通配符</h3><p>无界通配符用一个单独的<em>?</em>表示，例如List&lt;?&gt;表示未知类型的List，一般无界通配符用于以下两个场景：</p>
 <ul>
 <li>如果你正在写可以使用Object类提供的功能来实现的方法。</li>
-<li>当使用泛型类中的不依赖于类型参数的方法时，例如List.size和List.clear.</li>
+<li><p>当使用泛型类中的不依赖于类型参数的方法时，例如List.size和List.clear. Class&lt;?&gt;经常被使用，因为Class<t>类中的大部分方法和类型参数T无关。</t></p>
+<p>  public static void printList(List<object> list) {</object></p>
+<pre><code><span class="tag">for</span> (<span class="tag">Object</span> <span class="rule"><span class="attribute">elem </span>:<span class="value"> list)
+    System.out.<span class="function">println</span>(elem + <span class="string">" "</span>)</span></span>;
+<span class="tag">System</span><span class="class">.out</span><span class="class">.println</span>();
+</code></pre><p>  }</p>
+</li>
 </ul>
-<h3 id="有下界的通配符">有下界的通配符</h3><p><a id="type-erasure" href="#type-inference"></a></p>
+<p>如果上面的printList目的是打印任何类型的对象列表的话，是实现不了的。原因是List<integer>, List<string>, List<double>等都不是List<object>的子类型。如果需要打印任何类型的对象，需要使用通配符：</object></double></string></integer></p>
+<pre><code><span class="keyword">public</span> <span class="keyword">static</span> void printList(<span class="keyword">List</span><span class="preprocessor">&lt;?</span>&gt; <span class="keyword">list</span>) {
+    <span class="keyword">for</span> (Object elem: <span class="keyword">list</span>)
+        System.out.<span class="keyword">print</span>(elem + <span class="string">" "</span>);
+    System.out.println();
+}
+</code></pre><p>因为对于任意的具体类型A来说，List<a>是List&lt;?&gt;的子类型，你可以使用printList方法打印任意类型的对象列表。</a></p>
+<pre><code><span class="keyword">List</span>&lt;<span class="keyword">Integer</span>&gt; li = <span class="keyword">Arrays</span>.asList(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);
+<span class="keyword">List</span>&lt;<span class="keyword">String</span>&gt;  ls = <span class="keyword">Arrays</span>.asList(<span class="string">"one"</span>, <span class="string">"two"</span>, <span class="string">"three"</span>);
+printList(li);
+printList(ls);
+</code></pre><blockquote>
+<p>需要注意List<object> 和 List&lt;?&gt;是不同的，你可以向List<object>中插入任何Object的子类型的对象，但是你只能向List&lt;?&gt;中插入null。更多关于通配符应该在什么情况下使用，请参见<a href="#guideline">通配符使用指南</a></object></object></p>
+</blockquote>
+<h3 id="有下界的通配符">有下界的通配符</h3><p><a id="wildcards-guideline" href="wildcards-guideline"></a></p>
+<h3 id="通配符使用指南">通配符使用指南</h3><p><a id="type-erasure" href="#type-inference"></a></p>
 <h2 id="类型擦除（Type_Erasure）">类型擦除（Type Erasure）</h2><p><a id="wildcards-and-subtyping" href="#wildcards-and-subtyping"></a></p>
 <h2 id="通配符和子类型">通配符和子类型</h2><p>未完待续。。。</p>
 <h2 id="参考">参考</h2><p><a href="https://docs.oracle.com/javase/tutorial/java/generics/index.html" target="_blank" rel="external">https://docs.oracle.com/javase/tutorial/java/generics/index.html</a></p>
