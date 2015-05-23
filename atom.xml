@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2015-05-23T17:45:30.000Z</updated>
+  <updated>2015-05-23T17:57:22.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://zuoqy.com/2015/05/19/java-generic/"/>
     <id>http://zuoqy.com/2015/05/19/java-generic/</id>
     <published>2015-05-19T13:34:22.000Z</published>
-    <updated>2015-05-23T17:45:30.000Z</updated>
+    <updated>2015-05-23T17:57:22.000Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：泛型可以将某些类型相关的错误从运行时提前到编译时显现，相比C++的模板类，Java泛型有许多独特之处，本文将详细介绍Java泛型。<br><strong>Abstract</strong>: Java generics add stability to your code by making some bugs about types be detected early on complie-time. Compared to C ++ template classes, Java generics has many unique features, this article will detail Java generics.<br><a id="more"></a></p>
 <h2 id="为什么使用泛型">为什么使用泛型</h2><p>简而言之，泛型就是在定义类、接口、方法的时候，可以把类型（types）作为参数。类型参数使相同的逻辑能够复用在不同类型的输入上。</p>
 <h3 id="使用泛型的好处：">使用泛型的好处：</h3><ul>
@@ -70,7 +70,7 @@
 </ul>
 <h3 id="调用和实例化泛型类型">调用和实例化泛型类型</h3><pre><code><span class="built_in">Box</span>&lt;<span class="built_in">Integer</span>&gt; integerBox = new <span class="built_in">Box</span>&lt;<span class="built_in">Integer</span>&gt;();
 </code></pre><blockquote>
-<p><strong>类型形参（Type Parameter）</strong>和<strong>类型实参（Type Argument）</strong>：Box&lt;T&gt;中的T时类型形参，Box&lt;Integer&gt;中的Integer时类型实参。在能区分两者的语境中，经常不做区分的称为类型参数。</p>
+<p><strong>类型形参（Type Parameter）</strong>和<strong>类型实参（Type Argument）</strong>：<code>Box&lt;T&gt;</code>中的T时类型形参，<code>Box&lt;Integer&gt;</code>中的Integer时类型实参。在能区分两者的语境中，经常不做区分的称为类型参数。</p>
 </blockquote>
 <p><a id="the-diamond" href="#the-diamond"></a></p>
 <h3 id="The_Diamond">The Diamond</h3><p>在JDK7及以后的版本，调用和初始化泛型可以省略构造方法类型实参：</p>
@@ -109,7 +109,7 @@ OrderedPair<span class="subst">&lt;</span><span class="built_in">String</span>, 
 }
 </code></pre><p>如果类型实参被省略，则创建一个原始类型的Box：</p>
 <pre><code><span class="built_in">Box</span> rawBox = new <span class="built_in">Box</span>();
-</code></pre><p>上面的代码中，Box是Box&lt;T&gt;的原始类型。但如果Box不是泛型类，创建的对象就不能叫做Box的原始类型。JDK5及之前的代码不支持泛型，为了向前兼容设置的。把一个泛型对象赋值给原始类型引用是被允许的。</p>
+</code></pre><p>上面的代码中，Box是<code>Box&lt;T&gt;</code>的原始类型。但如果Box不是泛型类，创建的对象就不能叫做Box的原始类型。JDK5及之前的代码不支持泛型，为了向前兼容设置的。把一个泛型对象赋值给原始类型引用是被允许的。</p>
 <pre><code><span class="built_in">Box</span>&lt;<span class="built_in">String</span>&gt; stringBox = new <span class="built_in">Box</span>&lt;&gt;();
 <span class="built_in">Box</span> rawBox = stringBox;               // OK
 </code></pre><p>但是如果你将原始类型赋值给泛型引用，则会产生警告：</p>
@@ -232,7 +232,7 @@ interface <span class="type">C</span> { <span class="comment">/* ... */</span> }
             ++<span class="keyword">count</span>;
     <span class="keyword">return</span> <span class="keyword">count</span>;
 }
-</code></pre><p>上面的代码会产生编译错误，原因是&gt;运算符只能用于比较基本类型（Primitive Types）如：short, int, double, long, float, byte, 和 char。<br>解决这个问题，可以使用上界为Comparable&lt;T&gt;的类型参数：</p>
+</code></pre><p>上面的代码会产生编译错误，原因是&gt;运算符只能用于比较基本类型（Primitive Types）如：short, int, double, long, float, byte, 和 char。<br>解决这个问题，可以使用上界为<code>Comparable&lt;T&gt;</code>的类型参数：</p>
 <pre><code><span class="keyword">public</span> <span class="keyword">interface</span> Comparable&lt;T&gt; {
     <span class="keyword">public</span> <span class="keyword">int</span> <span class="keyword">compareTo</span>(T o);
 }
@@ -259,10 +259,10 @@ someMethod(<span class="keyword">new</span> Double(<span class="number">10.1</sp
 <span class="built_in">box</span>.<span class="built_in">add</span>(<span class="keyword">new</span> Double(<span class="number">10.1</span>));  <span class="comment">// OK</span>
 </code></pre><p>但是考虑如下的方法：</p>
 <pre><code><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">boxTest</span><span class="params">(Box&lt;Number&gt; n)</span> </span>{ <span class="comment">/* ... */</span> }
-</code></pre><p>boxTest方法会接受什么类型的参数？如果传入Box&lt;Integer&gt;或者Box&lt;Double&gt;可以吗？答案是<em>不可以</em>，因为<strong>Box&lt;Integer&gt;和Box&lt;Double&gt;不是Box&lt;Number&gt;的子类型</strong>！</p>
+</code></pre><p>boxTest方法会接受什么类型的参数？如果传入<code>Box&lt;Integer&gt;</code>或者<code>Box&lt;Double&gt;</code>可以吗？答案是<em>不可以</em>，因为<strong><code>Box&lt;Integer&gt;</code>和<code>Box&lt;Double&gt;</code>不是<code>Box&lt;Number&gt;</code>的子类型</strong>！</p>
 <p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/1.png" alt="generic subtypes"></p>
 <blockquote>
-<p>注意：给定两个具体类型A和B（如：Integer和Double），无论A，B两个类有什么样的关系，MyClass&lt;A&gt; 和 MyClass&lt;B&gt; 两个类没有任何关系，他们唯一相同的父类就是Object。关于如何创建一个泛型类的子类型，参见<a href="#wildcards-and-subtyping">通配符和子类型</a></p>
+<p>注意：给定两个具体类型A和B（如：Integer和Double），无论A，B两个类有什么样的关系，<code>MyClass&lt;A&gt;</code> 和 <code>MyClass&lt;B&gt;</code> 两个类没有任何关系，他们唯一相同的父类就是Object。关于如何创建一个泛型类的子类型，参见<a href="#wildcards-and-subtyping">通配符和子类型</a></p>
 </blockquote>
 <h3 id="泛型类和子类型">泛型类和子类型</h3><p>你可以通过继承泛型类或者实现泛型接口来创建一个泛型类或者泛型接口的子类型（subtype）。以Java集合类为例：</p>
 <p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/2.png" alt="Collections hierarchy"></p>
@@ -275,7 +275,7 @@ someMethod(<span class="keyword">new</span> Double(<span class="number">10.1</sp
 <pre><code>PayloadList&lt;<span class="built_in">String</span>,<span class="built_in">String</span>&gt;
 PayloadList&lt;<span class="built_in">String</span>,<span class="built_in">Integer</span>&gt;
 PayloadList&lt;<span class="built_in">String</span>,<span class="built_in">Exception</span>&gt;
-</code></pre><p>而任何PayloadList&lt;XXX,…&gt;都不是List&lt;String&gt;的子类型。</p>
+</code></pre><p>而任何<code>PayloadList&lt;XXX,...&gt;</code>都不是<code>List&lt;String&gt;</code>的子类型。</p>
 <p><a id="type-inference" href="#type-inference"></a></p>
 <h2 id="类型推断（Type_Inference）">类型推断（Type Inference）</h2><p>类型推断是Java编译器根据方法调用和相应的声明去推断类型实参的过程。类型推断算法往往取决于实参类型、赋值操作等号右边的类型或返回值类型。最后，类型推断算法会找到适合所有条件的最具体的类型作为推断结果。<br>例如，下面的例子，类型推断的结果是Serializable：</p>
 <pre><code>static &lt;<span class="literal">T</span>&gt; <span class="literal">T</span> pick(<span class="literal">T</span> a1, <span class="literal">T</span> a2) { <span class="keyword">return</span> a2; }
@@ -334,7 +334,7 @@ Serializable s = pick(<span class="string">"d"</span>, new ArrayList&lt;String&g
 }
 </code></pre><p>初始化MyClass实例：</p>
 <pre><code><span class="keyword">new</span> <span class="keyword">MyClass</span>&lt;<span class="built_in">Integer</span>&gt;(<span class="string">""</span>)
-</code></pre><p>上面的语句创建了MyClass&lt;Integer&gt;的对象，显式的指明泛型类MyClass&lt;X&gt;的类型实参是Integer。但是MyClass的构造方法包含类型形参T并没有被显式的赋值。编译器通过传入构造方法的String类型的参数推断类型参数T的实参是String类型。<br>在Java SE 7 之前的版本，编译器已经具备推断泛型构造方法类型实参的能力，Java SE 7及之后的版本，编译器可以推断泛型类的类型实参（必须使用<a href="#the-diamond">the diamond</a>）</p>
+</code></pre><p>上面的语句创建了<code>MyClass&lt;Integer&gt;</code>的对象，显式的指明泛型类<code>MyClass&lt;X&gt;</code>的类型实参是Integer。但是MyClass的构造方法包含类型形参T并没有被显式的赋值。编译器通过传入构造方法的String类型的参数推断类型参数T的实参是String类型。<br>在Java SE 7 之前的版本，编译器已经具备推断泛型构造方法类型实参的能力，Java SE 7及之后的版本，编译器可以推断泛型类的类型实参（必须使用<a href="#the-diamond">the diamond</a>）</p>
 <pre><code><span class="keyword">MyClass</span>&lt;<span class="built_in">Integer</span>&gt; myObject = <span class="keyword">new</span> <span class="keyword">MyClass</span>&lt;&gt;(<span class="string">""</span>);
 </code></pre><p>上面的语句，编译器既可以推断出泛型类的类型实参，也可以推断出泛型构造方法的类型实参。</p>
 <blockquote>
@@ -344,7 +344,7 @@ Serializable s = pick(<span class="string">"d"</span>, new ArrayList&lt;String&g
 <pre><code>static <span class="tag">&lt;<span class="title">T</span>&gt;</span> List<span class="tag">&lt;<span class="title">T</span>&gt;</span> emptyList();
 </code></pre><p>若有以下的赋值语句：</p>
 <pre><code><span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; listOne = Collections.emptyList();
-</code></pre><p>则期望的结果类型是List&lt;String&gt;；此类型即为目标类型。因为方法emptyList返回一个List&lt;T&gt;类型的值，编译器推断类型形参T一定是String。此机制Java SE 7 和 Java SE 8 都适用当然你也可以显示的指定泛型方法的类型参数：</p>
+</code></pre><p>则期望的结果类型是<code>List&lt;String&gt;</code>；此类型即为目标类型。因为方法emptyList返回一个<code>List&lt;T&gt;</code>类型的值，编译器推断类型形参T一定是String。此机制Java SE 7 和 Java SE 8 都适用当然你也可以显示的指定泛型方法的类型参数：</p>
 <pre><code><span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; listOne = Collections.&lt;<span class="built_in">String</span>&gt;emptyList();
 </code></pre><p>当然，这在上下文语境中并<strong>不是必须的</strong>。但在下面的情况下：</p>
 <pre><code><span class="keyword">void</span> processStringList(<span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; stringList) {
@@ -354,18 +354,18 @@ Serializable s = pick(<span class="string">"d"</span>, new ArrayList&lt;String&g
 <pre><code>processStringList<span class="list">(<span class="keyword">Collections</span>.emptyList<span class="list">()</span>)</span><span class="comment">;</span>
 </code></pre><p>错误大致是：</p>
 <pre><code><span class="built_in">List</span>&lt;<span class="built_in">Object</span>&gt; cannot be converted to <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt;
-</code></pre><p>编译器需要类型实参T，所以被默认当成List&lt;Object&gt;，进而emptyList方法返回List&lt;Object&gt;类型的结果，和processStringList方法的参数类型不兼容。因此，在Java SE 7中，必须指定类型参数的值的值：</p>
+</code></pre><p>编译器需要类型实参T，所以被默认当成<code>List&lt;Object&gt;</code>，进而emptyList方法返回<code>List&lt;Object&gt;</code>类型的结果，和processStringList方法的参数类型不兼容。因此，在Java SE 7中，必须指定类型参数的值的值：</p>
 <pre><code>processStringList<span class="list">(<span class="keyword">Collections</span>.&lt;String&gt;emptyList<span class="list">()</span>)</span><span class="comment">;</span>
-</code></pre><p>这种情况在Java SE 8中将不复存在，在Java SE 8中，<em>目标类型</em>的范围被扩展到包括方法参数。即可以通过形参的类型参数推断返回值的类型参数。<br>因为形参是List&lt;String&gt;,Collections.emptyList返回List&lt;T&gt;类型的结果，List&lt;String&gt;被作为目标类型，编译器推断T为String类型。因此，下面的语句在Java SE 8中可以编译通过：</p>
+</code></pre><p>这种情况在Java SE 8中将不复存在，在Java SE 8中，<em>目标类型</em>的范围被扩展到包括方法参数。即可以通过形参的类型参数推断返回值的类型参数。<br>因为形参是<code>List&lt;String&gt;</code>,Collections.emptyList返回<code>List&lt;T&gt;</code>类型的结果，<code>List&lt;String&gt;</code>被作为目标类型，编译器推断T为String类型。因此，下面的语句在Java SE 8中可以编译通过：</p>
 <pre><code>processStringList<span class="list">(<span class="keyword">Collections</span>.emptyList<span class="list">()</span>)</span><span class="comment">;</span>
 </code></pre><h2 id="通配符（Wildcard）">通配符（Wildcard）</h2><p>泛型编程中，把问号（?）称为<em>通配符</em>，表示未知类型。通配符在很多情况下会用到：类型参数、属性、局部变量，甚至是返回类型（尽管明确的返回值类型才是好的编程习惯）。但<em>绝不会用于</em>：泛型方法调用的类型实参、泛型类实例化、超类型（supertype）。</p>
-<h3 id="有上界的通配符">有上界的通配符</h3><p>你可以通过上界通配符减轻泛型对变量类型的限制。例如，你希望一个泛型方法同时能处理List&lt;Integer&gt;, List&lt;Double&gt; 和 List&lt;Number&gt;，你可以使用上界通配符。<br>应使用<em>?</em>和<em>extends</em>关键字（无论接口还是类），例如List&lt;? extends Number&gt;。 List&lt;Number&gt; 比List&lt;? extends Number&gt;的限制更严格。因为前者的匹配类型只有Number类型，而后者任何Number和Number的子类型都适用。<br>下面的process方法可以处理类型是任何Foo类或者Foo类的子类型。</p>
+<h3 id="有上界的通配符">有上界的通配符</h3><p>你可以通过上界通配符减轻泛型对变量类型的限制。例如，你希望一个泛型方法同时能处理<code>List&lt;Integer&gt;</code>, <code>List&lt;Double&gt;</code> 和 <code>List&lt;Number&gt;</code>，你可以使用上界通配符。<br>应使用<em>?</em>和<em>extends</em>关键字（无论接口还是类），例如<code>List&lt;? extends Number&gt;</code>。 <code>List&lt;Number&gt;</code> 比<code>List&lt;? extends Number&gt;</code>的限制更严格。因为前者的匹配类型只有Number类型，而后者任何Number和Number的子类型都适用。<br>下面的process方法可以处理类型是任何Foo类或者Foo类的子类型。</p>
 <pre><code><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(List&lt;? extends Foo&gt; <span class="built_in">list</span>)</span> </span>{
     <span class="keyword">for</span> (Foo elem : <span class="built_in">list</span>) {
         <span class="comment">// ...</span>
     }
 }
-</code></pre><p>下面的sumOfList方法, List&lt;Integer&gt; 和 List&lt;Double&gt;都适用：</p>
+</code></pre><p>下面的sumOfList方法, <code>List&lt;Integer&gt;</code> 和 <code>List&lt;Double&gt;</code>都适用：</p>
 <pre><code>public static double sumOfList(<span class="keyword">List</span>&lt;? extends Number&gt; <span class="keyword">list</span>) {
     double s = 0.0;
     <span class="keyword">for</span> (Number <span class="keyword">n</span> : <span class="keyword">list</span>)
@@ -378,25 +378,25 @@ System.<span class="keyword">out</span>.println(<span class="string">"sum = "</s
 
 <span class="keyword">List</span>&lt;Double&gt; ld = Arrays.asList(1.2, 2.3, 3.5);
 System.<span class="keyword">out</span>.println(<span class="string">"sum = "</span> + sumOfList(ld));
-</code></pre><h3 id="无界通配符">无界通配符</h3><p>无界通配符用一个单独的<em>?</em>表示，例如List&lt;?&gt;表示未知类型的List，一般无界通配符用于以下两个场景：</p>
+</code></pre><h3 id="无界通配符">无界通配符</h3><p>无界通配符用一个单独的<em>?</em>表示，例如<code>List&lt;?&gt;</code>表示未知类型的List，一般无界通配符用于以下两个场景：</p>
 <ul>
 <li>如果你正在写可以使用Object类提供的功能来实现的方法。</li>
-<li>当使用泛型类中的不依赖于类型参数的方法时，例如List.size和List.clear. Class&lt;?&gt;经常被使用，因为Class&lt;T&gt;类中的大部分方法和类型参数T无关。</li>
+<li>当使用泛型类中的不依赖于类型参数的方法时，例如List.size和List.clear. <code>Class&lt;?&gt;</code>经常被使用，因为<code>Class&lt;T&gt;</code>类中的大部分方法和类型参数T无关。</li>
 </ul>
 <figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> printList(List&lt;<span class="keyword">Object</span>&gt; list) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">Object</span> elem : list)</span><br><span class="line">        System.out.<span class="built_in">println</span>(elem + <span class="string">" "</span>);</span><br><span class="line">    System.out.<span class="built_in">println</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如果上面的printList目的是打印任何类型的对象列表的话，是实现不了的。原因是List&lt;Integer&gt;, List&lt;String&gt;, List&lt;Double&gt;等都不是List&lt;Object&gt;的子类型。如果需要打印任何类型的对象，需要使用通配符：</p>
+<p>如果上面的printList目的是打印任何类型的对象列表的话，是实现不了的。原因是<code>List&lt;Integer&gt;</code>, <code>List&lt;String&gt;</code>, <code>List&lt;Double&gt;</code>等都不是<code>List&lt;Object&gt;</code>的子类型。如果需要打印任何类型的对象，需要使用通配符：</p>
 <pre><code><span class="keyword">public</span> <span class="keyword">static</span> void printList(<span class="keyword">List</span><span class="preprocessor">&lt;?</span>&gt; <span class="keyword">list</span>) {
     <span class="keyword">for</span> (Object elem: <span class="keyword">list</span>)
         System.out.<span class="keyword">print</span>(elem + <span class="string">" "</span>);
     System.out.println();
 }
-</code></pre><p>因为对于任意的具体类型T来说，List&lt;T&gt;是List&lt;?&gt;的子类型，你可以使用printList方法打印任意类型的对象列表。</p>
+</code></pre><p>因为对于任意的具体类型T来说，<code>List&lt;T&gt;</code>是<code>List&lt;?&gt;</code>的子类型，你可以使用printList方法打印任意类型的对象列表。</p>
 <pre><code><span class="keyword">List</span>&lt;<span class="keyword">Integer</span>&gt; li = <span class="keyword">Arrays</span>.asList(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);
 <span class="keyword">List</span>&lt;<span class="keyword">String</span>&gt;  ls = <span class="keyword">Arrays</span>.asList(<span class="string">"one"</span>, <span class="string">"two"</span>, <span class="string">"three"</span>);
 printList(li);
 printList(ls);
 </code></pre><blockquote>
-<p>需要注意List&lt;Object&gt; 和 List&lt;?&gt;是不同的，你可以向List&lt;Object&gt;中插入任何Object的子类型的对象，但是你只能向List&lt;?&gt;中插入null。更多关于通配符应该在什么情况下使用，请参见<a href="#wildcards-guideline">通配符使用指南</a></p>
+<p>需要注意<code>List&lt;Object&gt;</code> 和 <code>List&lt;?&gt;</code>是不同的，你可以向<code>List&lt;Object&gt;</code>中插入任何Object的子类型的对象，但是你只能向<code>List&lt;?&gt;</code>中插入null。更多关于通配符应该在什么情况下使用，请参见<a href="#wildcards-guideline">通配符使用指南</a></p>
 </blockquote>
 <h3 id="有下界的通配符">有下界的通配符</h3><p><a id="wildcards-guideline" href="#wildcards-guideline"></a></p>
 <h3 id="通配符使用指南">通配符使用指南</h3><p><a id="type-erasure" href="#type-inference"></a></p>
