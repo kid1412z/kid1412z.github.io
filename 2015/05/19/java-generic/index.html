@@ -530,7 +530,7 @@ System.<span class="keyword">out</span>.println(<span class="string">"sum = "</s
         System.out.<span class="keyword">print</span>(elem + <span class="string">" "</span>);
     System.out.println();
 }
-</code></pre><p>因为对于任意的具体类型A来说，List<a>是List&lt;?&gt;的子类型，你可以使用printList方法打印任意类型的对象列表。</a></p>
+</code></pre><p>因为对于任意的具体类型T来说，List<t>是List&lt;?&gt;的子类型，你可以使用printList方法打印任意类型的对象列表。</t></p>
 <pre><code><span class="keyword">List</span>&lt;<span class="keyword">Integer</span>&gt; li = <span class="keyword">Arrays</span>.asList(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);
 <span class="keyword">List</span>&lt;<span class="keyword">String</span>&gt;  ls = <span class="keyword">Arrays</span>.asList(<span class="string">"one"</span>, <span class="string">"two"</span>, <span class="string">"three"</span>);
 printList(li);
