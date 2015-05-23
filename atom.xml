@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2015-05-23T17:04:37.000Z</updated>
+  <updated>2015-05-23T17:09:14.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://zuoqy.com/2015/05/19/java-generic/"/>
     <id>http://zuoqy.com/2015/05/19/java-generic/</id>
     <published>2015-05-19T13:34:22.000Z</published>
-    <updated>2015-05-23T17:04:37.000Z</updated>
+    <updated>2015-05-23T17:09:14.000Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：泛型可以将某些类型相关的错误从运行时提前到编译时显现，相比C++的模板类，Java泛型有许多独特之处，本文将详细介绍Java泛型。<br><strong>Abstract</strong>: Java generics add stability to your code by making some bugs about types be detected early on complie-time. Compared to C ++ template classes, Java generics has many unique features, this article will detail Java generics.<br><a id="more"></a></p>
 <h2 id="为什么使用泛型">为什么使用泛型</h2><p>简而言之，泛型就是在定义类、接口、方法的时候，可以把类型（types）作为参数。类型参数使相同的逻辑能够复用在不同类型的输入上。</p>
 <h3 id="使用泛型的好处：">使用泛型的好处：</h3><ul>
@@ -383,12 +383,8 @@ System.<span class="keyword">out</span>.println(<span class="string">"sum = "</s
 <li>如果你正在写可以使用Object类提供的功能来实现的方法。</li>
 <li>当使用泛型类中的不依赖于类型参数的方法时，例如List.size和List.clear. Class&lt;?&gt;经常被使用，因为Class<t>类中的大部分方法和类型参数T无关。</t></li>
 </ul>
-<pre><code><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> printList(List&lt;<span class="keyword">Object</span>&gt; list) {
-    <span class="keyword">for</span> (<span class="keyword">Object</span> elem : list)
-        System.out.<span class="built_in">println</span>(elem + <span class="string">" "</span>);
-    System.out.<span class="built_in">println</span>();
-}
-</code></pre><p>如果上面的printList目的是打印任何类型的对象列表的话，是实现不了的。原因是List<integer>, List<string>, List<double>等都不是List<object>的子类型。如果需要打印任何类型的对象，需要使用通配符：</object></double></string></integer></p>
+<figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> printList(List&lt;<span class="keyword">Object</span>&gt; list) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">Object</span> elem : list)</span><br><span class="line">        System.out.<span class="built_in">println</span>(elem + <span class="string">" "</span>);</span><br><span class="line">    System.out.<span class="built_in">println</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果上面的printList目的是打印任何类型的对象列表的话，是实现不了的。原因是List<integer>, List<string>, List<double>等都不是List<object>的子类型。如果需要打印任何类型的对象，需要使用通配符：</object></double></string></integer></p>
 <pre><code><span class="keyword">public</span> <span class="keyword">static</span> void printList(<span class="keyword">List</span><span class="preprocessor">&lt;?</span>&gt; <span class="keyword">list</span>) {
     <span class="keyword">for</span> (Object elem: <span class="keyword">list</span>)
         System.out.<span class="keyword">print</span>(elem + <span class="string">" "</span>);
