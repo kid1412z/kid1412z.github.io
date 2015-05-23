@@ -77,7 +77,7 @@ tags: [Java,generic]
 
     Box<Integer> integerBox = new Box<Integer>();
 
-> **类型形参（Type Parameter）**和**类型实参（Type Argument）**：Box<T>中的T时类型形参，Box<Integer>中的Integer时类型实参。在能区分两者的语境中，经常不做区分的称为类型参数。
+> **类型形参（Type Parameter）**和**类型实参（Type Argument）**：Box&lt;T>中的T时类型形参，Box&lt;Integer>中的Integer时类型实参。在能区分两者的语境中，经常不做区分的称为类型参数。
 
 <a id="the-diamond" href="#the-diamond"></a>
 ### The Diamond
@@ -137,7 +137,7 @@ tags: [Java,generic]
 
     Box rawBox = new Box();
     
-上面的代码中，Box是Box<T>的原始类型。但如果Box不是泛型类，创建的对象就不能叫做Box的原始类型。JDK5及之前的代码不支持泛型，为了向前兼容设置的。把一个泛型对象赋值给原始类型引用是被允许的。
+上面的代码中，Box是Box&lt;T>的原始类型。但如果Box不是泛型类，创建的对象就不能叫做Box的原始类型。JDK5及之前的代码不支持泛型，为了向前兼容设置的。把一个泛型对象赋值给原始类型引用是被允许的。
 
     Box<String> stringBox = new Box<>();
     Box rawBox = stringBox;               // OK
@@ -307,7 +307,7 @@ tags: [Java,generic]
     }
     
 上面的代码会产生编译错误，原因是>运算符只能用于比较基本类型（Primitive Types）如：short, int, double, long, float, byte, 和 char。
-解决这个问题，可以使用上界为Comparable<T>的类型参数：
+解决这个问题，可以使用上界为Comparable&lt;T>的类型参数：
 
     public interface Comparable<T> {
         public int compareTo(T o);
@@ -347,11 +347,11 @@ tags: [Java,generic]
 
     public void boxTest(Box<Number> n) { /* ... */ }
 
-boxTest方法会接受什么类型的参数？如果传入Box<Integer>或者Box<Double>可以吗？答案是*不可以*，因为**Box<Integer>和Box<Double>不是Box<Number>的子类型**！
+boxTest方法会接受什么类型的参数？如果传入Box&lt;Integer>或者Box&lt;Double>可以吗？答案是*不可以*，因为**Box&lt;Integer>和Box&lt;Double>不是Box&lt;Number>的子类型**！
 
 ![generic subtypes](http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/1.png)
 
-> 注意：给定两个具体类型A和B（如：Integer和Double），无论A，B两个类有什么样的关系，MyClass<A> 和 MyClass<B> 两个类没有任何关系，他们唯一相同的父类就是Object。关于如何创建一个泛型类的子类型，参见[通配符和子类型](#wildcards-and-subtyping)
+> 注意：给定两个具体类型A和B（如：Integer和Double），无论A，B两个类有什么样的关系，MyClass&lt;A> 和 MyClass&lt;B> 两个类没有任何关系，他们唯一相同的父类就是Object。关于如何创建一个泛型类的子类型，参见[通配符和子类型](#wildcards-and-subtyping)
 
 ### 泛型类和子类型
 
@@ -366,13 +366,13 @@ boxTest方法会接受什么类型的参数？如果传入Box<Integer>或者Box<
       ...
     }
 
-以下类型实参的PayLoadList是List<String>的子类型（subtype）：
+以下类型实参的PayLoadList是ListString>的子类型（subtype）：
     
     PayloadList<String,String>
     PayloadList<String,Integer>
     PayloadList<String,Exception>
     
-而任何PayloadList<XXX,...>都不是List<String>的子类型。
+而任何PayloadList&lt;XXX,...>都不是List&lt;String>的子类型。
 
 <a id="type-inference" href="#type-inference"></a>
 ## 类型推断（Type Inference）
@@ -458,7 +458,7 @@ boxTest方法会接受什么类型的参数？如果传入Box<Integer>或者Box<
 
     new MyClass<Integer>("")
 
-上面的语句创建了MyClass<Integer>的对象，显式的指明泛型类MyClass<X>的类型实参是Integer。但是MyClass的构造方法包含类型形参T并没有被显式的赋值。编译器通过传入构造方法的String类型的参数推断类型参数T的实参是String类型。
+上面的语句创建了MyClass&lt;Integer>的对象，显式的指明泛型类MyClass&lt;X>的类型实参是Integer。但是MyClass的构造方法包含类型形参T并没有被显式的赋值。编译器通过传入构造方法的String类型的参数推断类型参数T的实参是String类型。
 在Java SE 7 之前的版本，编译器已经具备推断泛型构造方法类型实参的能力，Java SE 7及之后的版本，编译器可以推断泛型类的类型实参（必须使用[the diamond](#the-diamond)）
 
     MyClass<Integer> myObject = new MyClass<>("");
@@ -477,7 +477,7 @@ Java编译器利用目标类型推断泛型方法调用时的参数类型。表�
 
     List<String> listOne = Collections.emptyList();
 
-则期望的结果类型是List<String>；此类型即为目标类型。因为方法emptyList返回一个List<T>类型的值，编译器推断类型形参T一定是String。此机制Java SE 7 和 Java SE 8 都适用当然你也可以显示的指定泛型方法的类型参数：
+则期望的结果类型是List&lt;String>；此类型即为目标类型。因为方法emptyList返回一个List&lt;T>类型的值，编译器推断类型形参T一定是String。此机制Java SE 7 和 Java SE 8 都适用当然你也可以显示的指定泛型方法的类型参数：
 
     List<String> listOne = Collections.<String>emptyList();
 
@@ -495,12 +495,12 @@ Java编译器利用目标类型推断泛型方法调用时的参数类型。表�
 
     List<Object> cannot be converted to List<String>
     
-编译器需要类型实参T，所以被默认当成List<Object>，进而emptyList方法返回List<Object>类型的结果，和processStringList方法的参数类型不兼容。因此，在Java SE 7中，必须指定类型参数的值的值：
+编译器需要类型实参T，所以被默认当成List&lt;Object>，进而emptyList方法返回List&lt;Object>类型的结果，和processStringList方法的参数类型不兼容。因此，在Java SE 7中，必须指定类型参数的值的值：
 
     processStringList(Collections.<String>emptyList());
 
 这种情况在Java SE 8中将不复存在，在Java SE 8中，*目标类型*的范围被扩展到包括方法参数。即可以通过形参的类型参数推断返回值的类型参数。
-因为形参是List<String>,Collections。emptyList返回List<T>类型的结果，List<String>被作为目标类型，编译器推断T为String类型。因此，下面的语句在Java SE 8中可以编译通过：
+因为形参是List&lt;String>,Collections.emptyList返回List&lt;T>类型的结果，List&lt;String>被作为目标类型，编译器推断T为String类型。因此，下面的语句在Java SE 8中可以编译通过：
 
     processStringList(Collections.emptyList());
     
@@ -510,8 +510,8 @@ Java编译器利用目标类型推断泛型方法调用时的参数类型。表�
 
 ### 有上界的通配符
 
-你可以通过上界通配符减轻泛型对变量类型的限制。例如，你希望一个泛型方法同时能处理List<Integer>, List<Double> 和 List<Number>，你可以使用上界通配符。
-应使用*?*和*extends*关键字（无论接口还是类），例如List<? extends Number>。 List<Number> 比List<? extends Number>的限制更严格。因为前者的匹配类型只有Number类型，而后者任何Number和Number的子类型都适用。
+你可以通过上界通配符减轻泛型对变量类型的限制。例如，你希望一个泛型方法同时能处理List&lt;Integer>, List&lt;Double> 和 List&lt;Number>，你可以使用上界通配符。
+应使用*?*和*extends*关键字（无论接口还是类），例如List&lt;? extends Number>。 List&lt;Number> 比List&lt;? extends Number>的限制更严格。因为前者的匹配类型只有Number类型，而后者任何Number和Number的子类型都适用。
 下面的process方法可以处理类型是任何Foo类或者Foo类的子类型。
 
     public static void process(List<? extends Foo> list) {
@@ -520,7 +520,7 @@ Java编译器利用目标类型推断泛型方法调用时的参数类型。表�
         }
     }
 
-下面的sumOfList方法, List<Integer>和List<Double>都适用：
+下面的sumOfList方法, List&lt;Integer> 和 List&lt;Double>都适用：
 
     public static double sumOfList(List<? extends Number> list) {
         double s = 0.0;
@@ -537,19 +537,19 @@ Java编译器利用目标类型推断泛型方法调用时的参数类型。表�
 
 ### 无界通配符
 
-无界通配符用一个单独的*?*表示，例如List<?>表示未知类型的List，一般无界通配符用于以下两个场景：
+无界通配符用一个单独的*?*表示，例如List&lt;?>表示未知类型的List，一般无界通配符用于以下两个场景：
 * 如果你正在写可以使用Object类提供的功能来实现的方法。
-* 当使用泛型类中的不依赖于类型参数的方法时，例如List.size和List.clear. Class<?>经常被使用，因为Class<T>类中的大部分方法和类型参数T无关。
+* 当使用泛型类中的不依赖于类型参数的方法时，例如List.size和List.clear. Class&lt;?>经常被使用，因为Class&lt;T>类中的大部分方法和类型参数T无关。
 
-
+```    
     public static void printList(List<Object> list) {
         for (Object elem : list)
             System.out.println(elem + " ");
         System.out.println();
     }
+```
 
-
-如果上面的printList目的是打印任何类型的对象列表的话，是实现不了的。原因是List<Integer>, List<String>, List<Double>等都不是List<Object>的子类型。如果需要打印任何类型的对象，需要使用通配符：
+如果上面的printList目的是打印任何类型的对象列表的话，是实现不了的。原因是List&lt;Integer>, List&lt;String>, List&lt;Double>等都不是List&lt;Object>的子类型。如果需要打印任何类型的对象，需要使用通配符：
 
     public static void printList(List<?> list) {
         for (Object elem: list)
@@ -557,14 +557,14 @@ Java编译器利用目标类型推断泛型方法调用时的参数类型。表�
         System.out.println();
     }
 
-因为对于任意的具体类型T来说，List<T>是List<?>的子类型，你可以使用printList方法打印任意类型的对象列表。
+因为对于任意的具体类型T来说，List&lt;T>是List&lt;?>的子类型，你可以使用printList方法打印任意类型的对象列表。
 
     List<Integer> li = Arrays.asList(1, 2, 3);
     List<String>  ls = Arrays.asList("one", "two", "three");
     printList(li);
     printList(ls);
 
-> 需要注意List<Object> 和 List<?>是不同的，你可以向List<Object>中插入任何Object的子类型的对象，但是你只能向List<?>中插入null。更多关于通配符应该在什么情况下使用，请参见[通配符使用指南](#wildcards-guideline)
+> 需要注意List&lt;Object> 和 List&lt;?>是不同的，你可以向List&lt;Object>中插入任何Object的子类型的对象，但是你只能向List&lt;?>中插入null。更多关于通配符应该在什么情况下使用，请参见[通配符使用指南](#wildcards-guideline)
 
 ### 有下界的通配符
 
