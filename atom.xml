@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2015-05-23T17:57:22.000Z</updated>
+  <updated>2015-05-25T15:14:33.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://zuoqy.com/2015/05/19/java-generic/"/>
     <id>http://zuoqy.com/2015/05/19/java-generic/</id>
     <published>2015-05-19T13:34:22.000Z</published>
-    <updated>2015-05-23T17:57:22.000Z</updated>
+    <updated>2015-05-25T15:14:33.000Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：泛型可以将某些类型相关的错误从运行时提前到编译时显现，相比C++的模板类，Java泛型有许多独特之处，本文将详细介绍Java泛型。<br><strong>Abstract</strong>: Java generics add stability to your code by making some bugs about types be detected early on complie-time. Compared to C ++ template classes, Java generics has many unique features, this article will detail Java generics.<br><a id="more"></a></p>
 <h2 id="为什么使用泛型">为什么使用泛型</h2><p>简而言之，泛型就是在定义类、接口、方法的时候，可以把类型（types）作为参数。类型参数使相同的逻辑能够复用在不同类型的输入上。</p>
 <h3 id="使用泛型的好处：">使用泛型的好处：</h3><ul>
@@ -398,7 +398,11 @@ printList(ls);
 </code></pre><blockquote>
 <p>需要注意<code>List&lt;Object&gt;</code> 和 <code>List&lt;?&gt;</code>是不同的，你可以向<code>List&lt;Object&gt;</code>中插入任何Object的子类型的对象，但是你只能向<code>List&lt;?&gt;</code>中插入null。更多关于通配符应该在什么情况下使用，请参见<a href="#wildcards-guideline">通配符使用指南</a></p>
 </blockquote>
-<h3 id="有下界的通配符">有下界的通配符</h3><p><a id="wildcards-guideline" href="#wildcards-guideline"></a></p>
+<h3 id="有下界的通配符">有下界的通配符</h3><p>和有上界的通配符相反，有下界的通配符使用<code>&lt;? super A&gt;</code> 表示通配符的下界是A。</p>
+<blockquote>
+<p>注意，你可以指定上界，也可以指定下界，但是不同同时指定两者。</p>
+</blockquote>
+<p><a id="wildcards-guideline" href="#wildcards-guideline"></a></p>
 <h3 id="通配符使用指南">通配符使用指南</h3><p><a id="type-erasure" href="#type-inference"></a></p>
 <h2 id="类型擦除（Type_Erasure）">类型擦除（Type Erasure）</h2><p><a id="wildcards-and-subtyping" href="#wildcards-and-subtyping"></a></p>
 <h2 id="通配符和子类型">通配符和子类型</h2><p>未完待续。。。</p>
