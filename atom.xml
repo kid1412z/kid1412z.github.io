@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2015-05-25T15:14:33.000Z</updated>
+  <updated>2015-05-26T15:22:49.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://zuoqy.com/2015/05/19/java-generic/"/>
     <id>http://zuoqy.com/2015/05/19/java-generic/</id>
     <published>2015-05-19T13:34:22.000Z</published>
-    <updated>2015-05-25T15:14:33.000Z</updated>
+    <updated>2015-05-26T15:22:49.000Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：泛型可以将某些类型相关的错误从运行时提前到编译时显现，相比C++的模板类，Java泛型有许多独特之处，本文将详细介绍Java泛型。<br><strong>Abstract</strong>: Java generics add stability to your code by making some bugs about types be detected early on complie-time. Compared to C ++ template classes, Java generics has many unique features, this article will detail Java generics.<br><a id="more"></a></p>
 <h2 id="为什么使用泛型">为什么使用泛型</h2><p>简而言之，泛型就是在定义类、接口、方法的时候，可以把类型（types）作为参数。类型参数使相同的逻辑能够复用在不同类型的输入上。</p>
 <h3 id="使用泛型的好处：">使用泛型的好处：</h3><ul>
@@ -244,7 +244,8 @@ interface <span class="type">C</span> { <span class="comment">/* ... */</span> }
             ++<span class="keyword">count</span>;
     <span class="keyword">return</span> <span class="keyword">count</span>;
 }
-</code></pre><h2 id="泛型、继承和子类型（Generics,_Inheritance,_and_Subtypes）">泛型、继承和子类型（Generics, Inheritance, and Subtypes）</h2><p>如果两个类型兼容，可以把一个类型的对象赋予另个一类型的引用。例如：</p>
+</code></pre><p><a id="g-i-s" href="#g-i-s"></a></p>
+<h2 id="泛型、继承和子类型（Generics,_Inheritance,_and_Subtypes）">泛型、继承和子类型（Generics, Inheritance, and Subtypes）</h2><p>如果两个类型兼容，可以把一个类型的对象赋予另个一类型的引用。例如：</p>
 <pre><code><span class="built_in">Object</span> someObject = <span class="keyword">new</span> <span class="built_in">Object</span>();
 Integer someInteger = <span class="keyword">new</span> Integer(<span class="number">10</span>);
 someObject = someInteger;   <span class="comment">// OK</span>
@@ -402,10 +403,21 @@ printList(ls);
 <blockquote>
 <p>注意，你可以指定上界，也可以指定下界，但是不同同时指定两者。</p>
 </blockquote>
+<p>如果你想要一个方法能够处理Integer类型以及所有Integer类型的父类，则可以使用有下界的通配符：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">addNumbers</span><span class="params">(List&lt;? super Integer&gt; <span class="built_in">list</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;</span><br><span class="line">        <span class="built_in">list</span>.add(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="通配符和子类型">通配符和子类型</h3><p>在<a href="#g-i-s">泛型、继承和子类型</a>一节，我们曾经说过，仅仅类型参数有继承关系的泛型类或者泛型接口之间没有任何继承关系。但是你可以通过通配符建立泛型类和接口之间的继承关系。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> &#123;</span> <span class="comment">/* ... */</span> &#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">A</span> &#123;</span> <span class="comment">/* ... */</span> &#125;</span><br></pre></td></tr></table></figure>
+<p>则你可以这样写代码：</p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">B b = new B()<span class="comment">;</span></span><br><span class="line"><span class="literal">A</span> <span class="literal">a</span> = b<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<p>对于普通的类来说，子类型规则是成立的：如果B继承A，那么B是A的子类型。但是这个规则对于泛型类型来说，不适用。</p>
+<p>Integer是Number类的子类，<code>List&lt;Integer&gt;</code>和<code>List&lt;Number&gt;</code>是什么关系？</p>
+<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/3.png" alt="subtype"></p>
+<p>尽管Integer是Number的子类型，但是<code>List&lt;Integer&gt;</code>和<code>List&lt;Number&gt;</code>并没有继承关系。它们之间仅有的关系就是共同的父类是<code>List&lt;?&gt;</code>.<br>下图说明了有上下界通配符的泛型类之间的继承关系：</p>
+<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/4.png" alt="subtype-wildcard"></p>
 <p><a id="wildcards-guideline" href="#wildcards-guideline"></a></p>
 <h3 id="通配符使用指南">通配符使用指南</h3><p><a id="type-erasure" href="#type-inference"></a></p>
 <h2 id="类型擦除（Type_Erasure）">类型擦除（Type Erasure）</h2><p><a id="wildcards-and-subtyping" href="#wildcards-and-subtyping"></a></p>
-<h2 id="通配符和子类型">通配符和子类型</h2><p>未完待续。。。</p>
+<h2 id="通配符和子类型-1">通配符和子类型</h2><p>未完待续。。。</p>
 <h2 id="参考">参考</h2><p><a href="https://docs.oracle.com/javase/tutorial/java/generics/index.html" target="_blank" rel="external">https://docs.oracle.com/javase/tutorial/java/generics/index.html</a></p>
 ]]></content>
     <summary type="html">
