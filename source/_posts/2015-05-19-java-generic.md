@@ -609,6 +609,78 @@ Integer是Number类的子类，`List<Integer>`和`List<Number>`是什么关系�
 
 ![subtype-wildcard](http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/4.png)
 
+在[通配符使用指南](#wildcards-guidline)一节，将介绍更多关于上下界通配符的使用方法。
+
+### 通配符捕获和辅助方法
+
+在某些情况下，编译器会推断通配符的类型。例如，一个列表被定义为`List<?>`，当计算表达式的值的时候，编译器会根据代码推断出特定的类型。这种场景就叫做*通配符捕获（Wildcard Capture）*。
+在大部分情况下，你都不需要关注通配符捕获，除非你得到包含*capture of*的错误提示。
+
+
+```
+    import java.util.List;
+    
+    public class WildcardError {
+    
+        void foo(List<?> i) {
+            i.set(0, i.get(0));
+        }
+    }
+```
+
+在上面的代码中，编译器处理输入参数i时，把它的类型参数当成Object，当触发`List.set(int,E)`时，编译器无法确定set进list中的对象类型，从而报错。当有类型错误提示的时候，往往是编译器认为你对变量设置了错误的类型。添加泛型，正是为了解决编译期类型检查。
+例如使用JDK 7编译上面的代码的时候，会提示如下的错误：
+
+    WildcardError.java:6: error: method set in interface List<E> cannot be applied to given types;
+        i.set(0, i.get(0));
+         ^
+      required: int,CAP#1
+      found: int,Object
+      reason: actual argument Object cannot be converted to CAP#1 by method invocation conversion
+      where E is a type-variable:
+        E extends Object declared in interface List
+      where CAP#1 is a fresh type-variable:
+        CAP#1 extends Object from capture of ?
+    1 error
+
+你可以写一个私有的辅助方法来解决上面的错误：
+
+```
+    public class WildcardFixed {
+    
+        void foo(List<?> i) {
+            fooHelper(i);
+        }
+    
+    
+        // Helper method created so that the wildcard can be captured
+        // through type inference.
+        private <T> void fooHelper(List<T> l) {
+            l.set(0, l.get(0));
+        }
+    
+    }
+```
+
+辅助方法使编译器能够通过类型推断，得到T的类型是`CAP#1`。辅助方法惯例命名方式`originalMethodNameHelper`。
+再看一个稍微复杂的例子：
+
+```
+    import java.util.List;
+    
+    public class WildcardErrorBad {
+    
+        void swapFirst(List<? extends Number> l1, List<? extends Number> l2) {
+          Number temp = l1.get(0);
+          l1.set(0, l2.get(0)); // expected a CAP#1 extends Number,
+                                // got a CAP#2 extends Number;
+                                // same bound, but different types
+          l2.set(0, temp);	    // expected a CAP#1 extends Number,
+                                // got a Number
+        }
+    }
+```
+
 
 <a id="wildcards-guideline" href="#wildcards-guideline"></a>
 ### 通配符使用指南
