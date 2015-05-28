@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2015-05-27T01:13:42.000Z</updated>
+  <updated>2015-05-28T14:37:25.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://zuoqy.com/2015/05/19/java-generic/"/>
     <id>http://zuoqy.com/2015/05/19/java-generic/</id>
     <published>2015-05-19T13:34:22.000Z</published>
-    <updated>2015-05-27T01:13:42.000Z</updated>
+    <updated>2015-05-28T14:37:25.000Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：泛型可以将某些类型相关的错误从运行时提前到编译时显现，相比C++的模板类，Java泛型有许多独特之处，本文将详细介绍Java泛型。<br><strong>Abstract</strong>: Java generics add stability to your code by making some bugs about types be detected early on complie-time. Compared to C ++ template classes, Java generics has many unique features, this article will detail Java generics.<br><a id="more"></a></p>
 <h2 id="为什么使用泛型">为什么使用泛型</h2><p>简而言之，泛型就是在定义类、接口、方法的时候，可以把类型（types）作为参数。类型参数使相同的逻辑能够复用在不同类型的输入上。</p>
 <h3 id="使用泛型的好处：">使用泛型的好处：</h3><ul>
@@ -433,8 +433,58 @@ printList(ls);
 <figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">WildcardFixed</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">foo</span><span class="params">(List&lt;?&gt; i)</span> </span>&#123;</span><br><span class="line">        fooHelper(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Helper method created so that the wildcard can be captured</span></span><br><span class="line">    <span class="comment">// through type inference.</span></span><br><span class="line">    <span class="keyword">private</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">fooHelper</span><span class="params">(List&lt;T&gt; l)</span> </span>&#123;</span><br><span class="line">        l.<span class="keyword">set</span>(<span class="number">0</span>, l.<span class="keyword">get</span>(<span class="number">0</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>辅助方法使编译器能够通过类型推断，得到T的类型是<code>CAP#1</code>。辅助方法惯例命名方式<code>originalMethodNameHelper</code>。<br>再看一个稍微复杂的例子：</p>
 <figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="literal">import</span> java.util.<span class="built_in">List</span>;</span><br><span class="line"></span><br><span class="line">public <span class="class"><span class="keyword">class</span> <span class="title">WildcardErrorBad</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> swapFirst(<span class="built_in">List</span>&lt;? <span class="keyword">extends</span> Number&gt; l1, <span class="built_in">List</span>&lt;? <span class="keyword">extends</span> Number&gt; l2) &#123;</span><br><span class="line">      Number temp = l1.<span class="literal">get</span>(<span class="number">0</span>);</span><br><span class="line">      l1.<span class="literal">set</span>(<span class="number">0</span>, l2.<span class="literal">get</span>(<span class="number">0</span>)); <span class="comment">// expected a CAP#1 extends Number,</span></span><br><span class="line">                            <span class="comment">// got a CAP#2 extends Number;</span></span><br><span class="line">                            <span class="comment">// same bound, but different types</span></span><br><span class="line">      l2.<span class="literal">set</span>(<span class="number">0</span>, temp);	    <span class="comment">// expected a CAP#1 extends Number,</span></span><br><span class="line">                            <span class="comment">// got a Number</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个例子尝试不安全的操作，例如用下面的方式调用<code>swapFirst</code>方法：</p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">List</span>&lt;<span class="keyword">Integer</span>&gt; li = <span class="keyword">Arrays</span>.asList(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>);</span><br><span class="line"><span class="keyword">List</span>&lt;Double&gt;  ld = <span class="keyword">Arrays</span>.asList(<span class="number">10.10</span>, <span class="number">20.20</span>, <span class="number">30.30</span>);</span><br><span class="line">swapFirst(li, ld);</span><br></pre></td></tr></table></figure>
+<p>尽管<code>List&lt;Integer&gt;</code>和<code>List&lt;Double&gt;</code>都满足<code>List&lt;? extends Number&gt;</code>的类型限制，但试图把Integer列表中的元素放入Double类型的列表中肯定是错误的。<br>JDk javac程序编译以上代码会报类似下面的错误：</p>
+<pre><code>WildcardErrorBad.java:<span class="number">7</span>: error: <span class="function"><span class="keyword">method</span> <span class="title">set</span> <span class="title">in</span> <span class="title">interface</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt; <span class="title">cannot</span> <span class="title">be</span> <span class="title">applied</span> <span class="title">to</span> <span class="title">given</span> <span class="title">types</span>;</span>
+      l1.<span class="keyword">set</span>(<span class="number">0</span>, l2.get(<span class="number">0</span>)); <span class="comment">// expected a CAP#1 extends Number,</span>
+        ^
+  required: int,CAP<span class="string">#1</span>
+  found: int,Number
+  reason: actual argument Number cannot be converted <span class="keyword">to</span> CAP<span class="string">#1</span> <span class="keyword">by</span> <span class="function"><span class="keyword">method</span> <span class="title">invocation</span> <span class="title">conversion</span>
+  <span class="title">where</span> <span class="title">E</span> <span class="title">is</span> <span class="title">a</span> <span class="title">type</span>-<span class="title">variable</span>:</span>
+    E extends Object declared <span class="keyword">in</span> <span class="keyword">interface</span> List
+  <span class="keyword">where</span> CAP<span class="string">#1</span> <span class="keyword">is</span> a fresh <span class="keyword">type</span>-variable:
+    CAP<span class="string">#1</span> extends Number <span class="keyword">from</span> capture <span class="keyword">of</span> ? extends Number
+WildcardErrorBad.java:<span class="number">10</span>: error: <span class="function"><span class="keyword">method</span> <span class="title">set</span> <span class="title">in</span> <span class="title">interface</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt; <span class="title">cannot</span> <span class="title">be</span> <span class="title">applied</span> <span class="title">to</span> <span class="title">given</span> <span class="title">types</span>;</span>
+      l2.<span class="keyword">set</span>(<span class="number">0</span>, temp);      <span class="comment">// expected a CAP#1 extends Number,</span>
+        ^
+  required: int,CAP<span class="string">#1</span>
+  found: int,Number
+  reason: actual argument Number cannot be converted <span class="keyword">to</span> CAP<span class="string">#1</span> <span class="keyword">by</span> <span class="function"><span class="keyword">method</span> <span class="title">invocation</span> <span class="title">conversion</span>
+  <span class="title">where</span> <span class="title">E</span> <span class="title">is</span> <span class="title">a</span> <span class="title">type</span>-<span class="title">variable</span>:</span>
+    E extends Object declared <span class="keyword">in</span> <span class="keyword">interface</span> List
+  <span class="keyword">where</span> CAP<span class="string">#1</span> <span class="keyword">is</span> a fresh <span class="keyword">type</span>-variable:
+    CAP<span class="string">#1</span> extends Number <span class="keyword">from</span> capture <span class="keyword">of</span> ? extends Number
+WildcardErrorBad.java:<span class="number">15</span>: error: <span class="function"><span class="keyword">method</span> <span class="title">set</span> <span class="title">in</span> <span class="title">interface</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt; <span class="title">cannot</span> <span class="title">be</span> <span class="title">applied</span> <span class="title">to</span> <span class="title">given</span> <span class="title">types</span>;</span>
+        i.<span class="keyword">set</span>(<span class="number">0</span>, i.get(<span class="number">0</span>));
+         ^
+  required: int,CAP<span class="string">#1</span>
+  found: int,Object
+  reason: actual argument Object cannot be converted <span class="keyword">to</span> CAP<span class="string">#1</span> <span class="keyword">by</span> <span class="function"><span class="keyword">method</span> <span class="title">invocation</span> <span class="title">conversion</span>
+  <span class="title">where</span> <span class="title">E</span> <span class="title">is</span> <span class="title">a</span> <span class="title">type</span>-<span class="title">variable</span>:</span>
+    E extends Object declared <span class="keyword">in</span> <span class="keyword">interface</span> List
+  <span class="keyword">where</span> CAP<span class="string">#1</span> <span class="keyword">is</span> a fresh <span class="keyword">type</span>-variable:
+    CAP<span class="string">#1</span> extends Object <span class="keyword">from</span> capture <span class="keyword">of</span> ?
+<span class="number">3</span> errors
+</code></pre><p>没有辅助方法能够解决上面的问题，因为代码压根是错误的。</p>
 <p><a id="wildcards-guideline" href="#wildcards-guideline"></a></p>
-<h3 id="通配符使用指南">通配符使用指南</h3><p><a id="type-erasure" href="#type-inference"></a></p>
+<h3 id="通配符使用指南">通配符使用指南</h3><p>使用带上下界的通配符是Java泛型中最容易让人产生迷惑的地方，这一节将提供一些代码设计上的指南。<br>为了方便后续讨论，读者应该理解一个变量有如下的两个功能：</p>
+<ul>
+<li><strong>传入参数（An “In” Variable）：</strong> 传入参数在代码中往往作为数据使用，例如<code>copy(src,dest)</code>函数有两个参数，src作为被拷贝的对象，是传入变量，习惯上叫做<em>入参</em>。</li>
+<li><strong>传出参数（An “Out” Variable)：</strong> 传出参数在代码中往往作为结果使用，例如<code>copy(src,dest)</code>函数中的dest就是传出参数，习惯上称为<em>传出参数</em>。</li>
+</ul>
+<p>当然有些变量既被用做传入变量又被用作传出变量，这种情况在这一小节中也有讨论。<br>你可以结合<em>in</em>和<em>out</em>的原则，用下面列表中的tips作为决定使用哪种泛型通配符的依据：</p>
+<blockquote>
+<p><strong>通配符使用指南</strong></p>
+<ul>
+<li>传入参数用上界通配符extends关键字</li>
+<li>传出参数用下界通配符super关键字</li>
+<li>传入参数在代码中可被当做Object对象访问时，使用无界通配符</li>
+<li>既是传入参数又是传出参数时，不要使用通配符</li>
+</ul>
+</blockquote>
+<p><a id="type-erasure" href="#type-inference"></a></p>
 <h2 id="类型擦除（Type_Erasure）">类型擦除（Type Erasure）</h2><p><a id="wildcards-and-subtyping" href="#wildcards-and-subtyping"></a></p>
 <h2 id="通配符和子类型-1">通配符和子类型</h2><p>未完待续。。。</p>
 <h2 id="参考">参考</h2><p><a href="https://docs.oracle.com/javase/tutorial/java/generics/index.html" target="_blank" rel="external">https://docs.oracle.com/javase/tutorial/java/generics/index.html</a></p>
