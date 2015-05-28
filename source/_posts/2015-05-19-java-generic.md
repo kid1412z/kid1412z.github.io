@@ -681,9 +681,70 @@ Integer是Number类的子类，`List<Integer>`和`List<Number>`是什么关系�
     }
 ```
 
+这个例子尝试不安全的操作，例如用下面的方式调用`swapFirst`方法：
+
+```
+    List<Integer> li = Arrays.asList(1, 2, 3);
+    List<Double>  ld = Arrays.asList(10.10, 20.20, 30.30);
+    swapFirst(li, ld);
+```
+
+尽管`List<Integer>`和`List<Double>`都满足`List<? extends Number>`的类型限制，但试图把Integer列表中的元素放入Double类型的列表中肯定是错误的。
+JDk javac程序编译以上代码会报类似下面的错误：
+
+    WildcardErrorBad.java:7: error: method set in interface List<E> cannot be applied to given types;
+          l1.set(0, l2.get(0)); // expected a CAP#1 extends Number,
+            ^
+      required: int,CAP#1
+      found: int,Number
+      reason: actual argument Number cannot be converted to CAP#1 by method invocation conversion
+      where E is a type-variable:
+        E extends Object declared in interface List
+      where CAP#1 is a fresh type-variable:
+        CAP#1 extends Number from capture of ? extends Number
+    WildcardErrorBad.java:10: error: method set in interface List<E> cannot be applied to given types;
+          l2.set(0, temp);      // expected a CAP#1 extends Number,
+            ^
+      required: int,CAP#1
+      found: int,Number
+      reason: actual argument Number cannot be converted to CAP#1 by method invocation conversion
+      where E is a type-variable:
+        E extends Object declared in interface List
+      where CAP#1 is a fresh type-variable:
+        CAP#1 extends Number from capture of ? extends Number
+    WildcardErrorBad.java:15: error: method set in interface List<E> cannot be applied to given types;
+            i.set(0, i.get(0));
+             ^
+      required: int,CAP#1
+      found: int,Object
+      reason: actual argument Object cannot be converted to CAP#1 by method invocation conversion
+      where E is a type-variable:
+        E extends Object declared in interface List
+      where CAP#1 is a fresh type-variable:
+        CAP#1 extends Object from capture of ?
+    3 errors
+
+没有辅助方法能够解决上面的问题，因为代码压根是错误的。
 
 <a id="wildcards-guideline" href="#wildcards-guideline"></a>
 ### 通配符使用指南
+
+使用带上下界的通配符是Java泛型中最容易让人产生迷惑的地方，这一节将提供一些代码设计上的指南。
+为了方便后续讨论，读者应该理解一个变量有如下的两个功能：
+
+* **传入参数（An "In" Variable）：** 传入参数在代码中往往作为数据使用，例如`copy(src,dest)`函数有两个参数，src作为被拷贝的对象，是传入变量，习惯上叫做*入参*。
+* **传出参数（An "Out" Variable)：** 传出参数在代码中往往作为结果使用，例如`copy(src,dest)`函数中的dest就是传出参数，习惯上称为*传出参数*。
+
+当然有些变量既被用做传入变量又被用作传出变量，这种情况在这一小节中也有讨论。
+你可以结合*in*和*out*的原则，用下面列表中的tips作为决定使用哪种泛型通配符的依据：
+
+> **通配符使用指南**
+* 传入参数用上界通配符extends关键字
+* 传出参数用下界通配符super关键字
+* 传入参数在代码中可被当做Object对象访问时，使用无界通配符
+* 既是传入参数又是传出参数时，不要使用通配符
+
+
 <a id="type-erasure" href="#type-inference"></a>
 ## 类型擦除（Type Erasure）
 
