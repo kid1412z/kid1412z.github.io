@@ -744,6 +744,43 @@ JDk javac程序编译以上代码会报类似下面的错误：
 * 传入参数在代码中可被当做Object对象访问时，使用无界通配符
 * 既是传入参数又是传出参数时，不要使用通配符
 
+> 注：上面的这些规则不适用与方法的返回类型，应该避免在返回值中使用通配符，因为这样强迫方法使用者去写额外的代码处理通配符。
+
+如果列表定义为`List<? extends ...>`则非正规的定义了一个只读的列表，但不严格保证列表是只读的。
+假设有如下的两个类：
+
+```
+    class NaturalNumber {
+    
+        private int i;
+    
+        public NaturalNumber(int i) { this.i = i; }
+        // ...
+    }
+    
+    class EvenNumber extends NaturalNumber {
+    
+        public EvenNumber(int i) { super(i); }
+        // ...
+    }
+```
+
+下面的代码会产生编译错误：：
+
+```
+    List<EvenNumber> le = new ArrayList<>();
+    List<? extends NaturalNumber> ln = le;
+    ln.add(new NaturalNumber(35));  // compile-time error
+```
+
+因为`List<EvenNumber>`是`List<? extends NaturalNumber>`的子类型，你可以把le赋值给ln，但是你不能向`EvenNumber`列表中添加`NaturalNumber`。你可以对`List<? extends ...>`列表做如下的操作：
+
+* add null
+* 调用 `clear()`
+* 得到列表的Iterator并调用`remove()`方法
+* 捕获通配符类型并把从列表读取的元素添加到列表
+
+可以看到含有通配符的列表并非是只读的，但你无法添加新的非空元素，也无法改变已有元素。
 
 <a id="type-erasure" href="#type-inference"></a>
 ## 类型擦除（Type Erasure）
