@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2015-05-30T15:14:52.000Z</updated>
+  <updated>2015-05-30T15:22:53.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -19,8 +19,8 @@
     <link href="http://zuoqy.com/2015/05/19/java-generic/"/>
     <id>http://zuoqy.com/2015/05/19/java-generic/</id>
     <published>2015-05-19T13:34:22.000Z</published>
-    <updated>2015-05-30T15:14:52.000Z</updated>
-    <content type="html"><![CDATA[<p><strong>摘要</strong>：泛型可以将某些类型相关的错误从运行时提前到编译时显现，相比C++的模板类，Java泛型有许多独特之处，本文将详细介绍Java泛型。<br><strong>Abstract</strong>: Java generics add stability to your code by making some bugs about types be detected early on complie-time. Compared to C ++ template classes, Java generics has many unique features, this article will detail Java generics.<br><a id="more"></a></p>
+    <updated>2015-05-30T15:22:53.000Z</updated>
+    <content type="html"><![CDATA[<p><strong>摘要</strong>：泛型可以将某些类型相关的错误从运行时提前到编译时显现，但Java泛型尤其特殊性和不彻底性，稍不注意就会犯错误，甚至影响到设计。这篇博文参照Oracle给出的教程，全面的介绍了Java泛型的重要知识点。<br><strong>Abstract</strong>: Java generics add stability to your code by making some bugs about types be detected early on complie-time. This article gives a comprehensive introduction to the important points Java generics.<br><a id="more"></a></p>
 <h2 id="为什么使用泛型">为什么使用泛型</h2><p>简而言之，泛型就是在定义类、接口、方法的时候，可以把类型（types）作为参数。类型参数使相同的逻辑能够复用在不同类型的输入上。</p>
 <h3 id="使用泛型的好处：">使用泛型的好处：</h3><ul>
 <li>编译期强类型检查（编译期错误排查难度小于运行时错误）</li>
@@ -503,7 +503,7 @@ WildcardErrorBad.java:<span class="number">15</span>: error: <span class="functi
 <h2 id="参考">参考</h2><p><a href="https://docs.oracle.com/javase/tutorial/java/generics/index.html" target="_blank" rel="external">https://docs.oracle.com/javase/tutorial/java/generics/index.html</a></p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p><strong>摘要</strong>：泛型可以将某些类型相关的错误从运行时提前到编译时显现，相比C++的模板类，Java泛型有许多独特之处，本文将详细介绍Java泛型。<br><strong>Abstract</strong>: Java generics add stability to your code by making some bugs about types be detected early on complie-time. Compared to C ++ template classes, Java generics has many unique features, this article will detail Java generics.<br>]]>
+    <![CDATA[<p><strong>摘要</strong>：泛型可以将某些类型相关的错误从运行时提前到编译时显现，但Java泛型尤其特殊性和不彻底性，稍不注意就会犯错误，甚至影响到设计。这篇博文参照Oracle给出的教程，全面的介绍了Java泛型的重要知识点。<br><strong>Abstract</strong>: Java generics add stability to your code by making some bugs about types be detected early on complie-time. This article gives a comprehensive introduction to the important points Java generics.<br>]]>
     
     </summary>
     
