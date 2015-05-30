@@ -582,6 +582,7 @@ Java编译器利用目标类型推断泛型方法调用时的参数类型。表�
     }
 ```
 
+<a id="wildcards-and-subtyping" href="#wildcards-and-subtyping"></a>
 ### 通配符和子类型
 
 在[泛型、继承和子类型](#g-i-s)一节，我们曾经说过，仅仅类型参数有继承关系的泛型类或者泛型接口之间没有任何继承关系。但是你可以通过通配符建立泛型类和接口之间的继承关系。
@@ -784,9 +785,6 @@ JDk javac程序编译以上代码会报类似下面的错误：
 
 <a id="type-erasure" href="#type-inference"></a>
 ## 类型擦除（Type Erasure）
-
-<a id="wildcards-and-subtyping" href="#wildcards-and-subtyping"></a>
-## 通配符和子类型
 
 
 
