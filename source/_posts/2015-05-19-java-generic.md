@@ -786,6 +786,90 @@ JDk javac程序编译以上代码会报类似下面的错误：
 <a id="type-erasure" href="#type-inference"></a>
 ## 类型擦除（Type Erasure）
 
+Java语言通过引入泛型来提供更严格的编译期类型检查，为了实现泛型，Java编译器应用类型擦除：
+* 将所有类型参数替换为通配符的界限或Object（如果无界限），产生的字节码只包含普通的那个的类、接口和方法。
+* 如果需要保证类型安全，还需要插入类型转换。
+* 生成桥接方法来保持泛型类型的多态性。
+
+类型擦除确保了没有任何新的类型创建，从而不会造成任何运行时的开销。
+
+### 泛型类的类型擦除
+
+在类型擦除过程中，Java编译器将删除所有类型参数，并替换类型参数为他的界限，如果没有界限，将替换为Object。
+例如：
+
+```
+    public class Node<T> {
+    
+        private T data;
+        private Node<T> next;
+    
+        public Node(T data, Node<T> next) }
+            this.data = data;
+            this.next = next;
+        }
+    
+        public T getData() { return data; }
+        // ...
+    }
+```
+
+因为类型参数没有界限，编译器将类型参数替换为Object。
+
+```
+   public class Node {
+   
+       private Object data;
+       private Node next;
+   
+       public Node(Object data, Node next) {
+           this.data = data;
+           this.next = next;
+       }
+   
+       public Object getData() { return data; }
+       // ...
+   }
+```
+
+如果类型参数有界限：
+
+```
+    public class Node<T extends Comparable<T>> {
+    
+        private T data;
+        private Node<T> next;
+    
+        public Node(T data, Node<T> next) {
+            this.data = data;
+            this.next = next;
+        }
+    
+        public T getData() { return data; }
+        // ...
+    }
+```
+
+Java编译器把有界限的类型参数`T`替换为第一个有界类型`Comparable`：
+
+```
+    public class Node {
+    
+        private Comparable data;
+        private Node next;
+    
+        public Node(Comparable data, Node next) {
+            this.data = data;
+            this.next = next;
+        }
+    
+        public Comparable getData() { return data; }
+        // ...
+    }
+```
+
+### 泛型方法的类型擦除
+
 
 
 未完待续。。。
