@@ -870,6 +870,108 @@ Java编译器把有界限的类型参数`T`替换为第一个有界类型`Compar
 
 ### 泛型方法的类型擦除
 
+Java编译器也会擦除泛型方法实参中的类型参数：
+
+```
+    // Counts the number of occurrences of elem in anArray.
+    //
+    public static <T> int count(T[] anArray, T elem) {
+        int cnt = 0;
+        for (T e : anArray)
+            if (e.equals(elem))
+                ++cnt;
+            return cnt;
+    }
+```
+
+因为`T`没有界限限制，所以类型参数会被替换为`Object`：
+
+```
+    public static int count(Object[] anArray, Object elem) {
+        int cnt = 0;
+        for (Object e : anArray)
+            if (e.equals(elem))
+                ++cnt;
+            return cnt;
+    }
+```
+
+例如下面的三个类：
+
+```
+    class Shape { /* ... */ }
+    class Circle extends Shape { /* ... */ }
+    class Rectangle extends Shape { /* ... */ }
+```
+
+你可以写一个泛型方法来画出不同的图形：
+
+```
+    public static <T extends Shape> void draw(T shape) { /* ... */ }
+```
+
+Java编译器将`T`替换为Shape：
+
+```
+    public static void draw(Shape shape) { /* ... */ }
+
+```
+
+### 类型擦除和桥接方法的影响
+
+有的时候类型擦除会引发预料不到的情况，在下面的[桥接方法](#bridge-methods)展示了编译器在某些时候会创建合成方法（*桥接方法*）。桥接方法是类型擦除处理过程的一部分。
+
+
+```
+    public class Node<T> {
+    
+        public T data;
+    
+        public Node(T data) { this.data = data; }
+    
+        public void setData(T data) {
+            System.out.println("Node.setData");
+            this.data = data;
+        }
+    }
+    
+    public class MyNode extends Node<Integer> {
+        public MyNode(Integer data) { super(data); }
+    
+        public void setData(Integer data) {
+            System.out.println("MyNode.setData");
+            super.setData(data);
+        }
+    }
+```
+
+```
+    MyNode mn = new MyNode(5);
+    Node n = mn;            // A raw type - compiler throws an unchecked warning
+    n.setData("Hello");     
+    Integer x = mn.data;    // Causes a ClassCastException to be thrown.
+```
+
+类型擦除之后，上面的代码变为：
+
+
+```
+    MyNode mn = new MyNode(5);
+    Node n = (MyNode)mn;         // A raw type - compiler throws an unchecked warning
+    n.setData("Hello");
+    Integer x = (String)mn.data; // Causes a ClassCastException to be thrown.
+```
+
+当代码运行时：
+* `n.setData("Hello");` 实际上调用了MyNode对象的`setData(Object)`方法（`MyNode`继承了`Node`的`setData(Object)`方法）
+* 引用`n`指向的对象的成员变量data被赋予`String`类型的值
+* 引用`mn`指向的相同的对象的成员预期是Integer类型
+* 试图将String类型的值赋给Integer类型，抛出`ClassCastException`异常
+
+<a id="bridge-methods" href="#bridge-methods"></a>
+### 桥接方法（Bridge Methods）
+
+
 
 
 未完待续。。。
