@@ -1023,6 +1023,28 @@ Java编译器将`T`替换为Shape：
 
 ## 非具体化类型（Non-Reifiable Types）
 
+类型擦除还和具有非具体化类型的可变参数方法同时使用，会产生一些问题。本小节将详细介绍以下内容：
+* 非具体化类型
+* 堆污染
+* 可变参数方法与非具体化类型的潜在漏洞
+* 防止非具体化类型的可变参数方法产生的警告
+
+### 非具体化类型（Non-Reifiable Types）
+
+具体化类型（Reifiable types）是在在运行时可以得到其全部类型信息的类型。包括基本类型（primitives），非泛型类型，原始类型（raw types）和无界通配符的调用。
+非具体化类型（Non-Reifiable Types）是类型信息在编译期间被类型擦除的类型——对没有定义为无界通配符的泛型类型的调用。非具体化类型的类型信息在运行时不是全部可见的。例如：`List<String>`和`List<Numbuer>`JVM在运行时不能区分这两种类型。正如在[泛型的限制](#restrictions-on-generics)中描述的，有些机制在非具体化类型上不能使用，比如`instanceof`。
+
+
+
+### 堆污染（Heap Pollution）
+
+### 可变参数方法与非具体化类型的潜在漏洞（Potential Vulnerabilities of Varargs Methods with Non-Reifiable Formal Parameters）
+
+### 防止非具体化类型的可变参数方法产生的警告（Prevent Warnings from Varargs Methods with Non-Reifiable Formal Parameters）
+
+
+<a id="restrictions-on-generics"><a/>
+## 泛型的限制（Restrictions on Generics）
 未完待续。。。
 
 ## 参考
