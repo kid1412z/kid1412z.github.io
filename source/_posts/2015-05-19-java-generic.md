@@ -1034,11 +1034,58 @@ Java编译器将`T`替换为Shape：
 具体化类型（Reifiable types）是在在运行时可以得到其全部类型信息的类型。包括基本类型（primitives），非泛型类型，原始类型（raw types）和无界通配符的调用。
 非具体化类型（Non-Reifiable Types）是类型信息在编译期间被类型擦除的类型——对没有定义为无界通配符的泛型类型的调用。非具体化类型的类型信息在运行时不是全部可见的。例如：`List<String>`和`List<Numbuer>`JVM在运行时不能区分这两种类型。正如在[泛型的限制](#restrictions-on-generics)中描述的，有些机制在非具体化类型上不能使用，比如`instanceof`。
 
-
-
 ### 堆污染（Heap Pollution）
 
+当包含类型参数的引用指向一个并非这种类型的对象的时候，就会发生堆污染。一般在这种情形下，编译器在编译器会报未检查警告（unchecked warning）。当无论编译期类型检查还是运行时都无法验证一个包含类型参数的操作（类型转换或者方法调用）是否正确的时候，就会产生未检查警告。混用原始类型（raw types）和泛型参数或者执行未检查的类型转换时都会产生堆污染。
+一般情况下，如果所有代码都同时编译，编译器利用未检查警告提醒你留意潜在的堆污染；如果不同部分的代码分开编译，则编译器很难检测到潜在的堆污染。
+当然，如果你能确保代码没有任何未检查警告，则不可能发生堆污染。
+
 ### 可变参数方法与非具体化类型的潜在漏洞（Potential Vulnerabilities of Varargs Methods with Non-Reifiable Formal Parameters）
+
+泛型方法包含可变长度参数时可能造成堆污染。
+
+```
+    public class ArrayBuilder {
+    
+      public static <T> void addToList (List<T> listArg, T... elements) {
+        for (T x : elements) {
+          listArg.add(x);
+        }
+      }
+    
+      public static void faultyMethod(List<String>... l) {
+        Object[] objectArray = l;     // Valid
+        objectArray[0] = Arrays.asList(42);
+        String s = l[0].get(0);       // ClassCastException thrown here
+      }
+    
+    }
+```
+
+```
+    public class HeapPollutionExample {
+    
+      public static void main(String[] args) {
+    
+        List<String> stringListA = new ArrayList<String>();
+        List<String> stringListB = new ArrayList<String>();
+    
+        ArrayBuilder.addToList(stringListA, "Seven", "Eight", "Nine");
+        ArrayBuilder.addToList(stringListB, "Ten", "Eleven", "Twelve");
+        List<List<String>> listOfStringLists =
+          new ArrayList<List<String>>();
+        ArrayBuilder.addToList(listOfStringLists,
+          stringListA, stringListB);
+    
+        ArrayBuilder.faultyMethod(Arrays.asList("Hello!"), Arrays.asList("World!"));
+      }
+    }
+```
+
+当编译上面代码的时候，编译器会产生关于`ArrayBuilder.addToList`方法的警告：
+
+    warning: [varargs] Possible heap pollution from parameterized vararg type T
+
 
 ### 防止非具体化类型的可变参数方法产生的警告（Prevent Warnings from Varargs Methods with Non-Reifiable Formal Parameters）
 
