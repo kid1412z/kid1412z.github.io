@@ -1085,7 +1085,39 @@ Java编译器将`T`替换为Shape：
 当编译上面代码的时候，编译器会产生关于`ArrayBuilder.addToList`方法的警告：
 
     warning: [varargs] Possible heap pollution from parameterized vararg type T
+    
+当遇到可变参数的方法时，编译器将可变参数转换成数组，但是Java不允许创建泛型数组（例如`new T[]`），在`ArrayBuilder.addToList`方法中，编译器将可变参数`T...`转换为`T[]`。但由于类型擦除，参数数组最终的类型是`Object[]`,因此可能会出现堆污染。
 
+下面的语句将参数数组赋值给Object数组：
+
+```
+    Object[] objectArray = l;
+```
+
+上面的语句会产生堆污染。参数数组可以赋值给Object类型的数组，但是此赋值语句编译器不会产生未检查警告，因为已经在将可变参数`List<String>... l`转换为`List[] l`的时候产生过警告。赋值语句是合法的，因为`List[]`是`Object[]`的子类型。
+
+这样，当你把任何类型的列表赋值给`objectArray`数组中的元素的时候，编译器不会产生任何的错误或者警告，例如下面的语句：
+
+```
+objectArray[0] = Arrays.asList(42);
+```
+
+将`objectArray`数组中的第一个元素赋值为`List<Integer>`类型的值。
+
+假设你用如下的方式调用`ArrayBuilder.faultyMethod`方法：
+
+```
+ArrayBuilder.faultyMethod(Arrays.asList("Hello!"), Arrays.asList("World!"));
+```
+
+在运行时，JVM会抛出`ClassCastException`异常：
+
+```
+// ClassCastException thrown here
+String s = l[0].get(0);
+```
+
+存储在`l`中是`List<Integer>`类型，但上面的语句期待的类型是`List<String>`。
 
 ### 防止非具体化类型的可变参数方法产生的警告（Prevent Warnings from Varargs Methods with Non-Reifiable Formal Parameters）
 
