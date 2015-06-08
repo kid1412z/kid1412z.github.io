@@ -31,6 +31,8 @@ highlight_theme: normal
 
 
 # MathJax Support
+# 这里的配置失效，已经修改了mathjax.swig，使mathjax的配置在文章级别配置是否启用
+# 要想启用mathjax，只需要在文章头部增加：mathjax: true即可
 mathjax:
 
 
