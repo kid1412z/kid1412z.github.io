@@ -12,6 +12,8 @@ tags: [Java,generic]
 
 先看几个问题：
 
+<!-- more -->
+
 1. 程序会出错吗？如果出错，是编译时还是运行时呢？
 
 ```
@@ -102,7 +104,7 @@ class Parser<T extends Exception> {
 
 7. `List<Number>` 是 `List<Integer>`的父类型吗？
 
-<!-- more -->
+
 ## 为什么使用泛型
 
 简而言之，泛型就是在定义类、接口、方法的时候，可以把类型（types）作为参数。类型参数使相同的逻辑能够复用在不同类型的输入上。
