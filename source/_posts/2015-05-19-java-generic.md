@@ -3,8 +3,105 @@ date: 2015-05-19 21:34:22
 categories: Java
 tags: [Java,generic]
 ---
-**摘要**：泛型可以将某些类型相关的错误从运行时提前到编译时显现，但Java泛型尤其特殊性和不彻底性，稍不注意就会犯错误，甚至影响到设计。这篇博文参照Oracle给出的教程，全面的介绍了Java泛型的重要知识点。
+**摘要**：泛型可以将某些类型相关的错误从运行时提前到编译时显现，但Java的泛型有很多特点和限制。本文介绍了泛型类型、原始类型、泛型方法、有界类型参数、泛型的继承和子类型、类型推断、通配符、类型擦除、非具体化类型和泛型的限制，之前用到的和以后要用的，都在这里了。
 **Abstract**: Java generics add stability to your code by making some bugs about types be detected early on complie-time. This article gives a comprehensive introduction to the important points Java generics.
+
+## 写在最前面
+
+一说泛型，好像都会。但前些天在看源码的时候，发现一个警告，引出了好多泛型的问题，最终让我下定决心整理一下Java泛型的坑（感谢Oracle，有一个很全面的Tutorial，Java编程思想都没有它介绍的详尽）。如果你也觉得你掌握了泛型，不妨试试以下问题，这些问题的解释，就包含在本篇文章里。
+
+先看几个问题：
+
+1. 程序会出错吗？如果出错，是编译时还是运行时呢？
+
+```
+    import java.util.List;
+    
+    public class Foo {
+    
+        void foo(List<?> i) {
+            i.set(0, i.get(0));
+        }
+    }
+```
+
+2. 下面的程序正确吗？
+
+```
+class NaturalNumber {
+    
+    private int i;
+    
+    public NaturalNumber(int i) { this.i = i; }
+        // ...
+    }
+    
+    class EvenNumber extends NaturalNumber {
+    
+        public EvenNumber(int i) { super(i); }
+        // ...
+    }
+    
+    public static void main(Sting[] args) {
+        List<EvenNumber> le = new ArrayList<>();
+        List<? extends NaturalNumber> ln = le;
+        ln.add(new NaturalNumber(35));
+    }
+
+```
+
+3. 下面的程序呢？
+
+```
+List<Integer> li = new ArrayList<>();
+List<Number>  ln = (List<Number>) li; 
+```
+
+4. 下面那个能编译通过呢？
+
+a)
+
+```
+public static <E> void rtti(List<E> list) {
+    if (list instanceof ArrayList<Integer>) {
+        // ...
+    }
+}
+```
+
+b)
+
+```
+public static void rtti(List<?> list) {
+    if (list instanceof ArrayList<?>) {  
+        // ...
+    }
+}
+```
+
+5. 下面的程序正确吗？
+
+```
+void processStringList(List<String> stringList) {
+    // process stringList
+}
+processStringList(Collections.emptyList());
+```
+如果不对，报什么错误呢？
+
+
+6. 下面的程序可以编译通过吗？
+
+```
+class Parser<T extends Exception> {
+    public void parse(File file) throws T {
+        // ...
+    }
+}
+```
+
+7. `List<Number>` 是 `List<Integer>`的父类型吗？
+
 <!-- more -->
 ## 为什么使用泛型
 
