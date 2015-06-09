@@ -1121,10 +1121,209 @@ String s = l[0].get(0);
 
 ### 防止非具体化类型的可变参数方法产生的警告（Prevent Warnings from Varargs Methods with Non-Reifiable Formal Parameters）
 
+如果你声明了一个参数化类型的可变参数的方法，并且可以确保该方法体不抛出ClassCastException或其他类似的异常，可以通过对方法增加如下注解来防止编译器警告：
+
+```
+@SafeVarargs
+```
+`@SafeVarargs`注解声明在这个方法内部不会错误的处理可变参数实参的类型。
+
+使用以下的方法注解也可以消除编译器关于参数化类型的可变参数的警告，虽然效果并不理想:
+
+```
+@SuppressWarnings({"unchecked", "varargs"})
+```
+这种方式不能消除方法调用方的编译警告。
 
 <a id="restrictions-on-generics"><a/>
 ## 泛型的限制（Restrictions on Generics）
-未完待续。。。
+
+### 无法用基本类型实例化泛型类型参数
+
+```
+class Pair<K, V> {
+
+    private K key;
+    private V value;
+
+    public Pair(K key, V value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    // ...
+}
+```
+我们无法用基本类型去实例化类型实参：
+
+```
+Pair<int, char> p = new Pair<>(8, 'a');  // compile-time error
+```
+
+只能通过对象类型实例化：
+
+```
+Pair<Integer, Character> p = new Pair<>(8, 'a');
+```
+
+Java自动装箱，相当于如下的实例化方式：
+
+```
+Pair<Integer, Character> p = new Pair<>(Integer.valueOf(8), new Character('a'));
+```
+
+### 不能创建类型参数的对象
+
+```
+public static <E> void append(List<E> list) {
+    E elem = new E();  // compile-time error
+    list.add(elem);
+}
+```
+
+解决办法是可以使用反射来创建类型参数的对象：
+
+```
+public static <E> void append(List<E> list, Class<E> cls) throws Exception {
+    E elem = cls.newInstance();   // OK
+    list.add(elem);
+}
+
+```
+
+上面的`append`方法可以用如下方式调用：
+
+```
+List<String> ls = new ArrayList<>();
+append(ls, String.class);
+```
+
+### 无法创建泛型类型的静态属性
+
+以下泛型类型的静态属性声明是不允许的：
+
+```
+public class MobileDevice<T> {
+    private static T os;
+
+    // ...
+}
+```
+因为如果允许静态属性是泛型参数类型，则对不同的实例化会产生歧义：
+
+```
+MobileDevice<Smartphone> phone = new MobileDevice<>();
+MobileDevice<Pager> pager = new MobileDevice<>();
+MobileDevice<TabletPC> pc = new MobileDevice<>();
+```
+静态属性只跟随类存在一份，多个类型参数的对象创建时，无法设置静态成员os。
+
+### 不能对类型参数使用类型转换或`instanceof`
+
+由于类型擦除，无法验证泛型参数的类型：
+
+```
+public static <E> void rtti(List<E> list) {
+    if (list instanceof ArrayList<Integer>) {  // compile-time error
+        // ...
+    }
+}
+```
+
+假设传入`rtti`方法的参数结合为：
+
+```
+S = { ArrayList<Integer>, ArrayList<String> LinkedList<Character>, ... }
+```
+
+在运行时不会跟踪类型参数，所以JVM无法区分`ArrayList<Integer>` 和 `ArrayList<String>`，最多我们可以使用无界通配符来验证实参是否是`ArrayList`：
+
+```
+public static void rtti(List<?> list) {
+    if (list instanceof ArrayList<?>) {  // OK; instanceof requires a reifiable type
+        // ...
+    }
+}
+```
+
+除非使用无界通配符，否则无法对泛型参数类型进行强制类型转换：
+
+```
+List<Integer> li = new ArrayList<>();
+List<Number>  ln = (List<Number>) li;  // compile-time error
+```
+
+在某些情况下，编译器明确知道类型参数一定匹配的情况下，才允许类型转换，例如：
+
+```
+List<String> l1 = ...;
+ArrayList<String> l2 = (ArrayList<String>)l1;  // OK
+```
+
+### 不能创建泛型类型的数组：
+
+```
+List<Integer>[] arrayOfLists = new List<Integer>[2];  // compile-time error
+```
+
+当向一个数组中插入不同类型的值时，会出现什么情况？
+
+```
+Object[] strings = new String[2];
+strings[0] = "hi";   // OK
+strings[1] = 100;    // An ArrayStoreException is thrown.
+```
+同样，如果在泛型List上尝试插入不同类型会怎么样？
+
+```
+Object[] stringLists = new List<String>[];  // compiler error, but pretend it's allowed
+stringLists[0] = new ArrayList<String>();   // OK
+stringLists[1] = new ArrayList<Integer>();  // An ArrayStoreException should be thrown,
+                                            // but the runtime can't detect it.
+```
+
+### 无法创建、捕获或抛出泛型类型的异常
+
+泛型类无法直接或者间接的继承`Throwable`类型：
+```
+// Extends Throwable indirectly
+class MathException<T> extends Exception { /* ... */ }    // compile-time error
+
+// Extends Throwable directly
+class QueueFullException<T> extends Throwable { /* ... */ // compile-time error
+```
+也无法捕获泛型类型：
+
+```
+public static <T extends Exception, J> void execute(List<J> jobs) {
+    try {
+        for (J job : jobs)
+            // ...
+    } catch (T e) {   // compile-time error
+        // ...
+    }
+}
+```
+
+但是你可以声明一个方法抛出泛型类型：
+
+```
+class Parser<T extends Exception> {
+    public void parse(File file) throws T {     // OK
+        // ...
+    }
+}
+```
+
+### 无法通过不同的泛型参数类型重载方法
+
+```
+public class Example {
+    public void print(Set<String> strSet) { }
+    public void print(Set<Integer> intSet) { }
+}
+```
+因为类型擦除导致两个方法的参数类型是一样的。
 
 ## 参考
 
