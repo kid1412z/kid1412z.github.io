@@ -104,6 +104,14 @@ class Parser<T extends Exception> {
 
 7. `List<Number>` 是 `List<Integer>`的父类型吗？
 
+8. 最后一个问题，为什么Map.get方法没有完全泛型化，而Map.put是完全泛型化的？
+
+```
+V put(K key, V value)
+V get(Object key)
+```
+这个题的答案很有意思，见[参考文献2](#refs)
+
 
 ## 为什么使用泛型
 
@@ -1424,9 +1432,11 @@ public class Example {
 ```
 因为类型擦除导致两个方法的参数类型是一样的。
 
+<a id="refs" href="#refs"></a>
 ## 参考
 
-[https://docs.oracle.com/javase/tutorial/java/generics/index.html](https://docs.oracle.com/javase/tutorial/java/generics/index.html)
+* [https://docs.oracle.com/javase/tutorial/java/generics/index.html](https://docs.oracle.com/javase/tutorial/java/generics/index.html)
+* [What are the reasons why Map.get(Object key) is not (fully) generic](http://stackoverflow.com/questions/857420/what-are-the-reasons-why-map-getobject-key-is-not-fully-generic)
 
 
 
