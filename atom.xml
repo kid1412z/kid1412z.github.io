@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2015-06-09T15:33:50.000Z</updated>
+  <updated>2015-06-10T14:15:14.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://zuoqy.com/2015/05/19/java-generic/"/>
     <id>http://zuoqy.com/2015/05/19/java-generic/</id>
     <published>2015-05-19T13:34:22.000Z</published>
-    <updated>2015-06-09T15:33:50.000Z</updated>
+    <updated>2015-06-10T14:15:14.000Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：泛型可以将某些类型相关的错误从运行时提前到编译时显现，但Java的泛型有很多特点和限制。本文介绍了泛型类型、原始类型、泛型方法、有界类型参数、泛型的继承和子类型、类型推断、通配符、类型擦除、非具体化类型和泛型的限制，之前用到的和以后要用的，都在这里了。<br><strong>Abstract</strong>: Java generics add stability to your code by making some bugs about types be detected early on complie-time. This article gives a comprehensive introduction to the important points Java generics.</p>
 <h2 id="写在最前面">写在最前面</h2><p>一说泛型，好像都会。但前些天在看源码的时候，发现一个警告，引出了好多泛型的问题，最终让我下定决心整理一下Java泛型的坑（感谢Oracle，有一个很全面的Tutorial，Java编程思想都没有它介绍的详尽）。如果你也觉得你掌握了泛型，不妨试试以下问题，这些问题的解释，就包含在本篇文章里。</p>
 <p>先看几个问题：</p>
@@ -53,8 +53,13 @@
 </ol>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Parser&lt;T</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Exception&gt;</span> &#123;</span></span><br><span class="line">    public void parse(<span class="type">File</span> file) <span class="keyword">throws</span> <span class="type">T</span> &#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ol>
-<li><code>List&lt;Number&gt;</code> 是 <code>List&lt;Integer&gt;</code>的父类型吗？</li>
+<li><p><code>List&lt;Number&gt;</code> 是 <code>List&lt;Integer&gt;</code>的父类型吗？</p>
+</li>
+<li><p>最后一个问题，为什么Map.get方法没有完全泛型化，而Map.put是完全泛型化的？</p>
+</li>
 </ol>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">V <span class="function"><span class="title">put</span><span class="params">(K key, V value)</span></span></span><br><span class="line">V <span class="function"><span class="title">get</span><span class="params">(Object key)</span></span></span><br></pre></td></tr></table></figure>
+<p>这个题的答案很有意思，见<a href="#refs">参考文献2</a></p>
 <h2 id="为什么使用泛型">为什么使用泛型</h2><p>简而言之，泛型就是在定义类、接口、方法的时候，可以把类型（types）作为参数。类型参数使相同的逻辑能够复用在不同类型的输入上。</p>
 <h3 id="使用泛型的好处：">使用泛型的好处：</h3><ul>
 <li>编译期强类型检查（编译期错误排查难度小于运行时错误）</li>
@@ -648,7 +653,11 @@ WildcardErrorBad.java:<span class="number">15</span>: error: <span class="functi
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Parser&lt;T</span> <span class="keyword"><span class="keyword">extends</span></span> <span class="title">Exception&gt;</span> &#123;</span></span><br><span class="line">    public void parse(<span class="type">File</span> file) <span class="keyword">throws</span> <span class="type">T</span> &#123;     <span class="comment">// OK</span></span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="无法通过不同的泛型参数类型重载方法">无法通过不同的泛型参数类型重载方法</h3><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Example</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(Set&lt;String&gt; strSet)</span> </span>&#123; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(Set&lt;Integer&gt; intSet)</span> </span>&#123; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>因为类型擦除导致两个方法的参数类型是一样的。</p>
-<h2 id="参考">参考</h2><p><a href="https://docs.oracle.com/javase/tutorial/java/generics/index.html" target="_blank" rel="external">https://docs.oracle.com/javase/tutorial/java/generics/index.html</a></p>
+<p><a id="refs" href="#refs"></a></p>
+<h2 id="参考">参考</h2><ul>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/generics/index.html" target="_blank" rel="external">https://docs.oracle.com/javase/tutorial/java/generics/index.html</a></li>
+<li><a href="http://stackoverflow.com/questions/857420/what-are-the-reasons-why-map-getobject-key-is-not-fully-generic" target="_blank" rel="external">What are the reasons why Map.get(Object key) is not (fully) generic</a></li>
+</ul>
 ]]></content>
     <summary type="html">
     <![CDATA[<p><strong>摘要</strong>：泛型可以将某些类型相关的错误从运行时提前到编译时显现，但Java的泛型有很多特点和限制。本文介绍了泛型类型、原始类型、泛型方法、有界类型参数、泛型的继承和子类型、类型推断、通配符、类型擦除、非具体化类型和泛型的限制，之前用到的和以后要用的，都在这里了。<br><strong>Abstract</strong>: Java generics add stability to your code by making some bugs about types be detected early on complie-time. This article gives a comprehensive introduction to the important points Java generics.</p>
