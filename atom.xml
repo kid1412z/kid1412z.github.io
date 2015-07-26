@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2015-06-29T13:05:11.000Z</updated>
+  <updated>2015-07-26T12:35:24.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -13,6 +13,211 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[正则表达式参考手册]]></title>
+    <link href="http://zuoqy.com/2015/07/24/regex/"/>
+    <id>http://zuoqy.com/2015/07/24/regex/</id>
+    <published>2015-07-24T02:14:45.000Z</published>
+    <updated>2015-07-26T12:35:24.000Z</updated>
+    <content type="html"><![CDATA[<p><strong>摘要</strong>：正则表达式参考手册<br><strong>Abstract</strong>: Regular Expression Reference<br><a id="more"></a></p>
+<h2 id="Character_classes">Character classes</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">Exp.</th>
+<th style="text-align:left">Match</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>.</code></td>
+<td style="text-align:left">Matches any character except line breaks. Equivalent to <code>[^\n\r]</code>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\w</code></td>
+<td style="text-align:left">Matches any word character (alphanumeric &amp; underscore). Only matches low-ascii characters (no accented or non-roman characters). Equivalent to <code>[A-Za-z0-9_]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\W</code></td>
+<td style="text-align:left">Matches any character that is not a word character (alphanumeric <code>&amp;</code> underscore). Equivalent to <code>[^A-Za-z0-9_]</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\d</code></td>
+<td style="text-align:left">Matches any digit character (0-9). Equivalent to <code>[0-9]</code>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\D</code></td>
+<td style="text-align:left">Matches any character that is not a digit character (0-9). Equivalent to <code>[^0-9]</code>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\s</code></td>
+<td style="text-align:left">Matches any whitespace character (spaces, tabs, line breaks).</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\S</code></td>
+<td style="text-align:left">Matches any character that is not a whitespace character (spaces, tabs, line breaks).</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>[ABC]</code></td>
+<td style="text-align:left">Match any character in the set.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>[^ABC]</code></td>
+<td style="text-align:left">Match any character that is not in the set.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>a-z</code></td>
+<td style="text-align:left">Matches a character having a character code between the two specified characters inclusive.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Anchors">Anchors</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">Exp.</th>
+<th style="text-align:left">Match</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>^</code></td>
+<td style="text-align:left">Matches the beginning of the string, or the beginning of a line if the multiline flag (m) is enabled. This matches a position, not a character.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>$</code></td>
+<td style="text-align:left">Matches the end of the string, or the end of a line if the multiline flag (m) is enabled. This matches a position, not a character.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\b</code></td>
+<td style="text-align:left">Matches a word boundary position such as whitespace, punctuation, or the start/end of the string. This matches a position, not a character.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\B</code></td>
+<td style="text-align:left">Matches any position that is not a word boundary. This matches a position, not a character.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Escape_charactors">Escape charactors</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">Exp.</th>
+<th style="text-align:left">Match</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>\.</code> <code>\*</code> <code>\\</code> <code>\+</code> <code>\*</code> <code>\?</code> <code>\{</code> <code>\(</code> <code>\[</code></td>
+<td style="text-align:left">escaped special characters</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\t</code> <code>\v</code> <code>\n</code> <code>\r</code> <code>\f</code></td>
+<td style="text-align:left">tab, vertical tab, linefeed, carriage return, FORM FEED character (char code 12).</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\u00A9</code></td>
+<td style="text-align:left">unicode escaped ©</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\000</code></td>
+<td style="text-align:left">Octal escaped character in the form <code>\000</code>(null). Value must be less than 255 (<code>\377</code>).</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\xFF</code></td>
+<td style="text-align:left">Hexadecimal escaped character in the form <code>\xFF</code>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Groups_and_Lookaround">Groups and Lookaround</h2><p>Quantifiers indicate that the preceding token must be matched a certain number of times. By default, quantifiers are greedy, and will match as many characters as possible.<br>Alternation acts like a boolean OR, matching one sequence or another.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Exp.</th>
+<th style="text-align:left">Match</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">(abc)</td>
+<td style="text-align:left">capture group</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>\1</code></td>
+<td style="text-align:left">Back reference. Matches the results of a previous capture group. For example \1 matches the results of the first capture group <code>&amp;</code> \3 matches the third.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>(?:abc)</code></td>
+<td style="text-align:left">Non-capturing group. Groups multiple tokens together without creating a capture group.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>(?=abc)</code></td>
+<td style="text-align:left">Positive lookahead. Matches a group after the main expression without including it in the result.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>(?!abc)</code></td>
+<td style="text-align:left">Negative lookahead. Specifies a group that can not match after the main expression (if it matches, the result is discarded).</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>(?&lt;=ABC)</code></td>
+<td style="text-align:left">Positive lookbehind. Matches a group before the main expression without including it in the result.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>(?&lt;!ABC)</code></td>
+<td style="text-align:left">Negative lookbhind. Specifies a group that can not match before the main expression (if it matches, the result is discarded).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Quantifiers_and_Alternation">Quantifiers and Alternation</h2><table>
+<thead>
+<tr>
+<th style="text-align:left">Exp.</th>
+<th style="text-align:left">Match</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>+</code></td>
+<td style="text-align:left">Matches 1 or more of the preceding token.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>*</code></td>
+<td style="text-align:left">Matches 0 or more of the preceding token.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>{1,3}</code></td>
+<td style="text-align:left">Quantifier.Matches the specified quantity of the previous token. <code>{1,3}</code> will match 1 to 3. <code>{3}</code> will match exactly 3. <code>{3,}</code> will match 3 or more.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>?</code></td>
+<td style="text-align:left">Optional. Matches 0 or 1 of the preceding token, effectively making it optional.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>?</code></td>
+<td style="text-align:left">Makes the preceding quantifier lazy, causing it to match as few characters as possible. By default, quantifiers are greedy, and will match as many characters as possible.</td>
+</tr>
+<tr>
+<td style="text-align:left">`</td>
+<td style="text-align:left">`</td>
+<td>Acts like a boolean OR. Matches the expression before or after the `</td>
+<td>`.It can operate within a group, or on a whole expression. The patterns will be tested in order.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Reference">Reference</h2><ul>
+<li><a href="http://regexr.com/" target="_blank" rel="external">http://regexr.com/</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><strong>摘要</strong>：正则表达式参考手册<br><strong>Abstract</strong>: Regular Expression Reference<br>]]>
+    
+    </summary>
+    
+      <category term="Regular Expression" scheme="http://zuoqy.com/tags/Regular-Expression/"/>
+    
+      <category term="json" scheme="http://zuoqy.com/tags/json/"/>
+    
+      <category term="正则表达式" scheme="http://zuoqy.com/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[深入HashMap]]></title>
