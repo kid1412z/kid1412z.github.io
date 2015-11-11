@@ -58,9 +58,9 @@ use_motion: true
 fancybox: true
 
 # Static files
-vendors: vendors
-css: css
-images: images
+vendors: http://7xi4cl.com1.z0.glb.clouddn.com/vendors
+css: http://7xi4cl.com1.z0.glb.clouddn.com/css
+images: http://7xi4cl.com1.z0.glb.clouddn.com/images
 
 # Theme version
 version: 0.4.2
