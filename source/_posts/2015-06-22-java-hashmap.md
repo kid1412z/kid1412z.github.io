@@ -14,13 +14,13 @@ HashMap实现了Map接口，HashMap和Hashtable唯一的区别就是HashMap不�
 一般情况下，填装因子默认设置为0.75，这个数值是空间和时间的折中。填装因子增大会减少HashMap所占空间，但会增加查找时间。为了保证效率，最好能对放入HashMap中的元素总数有一个预估，设置适当的初始大小从而避免*rehash*发生。
 需要注意的是，HashMap不是线程安全的，当多个线程同时改变同一个HashMap实例的结构时（structural modification），必须有额外的同步。所谓改变HashMap的结构，就是添加或者删除Mapping。只是改变key对应的value的值，不能算改变结构。同步操作可以在额外的Object实例上同步，也可以使用`Map m = Collections.synchronizedMap(new HashMap(...));`，如果没有做正确的同步，HashMap上的并发操作会*快速失败（fail-fast）*（事实上，它并不能保证未经同步的并发修改操作绝对能够快速失败），并抛出`ConcurrentModificationException`，这个异常机制只能用来检查程序是否有潜在的BUG，不能依赖这个异常去做程序逻辑的其他判断。
 
-![HashMap-dia](/images/2015-06-22/1.png)
+![HashMap-dia](http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-06-22/1.png)
 
 ## 结构
 
 HashMap最基本的构成单位是Entry，在HashMap内部，所有的键值对都存储在Entry数组中，如果放入HashMap的键值对有冲突，则用拉链法，把具有相同哈希值的Entry存放在一个链表中，如下图所示：
 
-![HashMap-structure](/images/2015-06-22/2.png)
+![HashMap-structure](http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-06-22/2.png)
 
 Entry类的定义如下：
 
