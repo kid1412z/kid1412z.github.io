@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="DP,wikioi,动态规划," />
+  <meta name="keywords" content="vmstat,性能监控," />
 
 
 
@@ -33,7 +33,7 @@
 
 
 
-  <title> 1576 最长严格上升子序列 | Q.Y Zuo Believes </title>
+  <title> vmstat用法 | Q.Y Zuo Believes </title>
 </head>
 
 <body>
@@ -112,7 +112,7 @@
           
           
             
-              1576 最长严格上升子序列
+              vmstat用法
             
           
         </h1>
@@ -120,14 +120,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2013-11-12
+          Posted on 2015-12-01
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; In
             
-              <a href="/categories/coding-gym/">coding gym</a>
+              <a href="/categories/performance/">performance</a>
 
               
               
@@ -140,8 +140,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2013/11/12/1576-longest-inc-subseq/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2013/11/12/1576-longest-inc-subseq/"></span>
+            <a href="/2015/12/01/vmstat/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/12/01/vmstat/"></span>
             </a>
           </span>
           
@@ -155,31 +155,78 @@
       
 
       
-        <h2 id="题目描述_Description"><a href="http://www.wikioi.com/problem/1576/" target="_blank" rel="external">题目描述 Description</a></h2><p>非常经典的问题，拿来给大家练手了。<br>序列 { 1,2,…,n } 的一个子序列是指序列 { i1, i2, ……, ik },其中 1&lt;=i1 &lt; i2 &lt; …… &lt; ik&lt;=n, 序列 { a1, a2, ……, an } 的一个子序列是指序列 { ai1, ai2, ……, aik },其中 { i1, i2, ……, ik } 是 { 1, 2, ……, n } 的一个子序列.同时,称 k 为此子序列的长度.<br>如果 { ai1, ai2, ……, aik } 满足 ai1 ≤ ai2 ≤ …… ≤ aik,则称之为上升子序列.如果不等号都是严格成立的,则称之为严格上升子序列.同理,如果前面不等关系全部取相反方向,则称之为下降子序列和严格下降子序列.<br>长度最长的上升子序列称为最长上升子序列.本问题对于给定的整数序列,请求出其最长严格上升子序列的长度</p>
-<a id="more"></a>
-<p><strong>输入描述 Input Description</strong><br>第一行，一个整数N。<br>第二行 ，N个整数（N &lt; = 5000）<br><strong>输出描述 Output Description</strong><br>输出K的极大值，即最长严格上升子序列的长度<br>样例输入 Sample Input<br>5<br>9 3 6 2 7<br>样例输出 Sample Output<br>3<br>数据范围及提示 Data Size &amp; Hint<br>【样例解释】<br>最长严格上升子序列为3,6,7</p>
-<h2 id="思路">思路</h2><ol>
-<li>子问题描述：用dp[i] 表示到i位置为止，最长严格上升子序列的长度,a[i] 为数组中的元素</li>
-<li>状态转换： 对于0&lt;=j &lt; i 先求出符合a[j] &lt; a[i] 的最大子序列长度，a[i] = max(a[j]) + 1;<br>因此： dp[i] = max(dp[j]+1. dp[i]) 0&lt;=j &lt; i &amp;&amp; a[j] &lt; a[i]</li>
-</ol>
-<h2 id="代码示例">代码示例</h2><pre><code><span class="function"><span class="keyword">int</span> <span class="title">lis</span><span class="params">(<span class="keyword">int</span> *a, <span class="keyword">int</span> n)</span>
-</span>{
-    <span class="keyword">int</span> res = <span class="number">1</span>;
-    <span class="keyword">int</span> dp[<span class="number">5009</span>]={<span class="number">1</span>};
-    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++) {
-        dp[i] = <span class="number">1</span>;
-        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++) {
-            <span class="keyword">if</span> (a[j] &lt; a[i]) {
-                dp[i] = max(dp[i], dp[j] + <span class="number">1</span>);
-            }
-        }
-        <span class="keyword">if</span>(dp[i] &gt; res){
-            res = dp[i];
-        }
-    }
-    <span class="keyword">return</span> res;
-}
-</code></pre>
+        <p><strong>摘要</strong>：vmstat用法<br><strong>Abstract</strong>: usage of vmstat<br><a id="more"></a></p>
+<h2 id="注记">注记</h2><p>vmstat - virtual memory statistics</p>
+<h2 id="概要">概要</h2><figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="atom">vmstat</span> [-<span class="atom">a</span>] [-<span class="atom">n</span>] [-<span class="name">S</span> <span class="atom">unit</span>] [<span class="atom">delay</span> [ <span class="atom">count</span>]]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">s</span>] [-<span class="atom">n</span>] [-<span class="name">S</span> <span class="atom">unit</span>]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">m</span>] [-<span class="atom">n</span>] [<span class="atom">delay</span> [ <span class="atom">count</span>]]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">d</span>] [-<span class="atom">n</span>] [<span class="atom">delay</span> [ <span class="atom">count</span>]]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">p</span> <span class="atom">disk</span> <span class="atom">partition</span>] [-<span class="atom">n</span>] [<span class="atom">delay</span> [ <span class="atom">count</span>]]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">f</span>]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="name">V</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="描述">描述</h2><p>vmstat命令打印关于进程，内存，分页，块IO，陷阱和CPU活动的信息。</p>
+<h2 id="选项说明">选项说明</h2><ul>
+<li><code>-a</code>: 显示活跃/非活跃内存</li>
+<li><code>-f</code>: 不与其他选项同时使用，显示系统从启动到现在fork（包含fork、vfork、clone系统调用）次数，等同于创建的任务数。不重复显示。</li>
+<li><code>-m</code>: 显示板子（网卡等）信息</li>
+<li><code>-n</code>: 让表头在刷新显示过程中只显示一次</li>
+<li><code>-s</code>: 显示一系列事件总数和内存统计，不重复显示</li>
+<li><code>delay</code>: 更新时间，如果没有设置这个参数，则显示的是从系统启动到现在的均值</li>
+<li><code>count</code>: 刷新次数</li>
+<li><code>-d</code>: 磁盘统计信息</li>
+<li><code>-w</code>: 扩大打印列宽</li>
+<li><code>-p</code>: 指定磁盘分区，获得更详细的统计信息。</li>
+<li><code>-S</code>: 指定单位<code>k/K/m/M</code> 分别表示：<code>1000/1024/1000000/1048576</code> </li>
+<li><code>-V</code>: 显示版本信息</li>
+</ul>
+<h2 id="VM模式显示字段说明">VM模式显示字段说明</h2><h3 id="Procs">Procs</h3><ul>
+<li><code>r</code>: 等待运行的进程数</li>
+<li><code>b</code>: 不可中断的休眠进程数</li>
+</ul>
+<h3 id="Memory">Memory</h3><ul>
+<li><code>swpd</code>: 虚拟内存使用量</li>
+<li><code>free</code>: 空闲内存</li>
+<li><code>buff</code>: 作为缓冲区的内存数</li>
+<li><code>cache</code>: 作为加速缓存的内存数</li>
+<li><code>inactive</code>: 不活跃的内存</li>
+<li><code>active</code>: 活跃内存</li>
+</ul>
+<h3 id="Swap">Swap</h3><ul>
+<li><code>si</code>: 从磁盘换入占用内存数</li>
+<li><code>so</code>: 换出到磁盘的内存数</li>
+</ul>
+<h3 id="IO">IO</h3><ul>
+<li><code>bi</code>: 从块设备输入的块数</li>
+<li><code>bo</code>: 从块设备输出的块数</li>
+</ul>
+<h3 id="System">System</h3><ul>
+<li><code>in</code>: 每秒中断次数（包含时钟中断）</li>
+<li><code>cs</code>: 每秒上下文切换次数</li>
+</ul>
+<h3 id="CPU">CPU</h3><p>下面的指标是CPU时间的百分比</p>
+<ul>
+<li><code>us</code>: 用户区代码CPU时间</li>
+<li><code>sy</code>: 内核代码CPU时间</li>
+<li><code>id</code>: 空闲CPU时间</li>
+<li><code>wa</code>: IO等待时间</li>
+<li><code>st</code>: 从虚拟机偷的CPU时间</li>
+</ul>
+<h2 id="磁盘模式显示选项说明">磁盘模式显示选项说明</h2><h3 id="Reads">Reads</h3><ul>
+<li><code>total</code>: 成功读出的总量</li>
+<li><code>merged</code>: 单次I/O读操作的量（合并到一次）</li>
+<li><code>sectors</code>: 成功读取的扇区数</li>
+<li><code>ms</code>: 读操作的时间</li>
+</ul>
+<h3 id="Writes">Writes</h3><ul>
+<li><code>total</code>: 成功写入的总量</li>
+<li><code>merged</code>: 单次I/O写操作的量（合并到一次）</li>
+<li><code>sectors</code>: 成功写入的扇区数</li>
+<li><code>ms</code>: 写操作的时间</li>
+</ul>
+<h3 id="IO-1">IO</h3><ul>
+<li><code>cur</code>: 当前正在进行的I/O </li>
+<li><code>s</code>: I/O消耗的时间（秒）</li>
+</ul>
+<h2 id="重要">重要</h2><p>vmstat不需要特殊的权限。当前所有linux的块大小都是1024 bytes。旧版内核可能是512 bytes 2048 bytes 或 4096bytes。</p>
+<h2 id="示例：">示例：</h2><p>在CPU密集型机器上：</p>
+<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-06-22/1.png" alt="vmstat1"></p>
+<p>在GPU机器上：</p>
+<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-06-22/2.png" alt="vmstat1"></p>
+
       
     </div>
 
@@ -187,11 +234,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/DP/"> #DP </a>
+            <a href="/tags/vmstat/"> #vmstat </a>
           
-            <a href="/tags/wikioi/"> #wikioi </a>
-          
-            <a href="/tags/动态规划/"> #动态规划 </a>
+            <a href="/tags/性能监控/"> #性能监控 </a>
           
         </div>
       
@@ -200,13 +245,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/04/16/java-memory1/">Java内存区域</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2013/11/11/3027-segment-coverage2/">3027 线段覆盖 2</a>
+              <a href="/2015/11/04/hbase-in-action/">《Hbase in Action》读书笔记</a>
             
           </div>
         </div>
@@ -322,7 +365,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#题目描述_Description"><span class="nav-number">1.</span> <span class="nav-text">题目描述 Description</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#思路"><span class="nav-number">2.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码示例"><span class="nav-number">3.</span> <span class="nav-text">代码示例</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#注记"><span class="nav-number">1.</span> <span class="nav-text">注记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概要"><span class="nav-number">2.</span> <span class="nav-text">概要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#描述"><span class="nav-number">3.</span> <span class="nav-text">描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选项说明"><span class="nav-number">4.</span> <span class="nav-text">选项说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VM模式显示字段说明"><span class="nav-number">5.</span> <span class="nav-text">VM模式显示字段说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Procs"><span class="nav-number">5.1.</span> <span class="nav-text">Procs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Memory"><span class="nav-number">5.2.</span> <span class="nav-text">Memory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Swap"><span class="nav-number">5.3.</span> <span class="nav-text">Swap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IO"><span class="nav-number">5.4.</span> <span class="nav-text">IO</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#System"><span class="nav-number">5.5.</span> <span class="nav-text">System</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU"><span class="nav-number">5.6.</span> <span class="nav-text">CPU</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#磁盘模式显示选项说明"><span class="nav-number">6.</span> <span class="nav-text">磁盘模式显示选项说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Reads"><span class="nav-number">6.1.</span> <span class="nav-text">Reads</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Writes"><span class="nav-number">6.2.</span> <span class="nav-text">Writes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IO-1"><span class="nav-number">6.3.</span> <span class="nav-text">IO</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重要"><span class="nav-number">7.</span> <span class="nav-text">重要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例："><span class="nav-number">8.</span> <span class="nav-text">示例：</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -881,8 +924,8 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'zuoqycom';
-      var disqus_identifier = '2013/11/12/1576-longest-inc-subseq/';
-      var disqus_url = 'http://zuoqy.com/2013/11/12/1576-longest-inc-subseq/';
+      var disqus_identifier = '2015/12/01/vmstat/';
+      var disqus_url = 'http://zuoqy.com/2015/12/01/vmstat/';
 
       (function(){
         var dsq = document.createElement('script');

@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2015-11-05T14:20:53.000Z</updated>
+  <updated>2015-12-01T06:52:58.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -13,6 +13,97 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[vmstat用法]]></title>
+    <link href="http://zuoqy.com/2015/12/01/vmstat/"/>
+    <id>http://zuoqy.com/2015/12/01/vmstat/</id>
+    <published>2015-12-01T04:37:58.000Z</published>
+    <updated>2015-12-01T06:52:58.000Z</updated>
+    <content type="html"><![CDATA[<p><strong>摘要</strong>：vmstat用法<br><strong>Abstract</strong>: usage of vmstat<br><a id="more"></a></p>
+<h2 id="注记">注记</h2><p>vmstat - virtual memory statistics</p>
+<h2 id="概要">概要</h2><figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="atom">vmstat</span> [-<span class="atom">a</span>] [-<span class="atom">n</span>] [-<span class="name">S</span> <span class="atom">unit</span>] [<span class="atom">delay</span> [ <span class="atom">count</span>]]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">s</span>] [-<span class="atom">n</span>] [-<span class="name">S</span> <span class="atom">unit</span>]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">m</span>] [-<span class="atom">n</span>] [<span class="atom">delay</span> [ <span class="atom">count</span>]]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">d</span>] [-<span class="atom">n</span>] [<span class="atom">delay</span> [ <span class="atom">count</span>]]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">p</span> <span class="atom">disk</span> <span class="atom">partition</span>] [-<span class="atom">n</span>] [<span class="atom">delay</span> [ <span class="atom">count</span>]]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">f</span>]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="name">V</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="描述">描述</h2><p>vmstat命令打印关于进程，内存，分页，块IO，陷阱和CPU活动的信息。</p>
+<h2 id="选项说明">选项说明</h2><ul>
+<li><code>-a</code>: 显示活跃/非活跃内存</li>
+<li><code>-f</code>: 不与其他选项同时使用，显示系统从启动到现在fork（包含fork、vfork、clone系统调用）次数，等同于创建的任务数。不重复显示。</li>
+<li><code>-m</code>: 显示板子（网卡等）信息</li>
+<li><code>-n</code>: 让表头在刷新显示过程中只显示一次</li>
+<li><code>-s</code>: 显示一系列事件总数和内存统计，不重复显示</li>
+<li><code>delay</code>: 更新时间，如果没有设置这个参数，则显示的是从系统启动到现在的均值</li>
+<li><code>count</code>: 刷新次数</li>
+<li><code>-d</code>: 磁盘统计信息</li>
+<li><code>-w</code>: 扩大打印列宽</li>
+<li><code>-p</code>: 指定磁盘分区，获得更详细的统计信息。</li>
+<li><code>-S</code>: 指定单位<code>k/K/m/M</code> 分别表示：<code>1000/1024/1000000/1048576</code> </li>
+<li><code>-V</code>: 显示版本信息</li>
+</ul>
+<h2 id="VM模式显示字段说明">VM模式显示字段说明</h2><h3 id="Procs">Procs</h3><ul>
+<li><code>r</code>: 等待运行的进程数</li>
+<li><code>b</code>: 不可中断的休眠进程数</li>
+</ul>
+<h3 id="Memory">Memory</h3><ul>
+<li><code>swpd</code>: 虚拟内存使用量</li>
+<li><code>free</code>: 空闲内存</li>
+<li><code>buff</code>: 作为缓冲区的内存数</li>
+<li><code>cache</code>: 作为加速缓存的内存数</li>
+<li><code>inactive</code>: 不活跃的内存</li>
+<li><code>active</code>: 活跃内存</li>
+</ul>
+<h3 id="Swap">Swap</h3><ul>
+<li><code>si</code>: 从磁盘换入占用内存数</li>
+<li><code>so</code>: 换出到磁盘的内存数</li>
+</ul>
+<h3 id="IO">IO</h3><ul>
+<li><code>bi</code>: 从块设备输入的块数</li>
+<li><code>bo</code>: 从块设备输出的块数</li>
+</ul>
+<h3 id="System">System</h3><ul>
+<li><code>in</code>: 每秒中断次数（包含时钟中断）</li>
+<li><code>cs</code>: 每秒上下文切换次数</li>
+</ul>
+<h3 id="CPU">CPU</h3><p>下面的指标是CPU时间的百分比</p>
+<ul>
+<li><code>us</code>: 用户区代码CPU时间</li>
+<li><code>sy</code>: 内核代码CPU时间</li>
+<li><code>id</code>: 空闲CPU时间</li>
+<li><code>wa</code>: IO等待时间</li>
+<li><code>st</code>: 从虚拟机偷的CPU时间</li>
+</ul>
+<h2 id="磁盘模式显示选项说明">磁盘模式显示选项说明</h2><h3 id="Reads">Reads</h3><ul>
+<li><code>total</code>: 成功读出的总量</li>
+<li><code>merged</code>: 单次I/O读操作的量（合并到一次）</li>
+<li><code>sectors</code>: 成功读取的扇区数</li>
+<li><code>ms</code>: 读操作的时间</li>
+</ul>
+<h3 id="Writes">Writes</h3><ul>
+<li><code>total</code>: 成功写入的总量</li>
+<li><code>merged</code>: 单次I/O写操作的量（合并到一次）</li>
+<li><code>sectors</code>: 成功写入的扇区数</li>
+<li><code>ms</code>: 写操作的时间</li>
+</ul>
+<h3 id="IO-1">IO</h3><ul>
+<li><code>cur</code>: 当前正在进行的I/O </li>
+<li><code>s</code>: I/O消耗的时间（秒）</li>
+</ul>
+<h2 id="重要">重要</h2><p>vmstat不需要特殊的权限。当前所有linux的块大小都是1024 bytes。旧版内核可能是512 bytes 2048 bytes 或 4096bytes。</p>
+<h2 id="示例：">示例：</h2><p>在CPU密集型机器上：</p>
+<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-06-22/1.png" alt="vmstat1"></p>
+<p>在GPU机器上：</p>
+<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-06-22/2.png" alt="vmstat1"></p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><strong>摘要</strong>：vmstat用法<br><strong>Abstract</strong>: usage of vmstat<br>]]>
+    
+    </summary>
+    
+      <category term="vmstat" scheme="http://zuoqy.com/tags/vmstat/"/>
+    
+      <category term="性能监控" scheme="http://zuoqy.com/tags/%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7/"/>
+    
+      <category term="performance" scheme="http://zuoqy.com/categories/performance/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[《Hbase in Action》读书笔记]]></title>
