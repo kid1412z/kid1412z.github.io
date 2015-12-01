@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2015-12-01T06:52:58.000Z</updated>
+  <updated>2015-12-01T06:56:57.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://zuoqy.com/2015/12/01/vmstat/"/>
     <id>http://zuoqy.com/2015/12/01/vmstat/</id>
     <published>2015-12-01T04:37:58.000Z</published>
-    <updated>2015-12-01T06:52:58.000Z</updated>
+    <updated>2015-12-01T06:56:57.000Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：vmstat用法<br><strong>Abstract</strong>: usage of vmstat<br><a id="more"></a></p>
 <h2 id="注记">注记</h2><p>vmstat - virtual memory statistics</p>
 <h2 id="概要">概要</h2><figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="atom">vmstat</span> [-<span class="atom">a</span>] [-<span class="atom">n</span>] [-<span class="name">S</span> <span class="atom">unit</span>] [<span class="atom">delay</span> [ <span class="atom">count</span>]]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">s</span>] [-<span class="atom">n</span>] [-<span class="name">S</span> <span class="atom">unit</span>]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">m</span>] [-<span class="atom">n</span>] [<span class="atom">delay</span> [ <span class="atom">count</span>]]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">d</span>] [-<span class="atom">n</span>] [<span class="atom">delay</span> [ <span class="atom">count</span>]]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">p</span> <span class="atom">disk</span> <span class="atom">partition</span>] [-<span class="atom">n</span>] [<span class="atom">delay</span> [ <span class="atom">count</span>]]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">f</span>]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="name">V</span>]</span><br></pre></td></tr></table></figure>
@@ -88,9 +88,9 @@
 </ul>
 <h2 id="重要">重要</h2><p>vmstat不需要特殊的权限。当前所有linux的块大小都是1024 bytes。旧版内核可能是512 bytes 2048 bytes 或 4096bytes。</p>
 <h2 id="示例：">示例：</h2><p>在CPU密集型机器上：</p>
-<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-06-22/1.png" alt="vmstat1"></p>
+<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-12-01/1.png" alt="vmstat1"></p>
 <p>在GPU机器上：</p>
-<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-06-22/2.png" alt="vmstat1"></p>
+<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-12-02/2.png" alt="vmstat1"></p>
 ]]></content>
     <summary type="html">
     <![CDATA[<p><strong>摘要</strong>：vmstat用法<br><strong>Abstract</strong>: usage of vmstat<br>]]>
