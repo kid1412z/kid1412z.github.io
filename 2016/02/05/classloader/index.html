@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="Hbase," />
+  <meta name="keywords" content="ClassLoader,Java," />
 
 
 
@@ -33,7 +33,7 @@
 
 
 
-  <title> 《Hbase in Action》读书笔记 | Q.Y Zuo Believes </title>
+  <title> Java ClassLoader | Q.Y Zuo Believes </title>
 </head>
 
 <body>
@@ -112,7 +112,7 @@
           
           
             
-              《Hbase in Action》读书笔记
+              Java ClassLoader
             
           
         </h1>
@@ -120,17 +120,28 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2015-11-04
+          Posted on 2016-02-05
         </span>
 
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/Java/">Java</a>
+
+              
+              
+
+            
+          </span>
         
 
         
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/11/04/hbase-in-action/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/11/04/hbase-in-action/"></span>
+            <a href="/2016/02/05/classloader/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/02/05/classloader/"></span>
             </a>
           </span>
           
@@ -144,69 +155,56 @@
       
 
       
-        <p><strong>摘要</strong>：<em>Hbase in Action</em> 读书笔记。</p>
-<p><strong>Abstract</strong>: <em>HBase in Action</em> notes.<br><a id="more"></a></p>
-<h2 id="使用场景和成功案例">使用场景和成功案例</h2><h3 id="抓取增量数据">抓取增量数据</h3><ul>
-<li>抓取监控指标 OpenTSDB：采集机器监控指标和日志信息，并支持按照时间序列进行查询</li>
-<li>抓取用户交互数据：Facebook 和 StumbleUpon</li>
-<li>遥测技术：Mozillahe Trend Micro: 收集软件崩溃报告</li>
-<li>广告效果和点击流：</li>
+        <p><strong>摘要</strong>：Java类加载器<br><strong>Abstract</strong>: An overview of Java ClassLoaders<br><a id="more"></a></p>
+<h2 id="走进CLassLoader">走进CLassLoader</h2><p>每个类加载器（classloader）自身都是一个扩展自<code>java.lang.ClassLoader</code>类的实例。那么如果类加载器本身也有类型，并且每类都是由classloader加载的，那么加载的顺序是怎样的？我们需要了解classloader的机制和JVM类加载体系。首先看一下classloader的API：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> java.lang;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">ClassLoader</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> Class <span class="title">loadClass</span><span class="params">(String name)</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">protected</span> Class de <span class="title">neClass</span><span class="params">(<span class="keyword">byte</span>[] b)</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> URL <span class="title">getResource</span><span class="params">(String name)</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> Enumeration <span class="title">getResources</span><span class="params">(String name)</span></span>;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> ClassLoader <span class="title">getParent</span><span class="params">()</span></span><br><span class="line">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><code>loadClass</code>方法是<code>java.lang.ClassLoader</code>类中最重要的方法，接收类的全名，返回改类型的实例对象。<br><code>defineClass</code>方法，参数为byte数组，一般是从磁盘或其他地方加载的Java字节码。<br><code>getResource</code>和<code>getResources</code>返回资源的URL，它有类似于<code>loadClass</code>方法的<strong>委托机制</strong>，首先委托给父类加载，然后再在本地查找。<code>loadClass</code>方法等同于<code>defineClass(getResource(name).getBytes())</code>.<br><code>getParent</code>方法返回父类加载器（parent classloader），在下一节中我们将详细描述。<br>由于Java的晚期绑定，类型加载延迟到最晚时刻进行。一个类只有在第一次调用其构造方法、static方法或static属性时，才会被加载。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    B b = <span class="keyword">new</span> B();</span><br><span class="line">    b.doSomethingElse();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>B b = new B();</code>在语义上等同于<code>getClassLoader().loadClass(&quot;B&quot;).newInstance();</code><br>在Java中，所有的对象都和他们的类关联，而所有的类都和该类的加载器关联。<br>当我们实例化一个<code>ClassLoader</code>，我们可以通过构造方法指定其父类加载器（<code>parent ClassLoader</code>），如果没有显式的指定，则JVM会指定一个默认的parent classloader。那么默认的parent classloader是什么呢？这取决于JVM的ClassLoader继承体系。</p>
+<h2 id="JVM的类加载委托体系（classloader_delegation_hierarchy）">JVM的类加载委托体系（classloader delegation hierarchy）</h2><p>JVM在启动时，会首先加载<strong>bootstrap classloader</strong>，bootstrap classloader是所有类加载器的parent，负责加载重要的Java基础类（如java.lang package）和其他运行时类型。<em>bootstrap类加载器是JVM中，唯一一个没有parent的类加载器</em>。<br>接着是加载<strong>extension classloader</strong>。它的parent是bootstrap classloader，负责加载<code>java.ext.dirs</code>路径下的所有jar包。<br>第三步，也是最重要的一步，就是加载<strong>system classpath classloader</strong>,该classloader的直接父节点是extention classloader。它负责从<code>CLASSPATH</code>变量指定的路径、<code>java.class.path</code>系统变量或<code>-classpath</code>命令行参数指定的路径中加载类。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10; +---------------------+&#10; |bootstrap classloader|&#10; +---------------------+&#10;           |&#10;           v&#10; +---------------------+&#10; |extention classloader|&#10; +---------------------+&#10;           |&#10;           v&#10;+----------------------------+&#10;|system classpath classloader|&#10;+----------------------------+</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>值得注意的是，以上JVM的类加载体系并非一个继承体系，而是一个委托体系（delegation hierarchy）。</p>
+</blockquote>
+<p>大部分的classloader在加载自己本地classpath种的资源和类之前，优先委托给他们的parent。如果parent classloader不能找到目标类或者资源，classloader才会尝试在本地的classpath中搜索并加载资源。也就是说，classloader只加载它的parent无法加载的类或资源。相反，被处于委托体系下层的classloader加载的class不能被委托体系上层的类访问。</p>
+<blockquote>
+<p>最初建立这样的类加载委托体系的初衷是为了避免相同类型可能被加载数次。回到1995年，当时Java平台的主要应用是Web Applet。当时网络带宽的限制，决定了JVM需要延迟加载类型。但后来证明Java在服务端程序和JavaEE中表现优异，在服务端程序中，classloader理想的加载顺序是相反的——优先在本地查找并加载class，没有找到时，再向parant中去查找。</p>
+</blockquote>
+<h2 id="JavaEE类型加载委托体系">JavaEE类型加载委托体系</h2><p>下面是一个典型的web容器classloader体系：每个EAR（J2EE Enterprise Archive）module和WAR都有自己的类加载器。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;                   +-----------+&#10;                   | container |&#10;                   +-----------+&#10;                         |&#10;           +---------------+----------+&#10;           |               |          |&#10;      +--------+       +--------+ +--------+&#10;      |App1.ear|       |App2.ear| |App3.ear|&#10;      +--------+       +--------+ +--------+&#10;          |                |          |&#10;    +-----------+          |          |&#10;    |           |          |          |&#10;+-------+   +-------+  +-------+  +-------+&#10;| WAR1  |   | WAR2  |  | WAR3  |  | WAR4  |&#10;+-------+   +-------+  +-------+  +-------+</span><br></pre></td></tr></table></figure>
+<p>Java Servlet规范建议web模块的classloader优先加载类加载器本地的内容。之后当没有找到目标类时，才委托parent加载。</p>
+<blockquote>
+<p>颠倒委托顺序的原因是：应用容器中的加载的众多类库都有自己的发布周期，不一定适用于开发者。典型的例子就是log4j类库，在container中使用的是一个版本，而在应用中使用的是另一个版本。</p>
+</blockquote>
+<p>然而这带来了问题：</p>
+<blockquote>
+<p>JEVGENI KABANOV:The reversed behavior of web module classloader has caused more problems with classloaders than anything else… ever.</p>
+</blockquote>
+<h3 id="JavaEE类加载错误">JavaEE类加载错误</h3><p>JavaEE的委托模型又是会出现以下几种有趣的错误。<code>NoClassDefFoundError</code>, <code>LinkageError</code>, <code>ClassNotFoundException</code>, <code>NoSuchMethodError</code>, <code>ClassCastException</code>.</p>
+<h4 id="NoClassDefFoundError">NoClassDefFoundError</h4><p><code>NoClassDefFoundError</code> 是上述错误中最常见的一种，排错分析的复杂程度取决于你Web项目的复杂性和规模。Java文档中是这样描述的：</p>
+<blockquote>
+<p>NoClassDefFoundError is thrown if the Java Virtual Machine or a ClassLoader instance tries to load in the de nition of a class and no de nition of the class could be found.</p>
+</blockquote>
+<p>也就是说，类型定义在编译期存在，而在运行时无法找到。这就是你不能完全依赖IDE的错误信息提示，许多运行时的错误IDE并帮不上忙。</p>
+<blockquote>
+<p>JEVGENI KABANOV: All classloading happens at runtime, which makes the IDE results irrelevant.</p>
+</blockquote>
+<p>例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NoClassDefFoundErrorServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        PrintWriter writer = resp.getWriter();</span><br><span class="line">        writer.print(StringUtils.defaultString(<span class="string">"hello"</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>NoClassDefFoundErrorServlet</code> 调用<code>StringUtils</code>类的defaultString方法，打印一条信息。但是在运行时会发生如下错误：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;java.lang.NoClassDefFoundError: org/apache/commons/lang3/StringUtils&#10;&#9;com.zuoqy.classloader.NoClassDefFoundErrorServlet.doGet(NoClassDefFoundErrorServlet.java:20)&#10;&#9;javax.servlet.http.HttpServlet.service(HttpServlet.java:620)&#10;&#9;javax.servlet.http.HttpServlet.service(HttpServlet.java:727)&#10;&#9;org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)</span><br></pre></td></tr></table></figure>
+<p>如何排除这个错误？ 很显然你需要检查<code>StringUtils</code>这个类是否真的被引入到了package里。由于maven依赖的<code>commons-lang3</code>的scope是provided，因此在编译期间并不会出错。由于运行时tomcat的lib目录中没有对应的jar包，才会产生运行时错误。</p>
+<p>这里有一个技巧，就是打印出classloader加载类的classpath：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NoClassDefFoundErrorServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        PrintWriter writer = resp.getWriter();</span><br><span class="line">        writer.print(Arrays.toString(((URLClassLoader) NoClassDefFoundErrorServlet.class.getClassLoader()).getURLs()));</span><br><span class="line">        <span class="comment">//writer.print(StringUtils.defaultString("hello"));</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>你会看到类似下面的输出：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;[file:/opt/tomcat/deploy/ROOT/WEB-INF/classes/, file:/opt/tomcat/deploy/ROOT/]</span><br></pre></td></tr></table></figure>
+<p>但打印classpath的方法不是在所有情况下都可以，我们还可以使用<code>jconsole</code>命令连接到tomcat进程上查看classpath信息以及在运行时加载了哪些类。</p>
+<h4 id="NoSuchMethodError">NoSuchMethodError</h4><p>产生<code>NoSuchMethodError</code>的原因一般是被引用的class存在，但是不是正确的版本。首先需要知道这个版本不正确的class是从哪加载的。可以通过设置JVM参数<code>‘-verbose:class</code>查看类的加载和卸载日志。确定所加载的class路径之后，可以使用<code>javap -private classfile</code>命令来查看此class文件中是否有目标方法。</p>
+<p>如果是maven项目，还可以通过在项目根目录下运行 <code>mvn clean dependency:tree</code> 命令查看是否存在依赖冲突。然后把错误版本的jar包在依赖中排除掉即可。</p>
+<p>未完待续…</p>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://zeroturnaround.com/rebellabs/rebel-labs-tutorial-do-you-really-get-classloaders/" target="_blank" rel="external">http://zeroturnaround.com/rebellabs/rebel-labs-tutorial-do-you-really-get-classloaders/</a></li>
 </ul>
-<h3 id="内容服务">内容服务</h3><ul>
-<li>URL短连接：存储短连接和原始连接之间的映射关系</li>
-<li>runa.com用户模型服务：实时报价。</li>
-</ul>
-<h3 id="信息交换">信息交换</h3><ul>
-<li>Facebook的短信交换系统</li>
-</ul>
-<h2 id="概要">概要</h2><h3 id="五个基本命令">五个基本命令</h3><ul>
-<li>Get</li>
-<li>Put</li>
-<li>Delete</li>
-<li>Scan</li>
-<li>Increment</li>
-</ul>
-<h3 id="数据存储">数据存储</h3><h4 id="无模式">无模式</h4><p>Hbase是无模式的，不需要事先定义Schema，不需要提前指定列和数据类型，只需要在写数据时给出列的名字。</p>
-<h3 id="工作机制">工作机制</h3><h4 id="写机制">写机制</h4><ul>
-<li><strong>持久化保证</strong>写入时会写到两个地方：预写式日志（WAL）和MemStore，只有这两个地方写完成才算写成功。</li>
-<li><strong>写速度</strong>：Memstore是内存缓冲区，缓冲区满才刷磁盘（HFile）。HFile是磁盘文件，对应列族。<strong>列族和HFile之间是一对多的关系。一个列族可以有多个HFile，但一个HFile只对应一个列族</strong>。</li>
-<li><strong>崩溃恢复</strong>：在写动作完成之前先写WAL，HBase集群中的每台服务器维护一个WAL，服务器宕机情况下，可以通过回放WAL的方式来恢复。跳过WAL可以提高写性能，但可能会产生数据丢失。</li>
-</ul>
-<figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Put p = <span class="keyword">new</span> Put();</span><br><span class="line"><span class="comment">//禁用预写日志</span></span><br><span class="line">p.setWriteToWAL(<span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
-<h4 id="读机制">读机制</h4><ul>
-<li><strong>毫秒级读</strong>：Hbase在读操作上使用了LRU缓存BlockCache（与MemStore在同一个JVM堆里），每个列族都有自己的BlockCache。</li>
-<li><strong>Block设置</strong>：Block是简历索引和从磁盘读的最小单位，默认是64KB。根据查询方式是Scan居多还是KV查询居多可以调整Block大小。scan居多时，调大block可以增大读取速度。并减少索引所占空间。</li>
-</ul>
-<h4 id="删除机制">删除机制</h4><ul>
-<li><strong>合并</strong>：Delete命令之后，并不是立即删除内容，而是针对被删除内容写入一条新的墓碑记录（tombstone）来标记删除。墓碑记录不能在scan和get时返回结果。直到执行一次大合并（major compaction）这些墓碑记录占用的空间才被释放。</li>
-<li><strong>小合并</strong>：合并分为大合并和小合并，小合并把多个HFile合并成一个大HFile。然后把新Hfile标记为激活状态，合并前的旧HFile被删除。</li>
-<li><strong>大合并</strong>：处理给定region一个列族的所有HFile。大合并消耗资源，不会频繁发生，但是清理被删除记录的唯一机会。</li>
-</ul>
-<h4 id="时间版本">时间版本</h4><p>Hbase中的数据有时间版本的概念，Hbase中的时间版本是long类型的，以毫秒为单位的当前时间。</p>
-<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">List</span>&lt;KeyValue&gt; kv = r.getColumn(Bytes.toBytes(<span class="string">"family"</span>),Bytes.toBytes(<span class="string">"col1"</span>));</span><br><span class="line">kv.<span class="literal">get</span>(<span class="number">0</span>).getValue();</span><br><span class="line">kv.<span class="literal">get</span>(<span class="number">1</span>).getValue();</span><br></pre></td></tr></table></figure>
-<h3 id="数据模型">数据模型</h3><ul>
-<li><strong>表（Table）</strong>：Hbase使用table组织数据，表名是字符串，由可以在文件系统路径里使用的字符构成。</li>
-<li><strong>行（Row)</strong>: 在表里，数据按行存储，行由行键（Rowkey）作为唯一标识。行键没有数据类型，总是视为<code>byte[]</code>.</li>
-<li><strong>列族（column family）</strong>：行里的数据按照列族分组，列族影响到Hbase数据的物理存放。他们必须事先定义好并且不轻易修改。</li>
-<li><strong>列限定符（column qualifier）</strong>：列族里的数据通过列限定符或列来定位。列限定符不必实现定义，不必再不同行之间保持一致。列限定符都是<code>byte[]</code>。</li>
-<li><strong>单元（cell）</strong>：行键、列族和列限定符一起确定一个单元。存储在单元中的数据成为<em>值（value）</em>。值都是<code>byte[]</code>.</li>
-<li><strong>时间版本</strong>：单元值有时间版本，时间版本用long型时间戳标识。时间版本的数量基于列族配置，默认数量是3.</li>
-</ul>
-<p>关系型数据库中的数据是<em>结构化数据</em>，Hbase中的数据是<em>半结构化数据</em>。Hbase是专门为半结构化数据和水平可扩展性设计的数据库。</p>
-<h3 id="数据坐标">数据坐标</h3><p>Hbase依次使用：行键、列族、列限定符和时间版本作为数据的坐标。基于非键值查询Hbase的唯一办法就是带过滤器的扫描。</p>
-<h3 id="事务特性">事务特性</h3><p>Hbase不是ACID兼容数据库。</p>
-<ul>
-<li>同一行上的<code>Put()</code>操作具有原子性。要么整体成功，要么整体失败。</li>
-<li>行间的<code>Put()</code>操作不是原子性的。</li>
-<li><code>Get()</code>操作返回当时所保存的完整行数据。</li>
-<li><code>Scan()</code>操作不是扫描快照，在扫描过程中如果有行更新，则扫描到的结果包含更新后的完整的行</li>
-</ul>
-<h2 id="Hbase表设计">Hbase表设计</h2><h3 id="IO优化">IO优化</h3><h4 id="写优化">写优化</h4><ul>
-<li>散列：通过散列行键（如取Md5或SHA1）来避免Region热点的问题。</li>
-<li>salting：通过在行键上加上前缀，将数据分散到各个Region。</li>
-</ul>
-<p>但以上两种方案会使Scan性能下降(连续的记录被打散到多个Region中)。</p>
-<h4 id="读优化">读优化</h4><p>例：推贴按照倒序时间戳和用户id组成的复合行键可以scan出最近n条用户推贴。</p>
 
       
     </div>
@@ -215,7 +213,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Hbase/"> #Hbase </a>
+            <a href="/tags/ClassLoader/"> #ClassLoader </a>
+          
+            <a href="/tags/Java/"> #Java </a>
           
         </div>
       
@@ -224,13 +224,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/12/01/vmstat/">vmstat用法</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/07/24/regex/">正则表达式参考手册</a>
+              <a href="/2015/12/01/vmstat/">vmstat用法</a>
             
           </div>
         </div>
@@ -346,7 +344,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用场景和成功案例"><span class="nav-number">1.</span> <span class="nav-text">使用场景和成功案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#抓取增量数据"><span class="nav-number">1.1.</span> <span class="nav-text">抓取增量数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内容服务"><span class="nav-number">1.2.</span> <span class="nav-text">内容服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信息交换"><span class="nav-number">1.3.</span> <span class="nav-text">信息交换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概要"><span class="nav-number">2.</span> <span class="nav-text">概要</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#五个基本命令"><span class="nav-number">2.1.</span> <span class="nav-text">五个基本命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据存储"><span class="nav-number">2.2.</span> <span class="nav-text">数据存储</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#无模式"><span class="nav-number">2.2.1.</span> <span class="nav-text">无模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工作机制"><span class="nav-number">2.3.</span> <span class="nav-text">工作机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#写机制"><span class="nav-number">2.3.1.</span> <span class="nav-text">写机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#读机制"><span class="nav-number">2.3.2.</span> <span class="nav-text">读机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除机制"><span class="nav-number">2.3.3.</span> <span class="nav-text">删除机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#时间版本"><span class="nav-number">2.3.4.</span> <span class="nav-text">时间版本</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据模型"><span class="nav-number">2.4.</span> <span class="nav-text">数据模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据坐标"><span class="nav-number">2.5.</span> <span class="nav-text">数据坐标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务特性"><span class="nav-number">2.6.</span> <span class="nav-text">事务特性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hbase表设计"><span class="nav-number">3.</span> <span class="nav-text">Hbase表设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IO优化"><span class="nav-number">3.1.</span> <span class="nav-text">IO优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#写优化"><span class="nav-number">3.1.1.</span> <span class="nav-text">写优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#读优化"><span class="nav-number">3.1.2.</span> <span class="nav-text">读优化</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#走进CLassLoader"><span class="nav-number">1.</span> <span class="nav-text">走进CLassLoader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JVM的类加载委托体系（classloader_delegation_hierarchy）"><span class="nav-number">2.</span> <span class="nav-text">JVM的类加载委托体系（classloader delegation hierarchy）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaEE类型加载委托体系"><span class="nav-number">3.</span> <span class="nav-text">JavaEE类型加载委托体系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaEE类加载错误"><span class="nav-number">3.1.</span> <span class="nav-text">JavaEE类加载错误</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NoClassDefFoundError"><span class="nav-number">3.1.1.</span> <span class="nav-text">NoClassDefFoundError</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NoSuchMethodError"><span class="nav-number">3.1.2.</span> <span class="nav-text">NoSuchMethodError</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -905,8 +903,8 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'zuoqycom';
-      var disqus_identifier = '2015/11/04/hbase-in-action/';
-      var disqus_url = 'http://zuoqy.com/2015/11/04/hbase-in-action/';
+      var disqus_identifier = '2016/02/05/classloader/';
+      var disqus_url = 'http://zuoqy.com/2016/02/05/classloader/';
 
       (function(){
         var dsq = document.createElement('script');
