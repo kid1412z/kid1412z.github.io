@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://zuoqy.com/2016/03/27/2-phase-commit/</loc>
+    <lastmod>2016-03-27T08:04:51.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://zuoqy.com/2016/02/05/classloader/</loc>
     <lastmod>2016-03-27T03:50:44.000Z</lastmod>
   </url>

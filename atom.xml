@@ -4,7 +4,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2016-03-27T03:50:44.000Z</updated>
+  <updated>2016-03-27T08:04:51.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -13,6 +13,64 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[二阶段提交协议]]></title>
+    <link href="http://zuoqy.com/2016/03/27/2-phase-commit/"/>
+    <id>http://zuoqy.com/2016/03/27/2-phase-commit/</id>
+    <published>2016-03-27T03:55:25.000Z</published>
+    <updated>2016-03-27T08:04:51.000Z</updated>
+    <content type="html"><![CDATA[<p><strong>摘要</strong>：简要介绍二阶段提交协议的思想<br><strong>Abstract</strong>:Main ideas of 2 phase commit.<br><a id="more"></a></p>
+<h2 id="两阶段提交协议（Two_Phase_Commit_Protocol）">两阶段提交协议（Two Phase Commit Protocol）</h2><p>两阶段提交协议是分布式事务处理使用的一种一致性协议。它用来协调分布式事务中的每个参与者，应对系统分布式系统执行事务过程中的短暂系统异常（如：节点失败、网络通信异常等）。</p>
+<h2 id="前提">前提</h2><ul>
+<li>系统有存在一个协调者（coordinator）节点，其他节点为参与者（cohorts）</li>
+<li>系统中有稳定的存储，用来记录事务日志（预写日志WAL，Write-ahead logging），预写日志不会因为节点宕机而丢失。</li>
+<li>系统中，任意两个节点之间都可以相互通信。（相比前两条，可放宽一些）</li>
+</ul>
+<h2 id="算法描述">算法描述</h2><h3 id="第一阶段：请求提交阶段Commit_Request_Phase（投票阶段_voting_phase）">第一阶段：请求提交阶段Commit Request Phase（投票阶段 voting phase）</h3><ul>
+<li>协调者向所有参与值发起事务提交请求，等待所有参与者的投票响应。</li>
+<li>所有参与者执行协调者发起的事务，记录Undo和Redo log。</li>
+<li>所有参与者投票给协调者（事务可以执行成功，回复<em>Yes</em>，否则回复<em>No</em>）。任何一个参数者没有回复yes都会导致事务回滚。</li>
+</ul>
+<h3 id="第二阶段：事务提交阶段（Commit_Phase）">第二阶段：事务提交阶段（Commit Phase）</h3><h4 id="执行成功：">执行成功：</h4><ul>
+<li>协调者向所有参与者发送commit命令</li>
+<li>所有参与者完成事务提交，并释放事务处理期间所占用的锁和资源</li>
+<li>参与者发送ACK给协调者</li>
+<li>当协调者收到所有参与者的ACK之后，事务执行成功</li>
+</ul>
+<h4 id="执行失败：">执行失败：</h4><ul>
+<li>任何一个参与者投票No或者超时，都导致事务回滚</li>
+<li>每个参与者根据WAL日志回滚</li>
+<li>每个参与者发送ACK给协调者</li>
+<li>协调者收到所有ACK后，事务回滚完成</li>
+</ul>
+<p>时序图：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Coordinator                                         Cohort&#10;                              QUERY TO COMMIT&#10;                --------------------------------&#62;&#10;                              VOTE YES/NO           prepare*/abort*&#10;                &#60;-------------------------------&#10;commit*/abort*                COMMIT/ROLLBACK&#10;                --------------------------------&#62;&#10;                              ACKNOWLEDGMENT        commit*/abort*&#10;                &#60;--------------------------------  &#10;end</span><br></pre></td></tr></table></figure>
+<p><code>*</code>表示改操作需要依赖稳定的存储</p>
+<h2 id="算法缺陷">算法缺陷</h2><ul>
+<li>同步阻塞：两阶段提交最大的缺点，等待其他参与者响应的过程中是阻塞的，无法进行其他操作。如果在阶段二协调者失败，则参与者永远处于阻塞状态，直到收到commit命令或者abort命令。</li>
+<li>单点问题：协调者存在单点问题</li>
+<li>太过保守：任何参与者错误或者超时，都会导致整个分布式事务失败。</li>
+</ul>
+<h2 id="参考">参考</h2><ul>
+<li><a href="https://en.wikipedia.org/wiki/Two-phase_commit_protocol" target="_blank" rel="external">https://en.wikipedia.org/wiki/Two-phase_commit_protocol</a></li>
+<li><a href="http://www.amazon.cn/%E5%9B%BE%E4%B9%A6/dp/B00RECRKPK" target="_blank" rel="external">从paxos到zookeeper——分布式一致性原理与实践</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><strong>摘要</strong>：简要介绍二阶段提交协议的思想<br><strong>Abstract</strong>:Main ideas of 2 phase commit.<br>]]>
+    
+    </summary>
+    
+      <category term="2 Phase Commit" scheme="http://zuoqy.com/tags/2-Phase-Commit/"/>
+    
+      <category term="2PC" scheme="http://zuoqy.com/tags/2PC/"/>
+    
+      <category term="一致性协议" scheme="http://zuoqy.com/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE/"/>
+    
+      <category term="二阶段提交" scheme="http://zuoqy.com/tags/%E4%BA%8C%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Java ClassLoader]]></title>
