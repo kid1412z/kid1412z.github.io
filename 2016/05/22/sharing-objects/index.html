@@ -22,7 +22,7 @@
 
 
 
-  <meta name="keywords" content="2 Phase Commit,2PC,一致性协议,二阶段提交," />
+  <meta name="keywords" content="Java,concurrency," />
 
 
 
@@ -35,7 +35,7 @@
 
 
 
-  <title> 二阶段提交协议 | Q.Y Zuo Believes </title>
+  <title> Java对象的共享 | Q.Y Zuo Believes </title>
 </head>
 
 <body>
@@ -114,7 +114,7 @@
           
           
             
-              二阶段提交协议
+              Java对象的共享
             
           
         </h1>
@@ -122,7 +122,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2016-03-27
+          Posted on 2016-05-22
         </span>
 
         
@@ -131,8 +131,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2016/03/27/2-phase-commit/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/03/27/2-phase-commit/"></span>
+            <a href="/2016/05/22/sharing-objects/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/05/22/sharing-objects/"></span>
             </a>
           </span>
           
@@ -146,41 +146,46 @@
       
 
       
-        <p><strong>摘要</strong>：简要介绍二阶段提交协议的思想<br><strong>Abstract</strong>:Main ideas of 2 phase commit.<br><a id="more"></a></p>
-<h2 id="两阶段提交协议（Two_Phase_Commit_Protocol）">两阶段提交协议（Two Phase Commit Protocol）</h2><p>两阶段提交协议是分布式事务处理使用的一种一致性协议。它用来协调分布式事务中的每个参与者，应对系统分布式系统执行事务过程中的短暂系统异常（如：节点失败、网络通信异常等）。</p>
-<h2 id="前提">前提</h2><ul>
-<li>系统有存在一个协调者（coordinator）节点，其他节点为参与者（cohorts）</li>
-<li>系统中有稳定的存储，用来记录事务日志（预写日志WAL，Write-ahead logging），预写日志不会因为节点宕机而丢失。</li>
-<li>系统中，任意两个节点之间都可以相互通信。（相比前两条，可放宽一些）</li>
+        <p><strong>摘要</strong>：Java内存可见性、对象的发布和逸出以及不变性<br><strong>Abstract</strong>:Visibility、publish and escape、immutable。<br><a id="more"></a></p>
+<h2 id="可见性">可见性</h2><p>可见性是指某个线程对变量写入的值，其他线程是否总能够正确的读取。通常，为了确保多线程之间对内存写入操作的可见性，必须使用同步机制。</p>
+<h3 id="重排序">重排序</h3><p>在多线程情况下，存在指令重排序的情况，因此在没有同步的情况下，不能假定多线程程序的指令执行顺序。</p>
+<h3 id="失效数据">失效数据</h3><p>在没有同步保证的多线程程序中，一个线程可能读取到某个变量的新值，也可能读取到其已经失效的值。</p>
+<h3 id="非原子的64位操作">非原子的64位操作</h3><p>在多线程程序中使用共享且可变的long和double等类型的变量是不安全的，除非用volatile声明或者用锁保护起来。因为JVM允许将64位的操作分解为两个32位的操作。</p>
+<h3 id="加锁与可见性">加锁与可见性</h3><p>加锁的含义不仅仅局限于互斥行为，还包括内存可见性。为了确保所有线程都能看到共享变量的最新值，所有执行读写操作的线程都必须在同一个锁上进行同步。</p>
+<h3 id="volatile变量">volatile变量</h3><p>volatile变量不会被缓存在寄存器中或者对其他处理器不可见的地方，因此在读取volatile类型的变量时，总会返回最新写入的值。<br>仅当volatile变量能简化代码实现以及对同步策略的验证时，才应该使用它们。使用方式包括：确保变量自身状态的可见性、确保所引用对象状态的可见性、标识一些重要的程序生命周期事件的发生（如初始化或关闭）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 判断某个状态，决定是否退出循环</span></span><br><span class="line"><span class="keyword">volatile</span> <span class="keyword">boolean</span> asleep;</span><br><span class="line">...</span><br><span class="line"><span class="keyword">while</span>(!asleep) &#123;</span><br><span class="line">    countSomeSheep();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注：volatile语义不足以保证递增操作（count++）的原子性，因为递增是读-修改-写操作。<strong>加锁机制既可以确保可见性，又可以确保原子性，而volatile变量只能确保可见性</strong>。</p>
+<p><strong>当且仅当满足以下所有条件时，才应该使用volatile变量</strong>：</p>
+<ul>
+<li>对变量的写入操作比依赖变量当前的值，或者确保只有一个线程更新变量的值。</li>
+<li>该变量不会与其他状态变量一起纳入不变性条件。</li>
+<li>访问该变量时不需要加锁。</li>
 </ul>
-<h2 id="算法描述">算法描述</h2><h3 id="第一阶段：请求提交阶段Commit_Request_Phase（投票阶段_voting_phase）">第一阶段：请求提交阶段Commit Request Phase（投票阶段 voting phase）</h3><ul>
-<li>协调者向所有参与值发起事务提交请求，等待所有参与者的投票响应。</li>
-<li>所有参与者执行协调者发起的事务，记录Undo和Redo log。</li>
-<li>所有参与者投票给协调者（事务可以执行成功，回复<em>Yes</em>，否则回复<em>No</em>）。任何一个参数者没有回复yes都会导致事务回滚。</li>
+<h2 id="发布与逸出">发布与逸出</h2><p><strong>发布（publish）</strong>对象，是指是对象能够在当前作用域之外的代码中使用。例如将对象的引用保存到其他类的代码中，或者将引用传递到其他类的方法中。<br><strong>逸出（escape）</strong>：当不应该发布的对象被发布，则成为逸出。</p>
+<h3 id="this逸出">this逸出</h3><p>在一个类的构造函数中发布对象时，只是发布了一个尚未构造完成的对象，即使发布对象的语句位于构造函数的最后一行。如果this引用在构造函数中逸出，这种对象的创建就是不正确的构造。<strong>不要在函数构造方法中，使this逸出</strong></p>
+<h4 id="错误1：在构造方法内发布内部类对象">错误1：在构造方法内发布内部类对象</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThisEscape</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 不正确的构造</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ThisEscape</span><span class="params">(EventSource source)</span> </span>&#123;</span><br><span class="line">        source.registerListener() &#123;</span><br><span class="line">            <span class="keyword">new</span> EventListener() &#123;</span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onEvent</span><span class="params">(Event e)</span> </span>&#123;</span><br><span class="line">                    doSomeThing(e);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>上例中，假设EventListener是ThisEscape类的内部类，在发布内部类的对象时，this隐含的也被发布了。</p>
+<h4 id="错误2：在构造函数中启动线程">错误2：在构造函数中启动线程</h4><p>如果想在构造器中启动线程或者设置事件监听，应该使用一个私有构造方法和一个公共的静态工厂方法，从而避免不正确的构造过程。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SafeListener</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> EventListener listener;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">SafeListener</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        listener = <span class="keyword">new</span> EventListener() &#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onEvent</span><span class="params">(Event e)</span> </span>&#123;</span><br><span class="line">                doSomething(e);</span><br><span class="line">            &#125; </span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SafeListener <span class="title">newInstance</span><span class="params">(EventSource source)</span> </span>&#123;</span><br><span class="line">        SafeListener safe = <span class="keyword">new</span> SafeListener();</span><br><span class="line">        source.registerListener(safe.listener);</span><br><span class="line">        <span class="keyword">return</span> safe;</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="线程封闭（Thread_Confinement）">线程封闭（Thread Confinement）</h2><p>当某个对象封闭在一个线程中时，将自动实现线程安全性，即使被封闭的对象本身不是线程安全的。</p>
+<h3 id="Ad-hoc线程封闭">Ad-hoc线程封闭</h3><p>Ad-hoc线程封闭是指维护线程封闭性的职责完全有程序实现来承担。例如在volatile变量上的读-修改-写操作确保只有一个线程来完成。<br>这种线程封闭较脆弱，应该尽量避免使用。</p>
+<h3 id="栈封闭">栈封闭</h3><p>栈封闭：是指只能通过局部变量才能访问对象。</p>
+<h3 id="ThreadLocal类">ThreadLocal类</h3><p>ThreadLocal是维持线程封闭性的一种更规范的方法，ThreadLocal对象通常用于防止可变的单例或者全局变量进行共享。静态的ThreadLocal对象可以将包含在其中的全局变量为每个使用它的线程都保存一份，当线程终结时，会被垃圾回收掉。运用此机制，可以很好的实现线程上下文的保存。</p>
+<h2 id="不变性">不变性</h2><p>不可变对象一定是线程安全的，当满足下面的条件时，对象才是不可变的：</p>
+<ul>
+<li>对象创建以后其状态不可修改</li>
+<li>对象所有域都是final类型</li>
+<li>对象是正确被创建的（在构造方法中没有this逸出）</li>
 </ul>
-<h3 id="第二阶段：事务提交阶段（Commit_Phase）">第二阶段：事务提交阶段（Commit Phase）</h3><h4 id="执行成功：">执行成功：</h4><ul>
-<li>协调者向所有参与者发送commit命令</li>
-<li>所有参与者完成事务提交，并释放事务处理期间所占用的锁和资源</li>
-<li>参与者发送ACK给协调者</li>
-<li>当协调者收到所有参与者的ACK之后，事务执行成功</li>
-</ul>
-<h4 id="执行失败：">执行失败：</h4><ul>
-<li>任何一个参与者投票No或者超时，都导致事务回滚</li>
-<li>每个参与者根据WAL日志回滚</li>
-<li>每个参与者发送ACK给协调者</li>
-<li>协调者收到所有ACK后，事务回滚完成</li>
-</ul>
-<p>时序图：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Coordinator                                         Cohort&#10;                              QUERY TO COMMIT&#10;                --------------------------------&#62;&#10;                              VOTE YES/NO           prepare*/abort*&#10;                &#60;-------------------------------&#10;commit*/abort*                COMMIT/ROLLBACK&#10;                --------------------------------&#62;&#10;                              ACKNOWLEDGMENT        commit*/abort*&#10;                &#60;--------------------------------  &#10;end</span><br></pre></td></tr></table></figure>
-<p><code>*</code>表示改操作需要依赖稳定的存储</p>
-<h2 id="算法缺陷">算法缺陷</h2><ul>
-<li>同步阻塞：两阶段提交最大的缺点，等待其他参与者响应的过程中是阻塞的，无法进行其他操作。如果在阶段二协调者失败，则参与者永远处于阻塞状态，直到收到commit命令或者abort命令。</li>
-<li>单点问题：协调者存在单点问题</li>
-<li>太过保守：任何参与者错误或者超时，都会导致整个分布式事务失败。</li>
+<h3 id="final域">final域</h3><p>final域能确保初始化过程的安全性，从而可以不受限制的访问不可变对象。</p>
+<h3 id="安全发布的常用模式">安全发布的常用模式</h3><ul>
+<li>在静态初始化函数中初始化一个对象引用</li>
+<li>将对象的引用保存到volatile类型的域或者AtomicReference对象中。</li>
+<li>将对象的引用保存到某个正确构造对象的final类型的域中</li>
+<li>将兑现给的引用保存到一个由锁保护的域中。</li>
 </ul>
 <h2 id="参考">参考</h2><ul>
-<li><a href="https://en.wikipedia.org/wiki/Two-phase_commit_protocol" target="_blank" rel="external">https://en.wikipedia.org/wiki/Two-phase_commit_protocol</a></li>
-<li><a href="http://www.amazon.cn/%E5%9B%BE%E4%B9%A6/dp/B00RECRKPK" target="_blank" rel="external">从paxos到zookeeper——分布式一致性原理与实践</a></li>
+<li>1 Goetz, Brian, and Tim Peierls. Java concurrency in practice. Pearson Education, 2006.</li>
 </ul>
 
       
@@ -190,13 +195,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/2-Phase-Commit/"> #2 Phase Commit </a>
+            <a href="/tags/Java/"> #Java </a>
           
-            <a href="/tags/2PC/"> #2PC </a>
-          
-            <a href="/tags/一致性协议/"> #一致性协议 </a>
-          
-            <a href="/tags/二阶段提交/"> #二阶段提交 </a>
+            <a href="/tags/concurrency/"> #concurrency </a>
           
         </div>
       
@@ -205,13 +206,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/05/22/sharing-objects/">Java对象的共享</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/02/05/classloader/">Java ClassLoader</a>
+              <a href="/2016/03/27/2-phase-commit/">二阶段提交协议</a>
             
           </div>
         </div>
@@ -327,7 +326,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#两阶段提交协议（Two_Phase_Commit_Protocol）"><span class="nav-number">1.</span> <span class="nav-text">两阶段提交协议（Two Phase Commit Protocol）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前提"><span class="nav-number">2.</span> <span class="nav-text">前提</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法描述"><span class="nav-number">3.</span> <span class="nav-text">算法描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一阶段：请求提交阶段Commit_Request_Phase（投票阶段_voting_phase）"><span class="nav-number">3.1.</span> <span class="nav-text">第一阶段：请求提交阶段Commit Request Phase（投票阶段 voting phase）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二阶段：事务提交阶段（Commit_Phase）"><span class="nav-number">3.2.</span> <span class="nav-text">第二阶段：事务提交阶段（Commit Phase）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#执行成功："><span class="nav-number">3.2.1.</span> <span class="nav-text">执行成功：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#执行失败："><span class="nav-number">3.2.2.</span> <span class="nav-text">执行失败：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法缺陷"><span class="nav-number">4.</span> <span class="nav-text">算法缺陷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#可见性"><span class="nav-number">1.</span> <span class="nav-text">可见性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#重排序"><span class="nav-number">1.1.</span> <span class="nav-text">重排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#失效数据"><span class="nav-number">1.2.</span> <span class="nav-text">失效数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非原子的64位操作"><span class="nav-number">1.3.</span> <span class="nav-text">非原子的64位操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加锁与可见性"><span class="nav-number">1.4.</span> <span class="nav-text">加锁与可见性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile变量"><span class="nav-number">1.5.</span> <span class="nav-text">volatile变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布与逸出"><span class="nav-number">2.</span> <span class="nav-text">发布与逸出</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#this逸出"><span class="nav-number">2.1.</span> <span class="nav-text">this逸出</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#错误1：在构造方法内发布内部类对象"><span class="nav-number">2.1.1.</span> <span class="nav-text">错误1：在构造方法内发布内部类对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#错误2：在构造函数中启动线程"><span class="nav-number">2.1.2.</span> <span class="nav-text">错误2：在构造函数中启动线程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程封闭（Thread_Confinement）"><span class="nav-number">3.</span> <span class="nav-text">线程封闭（Thread Confinement）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ad-hoc线程封闭"><span class="nav-number">3.1.</span> <span class="nav-text">Ad-hoc线程封闭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#栈封闭"><span class="nav-number">3.2.</span> <span class="nav-text">栈封闭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadLocal类"><span class="nav-number">3.3.</span> <span class="nav-text">ThreadLocal类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不变性"><span class="nav-number">4.</span> <span class="nav-text">不变性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#final域"><span class="nav-number">4.1.</span> <span class="nav-text">final域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安全发布的常用模式"><span class="nav-number">4.2.</span> <span class="nav-text">安全发布的常用模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
@@ -886,8 +885,8 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'zuoqycom';
-      var disqus_identifier = '2016/03/27/2-phase-commit/';
-      var disqus_url = 'http://zuoqy.com/2016/03/27/2-phase-commit/';
+      var disqus_identifier = '2016/05/22/sharing-objects/';
+      var disqus_url = 'http://zuoqy.com/2016/05/22/sharing-objects/';
 
       (function(){
         var dsq = document.createElement('script');
