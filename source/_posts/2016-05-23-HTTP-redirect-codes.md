@@ -1,6 +1,6 @@
 title: "HTTP重定向状态码的区别"
 date: 2016-05-23 18:13:53
-categories:
+categories: HTTP
 tags: [HTTP,redirect,重定向]
 ---
 **摘要**：HTTP重定向状态码区分。
