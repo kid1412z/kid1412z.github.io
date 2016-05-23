@@ -146,7 +146,7 @@
       
 
       
-        <p><strong>摘要</strong>：<br><strong>Abstract</strong>:<br><a id="more"></a></p>
+        <p><strong>摘要</strong>：HTTP重定向状态码区分。<br><strong>Abstract</strong>: Difference between HTTP redirect code 301, 302, 303, 307<br><a id="more"></a></p>
 <table>
 <thead>
 <tr>
@@ -178,7 +178,7 @@
 </tr>
 </tbody>
 </table>
-<p><code>302 Found</code>标准与实现有偏差，The HTTP/1.0（RFC 1945）规定客户端需要做临时重定向，原始的描述是<code>&quot;Moved Temporarily&quot;</code>,但是主流的浏览器实现成了类似303 See Other的功能。因此在HTTP/1.1中，增加了303和307两个状态码来区分两种不同的行为。</p>
+<p><code>302 Found</code>标准与实现有偏差，The HTTP/1.0（RFC 1945）规定客户端需要做临时重定向，原始的描述是<code>&quot;Moved Temporarily&quot;</code>，本应实现成307所描述的功能，但是主流的浏览器实现成了类似303 See Other的功能。因此在HTTP/1.1中，增加了303和307两个状态码来区分两种不同的行为。</p>
 <h2 id="参考">参考</h2><ul>
 <li>1 <a href="http://stackoverflow.com/questions/4764297/difference-between-http-redirect-codes" target="_blank" rel="external">Difference between HTTP redirect codes</a></li>
 <li>2 Gourley, David, and Brian Totty. HTTP: the definitive guide. “ O’Reilly Media, Inc.”, 2002.</li>
