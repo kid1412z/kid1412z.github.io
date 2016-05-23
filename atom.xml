@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Qiyang Zuo's Blog]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2016-05-22T09:40:12.000Z</updated>
+  <updated>2016-05-23T15:52:16.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -13,6 +13,64 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[HTTP重定向状态码的区别]]></title>
+    <link href="http://zuoqy.com/2016/05/23/HTTP-redirect-codes/"/>
+    <id>http://zuoqy.com/2016/05/23/HTTP-redirect-codes/</id>
+    <published>2016-05-23T10:13:53.000Z</published>
+    <updated>2016-05-23T15:52:16.000Z</updated>
+    <content type="html"><![CDATA[<p><strong>摘要</strong>：<br><strong>Abstract</strong>:<br><a id="more"></a></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">状态码</th>
+<th style="text-align:left">原因短语</th>
+<th style="text-align:left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">301</td>
+<td style="text-align:left">Moved Permanently</td>
+<td style="text-align:left">资源被永久移除。客户端后续应该请求到新的URI上（相应报文首部给出），客户端需要向新的URI重新发起请求。后续的请求也都应该请求新的URI。</td>
+</tr>
+<tr>
+<td style="text-align:left">302</td>
+<td style="text-align:left">Found</td>
+<td style="text-align:left">临时重定向。客户端后续请求仍然使用原有的URI。</td>
+</tr>
+<tr>
+<td style="text-align:left">303</td>
+<td style="text-align:left">See Other(since HTTP/1.1)</td>
+<td style="text-align:left">告诉客户端，用Get方法请求给定的新URI中的资源。对于POST/PUT/DELETE请求，客户端应该假定服务器已经收到并处理了该请求，应该向新的URI再发一次GET请求来获取结果。后续请求还需要请求到老URI上。</td>
+</tr>
+<tr>
+<td style="text-align:left">307</td>
+<td style="text-align:left">Temporary Redirect (since HTTP/1.1)</td>
+<td style="text-align:left">临时重定向。对于所有POST/PUT/DELETE请求，客户端<strong>应当重新发起本次请求</strong>。后续的请求还应该使用老的URI。</td>
+</tr>
+</tbody>
+</table>
+<p><code>302 Found</code>标准与实现有偏差，The HTTP/1.0（RFC 1945）规定客户端需要做临时重定向，原始的描述是<code>&quot;Moved Temporarily&quot;</code>,但是主流的浏览器实现成了类似303 See Other的功能。因此在HTTP/1.1中，增加了303和307两个状态码来区分两种不同的行为。</p>
+<h2 id="参考">参考</h2><ul>
+<li>1 <a href="http://stackoverflow.com/questions/4764297/difference-between-http-redirect-codes" target="_blank" rel="external">Difference between HTTP redirect codes</a></li>
+<li>2 Gourley, David, and Brian Totty. HTTP: the definitive guide. “ O’Reilly Media, Inc.”, 2002.</li>
+<li>3 <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_Redirection" target="_blank" rel="external">List of HTTP status codes</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><strong>摘要</strong>：<br><strong>Abstract</strong>:<br>]]>
+    
+    </summary>
+    
+      <category term="HTTP" scheme="http://zuoqy.com/tags/HTTP/"/>
+    
+      <category term="redirect" scheme="http://zuoqy.com/tags/redirect/"/>
+    
+      <category term="重定向" scheme="http://zuoqy.com/tags/%E9%87%8D%E5%AE%9A%E5%90%91/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Java对象的共享]]></title>
