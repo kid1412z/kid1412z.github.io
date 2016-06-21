@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Qiyang Zuo's Blog]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2016-05-23T16:05:49.000Z</updated>
+  <updated>2016-06-21T07:06:54.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -13,6 +13,62 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Gartner Hyper Cycle]]></title>
+    <link href="http://zuoqy.com/2016/06/21/Gartner-Hyper-Cycle/"/>
+    <id>http://zuoqy.com/2016/06/21/Gartner-Hyper-Cycle/</id>
+    <published>2016-06-21T03:29:19.000Z</published>
+    <updated>2016-06-21T07:06:54.000Z</updated>
+    <content type="html"><![CDATA[<p><strong>摘要</strong>：高德纳技术成熟度曲线。<br><strong>Abstract</strong>: Theory of Gartner Hyper Cycle.<br><a id="more"></a></p>
+<h2 id="概要">概要</h2><p>高德纳技术成熟度曲线如图所示,其描述了一个技术成熟度和该技术实际被应用和接受程度的关系.<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2016-06-21/1.png" alt="Gartner Hyper Cycle"></p>
+<h2 id="如何使用">如何使用</h2><p>人们使用技术成熟度曲线获得新兴技术的承诺和业界对风险的控制偏好.<br>你是否要抢先尝试使用新兴技术? 如果你结合承担的风险并理解风险投资不会经常得到应有的回报,你有所收获.<br>使用温和的方式是否合适? 新技术采纳者应该明白,新兴的技术往往没有得到足够的证明.<br>需要等待其更成熟之后再使用吗?如果你还存在很多关于商业可行性方面的额问题不能回答,你最好等待其他人给出更靠谱的答案之后再尝试使用.</p>
+<h2 id="技术成熟度曲线">技术成熟度曲线</h2><p>1995年开始，高德纳咨询公司依其专业分析预测与推论各种新科技的成熟演变速度及要达到成熟所需的时间，分成5个阶段：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">阶段</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">科技诞生的促动期 (Technology Trigger)</td>
+<td style="text-align:center">在此阶段，随着媒体大肆的报导过度，非理性的渲染，产品的知名度无所不在，然而随着这个科技的缺点、问题、限制出现，失败的案例大于成功的案例，例如:.com公司 1998~2000年之间的非理性疯狂飙升期。</td>
+</tr>
+<tr>
+<td style="text-align:center">过高期望的峰值（Peak of Inflated Expectations）</td>
+<td style="text-align:center">早期公众的过分关注演绎出了一系列成功的故事——当然同时也有众多失败的例子。对于失败，有些公司采取了补救措施，而大部分却无动于衷。</td>
+</tr>
+<tr>
+<td style="text-align:center">泡沫化的底谷期 (Trough of Disillusionment)</td>
+<td style="text-align:center">在历经前面阶段所存活的科技经过多方扎实有重点的试验，而对此科技的适用范围及限制是以客观的并实际的了解，成功并能存活的经营模式逐渐成长。</td>
+</tr>
+<tr>
+<td style="text-align:center">稳步爬升的光明期 (Slope of Enlightenment)</td>
+<td style="text-align:center">在此阶段，有一新科技的诞生，在市面上受到主要媒体与业界高度的注意，例如:1996年的Internet ，Web。</td>
+</tr>
+<tr>
+<td style="text-align:center">实质生产的高原期 (Plateau of Productivity)</td>
+<td style="text-align:center">在此阶段，新科技产生的利益与潜力被市场实际接受，实质支援此经营模式的工具、方法论经过数代的演进，进入了非常成熟的阶段。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考">参考</h2><ul>
+<li><a href="https://en.wikipedia.org/wiki/Hype_cycle" target="_blank" rel="external">https://en.wikipedia.org/wiki/Hype_cycle</a></li>
+<li><a href="http://www.gartner.com/technology/research/methodologies/hype-cycle.jsp" target="_blank" rel="external">http://www.gartner.com/technology/research/methodologies/hype-cycle.jsp</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><strong>摘要</strong>：高德纳技术成熟度曲线。<br><strong>Abstract</strong>: Theory of Gartner Hyper Cycle.<br>]]>
+    
+    </summary>
+    
+      <category term="Theory" scheme="http://zuoqy.com/tags/Theory/"/>
+    
+      <category term="Theory" scheme="http://zuoqy.com/categories/Theory/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[HTTP重定向状态码的区别]]></title>
