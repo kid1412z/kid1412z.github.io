@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Qiyang Zuo's Blog]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2016-06-21T07:06:54.000Z</updated>
+  <updated>2016-12-03T12:26:28.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -13,6 +13,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Median of Two Sorted Arrays]]></title>
+    <link href="http://zuoqy.com/2016/12/03/Median-of-Two-Sorted-Arrays/"/>
+    <id>http://zuoqy.com/2016/12/03/Median-of-Two-Sorted-Arrays/</id>
+    <published>2016-12-03T10:48:58.000Z</published>
+    <updated>2016-12-03T12:26:28.000Z</updated>
+    <content type="html"><![CDATA[<p><strong>摘要</strong>：两个有序数组的中位数<br><strong>Abstract</strong>: Median of Two Sorted Arrays<br>最近遇到一个有意思的题，求两个有序数组的中位数，亲自做了一下发现坑很多，除了二分查找的思想运用的很巧妙，还有各种边界条件把我搞得很崩溃。于是记录下来。<br><a id="more"></a><br>首先，题目是这样的：<br>有两个有序数组，长度分别是m和n，找到两个数组的中位数，要求时间复杂度是<code>O(log (m+n))</code></p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Example</span> 1:</span><br><span class="line"><span class="keyword">nums1</span> =<span class="sqbracket"> [1, 3]</span></span><br><span class="line"><span class="keyword">nums2</span> =<span class="sqbracket"> [2]</span></span><br><span class="line"><span class="keyword">The</span> median is 2.0</span><br><span class="line"></span><br><span class="line"><span class="keyword">Example</span> 2:</span><br><span class="line"><span class="keyword">nums1</span> =<span class="sqbracket"> [1, 2]</span></span><br><span class="line"><span class="keyword">nums2</span> =<span class="sqbracket"> [3, 4]</span></span><br><span class="line"><span class="keyword">The</span> median is (2 + 3)/2 = 2.5</span><br></pre></td></tr></table></figure>
+<p><code>O(m+n)</code>的解法就是一趟归并排序然后再取中位数，比较简单。<code>O(log(m+n))</code>的解法需要用到二分的思想。<br>假设<code>i</code>,<code>j</code>将数组<code>A</code>，<code>B</code>分为左右两部分：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">left_part                |        right_part&#10;A[0], A[1], ..., A[i-1]  |  A[i], A[i+1], ..., A[m-1]&#10;B[0], B[1], ..., B[j-1]  |  B[j], B[j+1], ..., B[n-1]</span><br></pre></td></tr></table></figure>
+<p>如果保持左右两部分数量相同，则<code>i</code>和<code>j</code>：的关系如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i + j = (m - i) + (n - j)&#10;==&#62; i + j = (m + n) / 2&#10;==&#62; j = (m + n) / 2 - i</span><br></pre></td></tr></table></figure>
+<p>即：我们只需要找到<code>i</code>,<code>j</code>满足：<code>i + j = (m - i) + (n - j)</code>且<code>max(left_part) &lt;= min(right_part)</code>即可通过：<code>A[i-1]、A[i]、B[j-1]、B[j]</code>计算出中位数：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">median = (max(left_part) + min(right_part))/2</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#22312;A&#25968;&#32452;&#20013;&#20108;&#20998;&#26597;&#25214;&#65292;&#24403;&#21069;&#20803;&#32032;index = i&#65306;&#10;1&#65289;&#24403;A[i - 1] &#62; B[j]&#65292;&#35828;&#26126;i&#36807;&#22823;&#65292;&#35201;&#25214;&#30340;i&#22312;A[0...i-1]&#20013;&#65307;&#10;2&#65289;&#24403;B[j - 1] &#62; A[i]&#65292;&#35828;&#26126;i&#36807;&#23567;&#65292;&#35201;&#25214;&#30340;i&#22312;A[i+1...m]&#20013;&#65307;&#10;&#24490;&#29615;1&#65289;2&#65289;&#30452;&#21040;&#25214;&#21040;&#31526;&#21512;&#26465;&#20214;&#30340;i&#21644;j</span><br></pre></td></tr></table></figure>
+<p>以上就是这个算法的主要思想，当然有这些还不够，还需要注意<code>i = 0</code>、<code>i = m</code>、<code>j = 0</code>、<code>j = n</code>和空数组<code>[]</code>等边界情况。</p>
+<p>具体代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">findMedianSortedArrays</span><span class="params">(<span class="keyword">int</span>[] A, <span class="keyword">int</span>[] B)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> m = A.length;</span><br><span class="line">        <span class="keyword">int</span> n = B.length;</span><br><span class="line">        <span class="keyword">int</span> left = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> right = m;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (m &gt; n) &#123;</span><br><span class="line">            <span class="keyword">return</span> findMedianSortedArrays(B, A);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (m == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> (B[n/<span class="number">2</span>] + B[(n - <span class="number">1</span>) / <span class="number">2</span>])/<span class="number">2.0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (left &lt;= right) &#123;</span><br><span class="line">            i = (left + right) / <span class="number">2</span>;</span><br><span class="line">            j = (m + n) / <span class="number">2</span> - i;</span><br><span class="line">            <span class="keyword">if</span> (i &gt; <span class="number">0</span> &amp;&amp; j &lt; n &amp;&amp; A[i - <span class="number">1</span>] &gt; B[j]) &#123; <span class="comment">// i &gt; 0 ==&gt; j &lt; n</span></span><br><span class="line">                right = i - <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="function"><span class="keyword">else</span> <span class="title">if</span> <span class="params">(j &gt; <span class="number">0</span> &amp;&amp; i &lt; m &amp;&amp; B[j - <span class="number">1</span>] &gt; A[i])</span> </span>&#123; <span class="comment">// j &gt; 0 ==&gt; i &lt; m</span></span><br><span class="line">                left = i + <span class="number">1</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> leftMax, rightMin;</span><br><span class="line">        <span class="keyword">if</span> (i == <span class="number">0</span>) &#123;</span><br><span class="line">            leftMax = B[j-<span class="number">1</span>];</span><br><span class="line">        &#125; <span class="function"><span class="keyword">else</span> <span class="title">if</span> <span class="params">(j == <span class="number">0</span>)</span> </span>&#123;</span><br><span class="line">            leftMax = A[i - <span class="number">1</span>];</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            leftMax = Math.max(A[i-<span class="number">1</span>], B[j-<span class="number">1</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (i == m) &#123;</span><br><span class="line">            rightMin = B[j];</span><br><span class="line">        &#125; <span class="function"><span class="keyword">else</span> <span class="title">if</span> <span class="params">(j == n)</span> </span>&#123;</span><br><span class="line">            rightMin = A[i];</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            rightMin = Math.min(A[i], B[j]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> ((m + n) % <span class="number">2</span> == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> rightMin;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (leftMax + rightMin) / <span class="number">2.0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><strong>摘要</strong>：两个有序数组的中位数<br><strong>Abstract</strong>: Median of Two Sorted Arrays<br>最近遇到一个有意思的题，求两个有序数组的中位数，亲自做了一下发现坑很多，除了二分查找的思想运用的很巧妙，还有各种边界条件把我搞得很崩溃。于是记录下来。<br>]]>
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://zuoqy.com/tags/Algorithm/"/>
+    
+      <category term="Algorithm" scheme="http://zuoqy.com/categories/Algorithm/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Gartner Hyper Cycle]]></title>
@@ -2511,54 +2541,6 @@ cout &lt;&lt; <span class="built_in">max</span> &lt;&lt; endl;
       <category term="动态规划" scheme="http://zuoqy.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
     
       <category term="coding gym" scheme="http://zuoqy.com/categories/coding-gym/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[动态规划]]></title>
-    <link href="http://zuoqy.com/2013/11/09/dynamic-programming/"/>
-    <id>http://zuoqy.com/2013/11/09/dynamic-programming/</id>
-    <published>2013-11-09T04:09:50.000Z</published>
-    <updated>2015-04-21T10:05:37.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="概念">概念</h2><p>适用于动态规划求解的问题，经过分解得到的问题往往不是相互独立的。若用分治算法来解这类问题，子问题常常被计算多次。动态规划的基本思想是，将计算过的子问题存储到一个表中，来避免重复计算。</p>
-<h2 id="动态规划的基本要素">动态规划的基本要素</h2><p>最优子结构：当问题的最优解包含了其子问题的最优解时，称该问题具有最优子结构的性质。<br>重叠子问题：当采用递归的方式计算问题时，相同的子问题被重复计算多次。</p>
-<h2 id="设计动态规划算法的步骤">设计动态规划算法的步骤</h2><ul>
-<li>找出最优解的性质，并刻画其结构特征</li>
-<li>递归定义最优值</li>
-<li>自底向上的方式计算出最优值</li>
-<li>根据计算最优值时得到的信息，构造最优解。</li>
-</ul>
-<a id="more"></a>
-<h2 id="动态规划专题">动态规划专题</h2><h3 id="序列型DP">序列型DP</h3><ul>
-<li><a href="/2013/11/09/1214-segment-coverage/">线段覆盖</a></li>
-<li><a href="/2013/11/11/3027-segment-coverage2/">3027 线段覆盖 2</a></li>
-<li><a href="/2013/11/12/1576-longest-inc-subseq/">1576 最长严格上升子序列</a></li>
-</ul>
-<h3 id="背包型DP">背包型DP</h3><ul>
-<li><a href="http://curlcoder.com/?p=67" target="_blank" rel="external">0-1 背包问题</a></li>
-<li><a href="http://curlcoder.com/2013/11/18/1068-%E4%B9%8C%E9%BE%9F%E6%A3%8B/" target="_blank" rel="external">1068 乌龟棋</a></li>
-</ul>
-<p>(未完待续)</p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="概念">概念</h2><p>适用于动态规划求解的问题，经过分解得到的问题往往不是相互独立的。若用分治算法来解这类问题，子问题常常被计算多次。动态规划的基本思想是，将计算过的子问题存储到一个表中，来避免重复计算。</p>
-<h2 id="动态规划的基本要素">动态规划的基本要素</h2><p>最优子结构：当问题的最优解包含了其子问题的最优解时，称该问题具有最优子结构的性质。<br>重叠子问题：当采用递归的方式计算问题时，相同的子问题被重复计算多次。</p>
-<h2 id="设计动态规划算法的步骤">设计动态规划算法的步骤</h2><ul>
-<li>找出最优解的性质，并刻画其结构特征</li>
-<li>递归定义最优值</li>
-<li>自底向上的方式计算出最优值</li>
-<li>根据计算最优值时得到的信息，构造最优解。</li>
-</ul>]]>
-    
-    </summary>
-    
-      <category term="Algorithm" scheme="http://zuoqy.com/tags/Algorithm/"/>
-    
-      <category term="DP" scheme="http://zuoqy.com/tags/DP/"/>
-    
-      <category term="动态规划" scheme="http://zuoqy.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
-    
-      <category term="Algorithm" scheme="http://zuoqy.com/categories/Algorithm/"/>
     
   </entry>
   
