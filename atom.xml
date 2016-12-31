@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Qiyang Zuo's Blog]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2016-12-03T12:26:28.000Z</updated>
+  <updated>2016-12-31T15:28:31.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -15,11 +15,67 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[2016——和时间赛跑的我]]></title>
+    <link href="http://zuoqy.com/2016/12/31/oh-my-2016/"/>
+    <id>http://zuoqy.com/2016/12/31/oh-my-2016/</id>
+    <published>2016-12-31T09:38:07.000Z</published>
+    <updated>2016-12-31T15:28:31.000Z</updated>
+    <content type="html"><![CDATA[<p>新年临近，转眼间已经是2016年的最后一天了。抓紧这最后的几个小时，跟风写个总结。</p>
+<p>如果说要我2016年的关键词，那我想就想题目那样，和时间赛跑。从2011年来到北京，到现在已经有五年时间了。想起来北京上学之前，和长辈们、朋友们聊天，总会说到，北京的生活节奏很快blabla，我一直没有什么深刻的体会。如今我挤在早班地铁里，或者9点多下班打车回家的路上，有时想起那些话，心里琢磨难道这就是所谓的”生活节奏快吗”？只是我不知不觉地习惯了这样的”节奏”，很少有时间静下心来回顾和反思。李笑来在其公众号文章中曾说”慢即是快，快即是无”。我认为不光是读书是这样，一味的”快”，缺乏精益和反思，和懒惰一样可怕，整个人很容易被这样的节奏淹没。<br>2016年，我的最大敌人就是时间。繁忙的工作让我更加珍惜时间，深感时间流逝太快。人的年龄越大，越感到时间变快，可能是因为对于一个3岁小孩，他的一天占到他人生的一千分之一，一年占到他人生的三分之一，而对于一个70岁的老人，他的一天占到人生的两万分之一<code>[1]</code>。和时间赛跑，就是在和这样的节奏抗争，让我能继续保持进取心、继续保持好奇心、继续我的业余爱好，从看似重复的工作和生活中获取新鲜的东西。</p>
+<ol>
+<li>工作</li>
+</ol>
+<p>毕业之后便加入阿里巴巴，算上实习，已经有三年半的时间。虽然平时工作很忙，但很庆幸当时选择了互联网这个行业，没错过这个飞速发展时代。科技发展日新月异，互联网的发展最为抢眼，人们的生活方式也正在被互联网改变：人工智能、互联网汽车、共享单车、直播、VR正在影响千千万万普通的家庭。互联网改变了人们的出行方式、支付方式、娱乐方式，时常因为自己身处浪潮之中并有幸能贡献微薄之力而感到兴奋。用一个词去概括过去一年的工作，我想就是”变化”。互联网行业发展瞬息万变，要做102年的阿里巴巴，有一个很重要的理念，就是”拥抱变化”。在阿里巴巴的1000多天中，我已经经历了很多次业务变化。每一次变化都有”涅槃重生”的感觉，每经历一次都更加强。从开始的迷茫和愤愤，到现在能快速的调整和适应，内心更加强大，专注力更强，对业务的理解更快速。变化让我接触到更多项目的初创和死亡，遇到了更多在大公司中业务发展各阶段的各种问题和困难。有句话说的一点都不错，过的不那么”舒服”的时候，才是进步最快的时候。2016年经历了两次大的业务调整和变化，有幸接触到智能交互服务领域。2016年，各大互联网公司争相推出自己的智能语音交互服务，Google发布了Google Home、亚马逊发布了Echo、微软也推出小冰……身在其中，才感受到了这个领域所面临的各种挑战，而我又这么喜欢挑战。</p>
+<ol>
+<li>阅读</li>
+</ol>
+<p>读书占去了我大部分的业余时间。从2015年底开始到现在这一年多的时间里，我总共读过22本书。还剩着一堆进度为40%-50%的烂尾书没有读完（实在惭愧）。完成的书单按照时间顺序排列分别是：《重来》、《曾国藩的正面与侧面》、《极客与团队》、《HBase in Action》、《支付战争》、《文学回忆录》、《量子理论：爱因斯坦与波尔关于世界本质的伟大论战》、《一万小时天才理论》、《把你的英语用起来》、《失控》、《七周七并发模型》、《巴菲特之道》、《黑客与画家》、《第一本Docker书》、《囚徒健身》、《Java 8函数式编程》、《精进》、《Java性能优化权威指南》、《我最想要的记忆魔法书》、《神奇的眼脑直映快读法》、《激荡三十年（上）中国企业1978-2008》、《刻意练习》。书单还算比较多样，什么类型的都有，甚至还有文学类<code>- - ！</code>。现在看着这个书单就像是一个日历摆在我面前，回忆书中的内容，总会想到写看书时所经历的事情。比如其中的技术书完全依据业务的需要，有些书则是在杭州出差期间，深夜的宾馆里静静看完的。读书的感觉很好，可以让浮躁的心安静下来，如同在时空中畅游，了解自己未知的领域、和作者对话。</p>
+<ol>
+<li>旅行</li>
+</ol>
+<p>读万卷书，行万里路。年初难得的两周假期，我和妻子去了美国旅行，期间从东岸飞到西岸，从纽约到旧金山，还去了夏威夷。在美国的两周多时间，我的身心的到了彻底的放松，在纽约时去了大都会博物馆、自然历史博物馆、帝国大厦、洛克菲勒、时代广场、中央公园和自由女神。被一个短短几百年时间建设起来的国家的文化积淀深深的震撼到了。自然环境、人文环境和文化气息，每每想起都感觉那么不真实，感觉我们的祖国还有很长很长的路要走啊。在旧金山，我们拜访了我向往的斯坦福大学，在金门大桥上徒步走过，迟到了渔人码头的海鲜大餐（感谢小伙伴在旧金山的招待）。在夏威夷，我们去过Maui和Honolulu两个岛，干净的沙滩和海水让我们流连忘返。</p>
+<ol>
+<li>写作</li>
+</ol>
+<p>2016年，我总共写了7篇博客。博客和微信公众号改变了我对写作的看法。原来越觉得一个人的能力在很大程度上体现在其阅读理解和写作上。同样的文字，不同人的理解程度千差万别，读过不一定全部理解，全部理解不一定能用自己的话写出来，能写出来，不一定能在Presentation中流畅的讲出来。而很多重要的机会都是看演讲和写作中能表达多少，你比别人多读了多少，多理解了多少。个人认为自己在写作方面有待提高，而且没有太多时间投入到写作上。这可能是和我在中学时代严重偏向理科导致的。其实，无论身处什么行业，偏爱什么学科，都离不开阅读理解和写作。</p>
+<ol>
+<li>业余爱好</li>
+</ol>
+<p>还好，我还有个业余爱好一直没有放弃。虽然能弹吉他的时间原来越少，但总有那么一些时间练习。音乐和阅读一样美妙，让大脑得到另一种形式的锻炼和休息。学习一样乐器的乐趣很多，吉他让我有机会真正去想了解音乐以及一些乐理知识。在中学时代，音乐课其实教授了不少有用的知识，知识当时不够重视。而有些能力比如音阶调式的听力、乐感等如果幼年时没有得到足够的锻炼，一旦成年是很难再去补救的<code>[2]</code>。在阅读《一万小时天才理论》和《精进》等书时从中获得的学习方法用在音乐中同样得到了良好的效果，避免无效练习之后，我节省了更多的时间获得真正的进步，也有了更多的成就感和乐趣。</p>
+<ol>
+<li>健身</li>
+</ol>
+<p>身体是一切的前提，工作后运动减少，让我开始了解健身知识，增加在健身方面投入。每周有一天少加半小时一小时班跑去健身房，回报就是身体状态和工作效率的提高。除了让大脑时刻保持良好的状态，让身体得到足够的锻炼是保持健康状态的不错选择。<em>种一棵树最好的时间是十年前，其次是现在。</em>不要等身体出了问题再去补救。从办健身卡到现在，坚持的还算不错，基本保持着一周去两次的状态。坚持健身也增强了我的意志力和身体状态，能够更好的投入工作和生活。</p>
+<ol>
+<li>公开课</li>
+</ol>
+<p>2016年，我业余时间完成了一门Coursera公开课的自修，并拿到证书。相比之前有所减少，主要是我的时间越来越少，很少有大块的时间用来完成课程作业了。两年前，我得益于住在公司附近，用大量早上早起的时间选修了人工智能和机器学习方面的课程，它们后来在我的工作中起到了很关键的作用并改变了我对好多事情的看法。</p>
+<p>最后，感谢我的家人和我的妻子对我的支持和理解。在新的一年，希望家人和朋友们身体健康，特别祝愿我九十岁的姥姥身体健康。</p>
+<p>2016年12月31日<br>于石家庄</p>
+<h2 id="参考">参考</h2><ul>
+<li><code>[1]</code> 《把时间当做朋友》</li>
+<li><code>[2]</code> 《一万小时天才理论》《精进》《刻意练习》</li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>新年临近，转眼间已经是2016年的最后一天了。抓紧这最后的几个小时，跟风写个总结。</p>
+<p>如果说要我2016年的关键词，那我想就想题目那样，和时间赛跑。从2011年来到北京，到现在已经有五年时间了。想起来北京上学之前，和长辈们、朋友们聊天，总会说到，北京的生活节奏很]]>
+    </summary>
+    
+      <category term="2016" scheme="http://zuoqy.com/tags/2016/"/>
+    
+      <category term="summary" scheme="http://zuoqy.com/tags/summary/"/>
+    
+      <category term="summary" scheme="http://zuoqy.com/categories/summary/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[Median of Two Sorted Arrays]]></title>
     <link href="http://zuoqy.com/2016/12/03/Median-of-Two-Sorted-Arrays/"/>
     <id>http://zuoqy.com/2016/12/03/Median-of-Two-Sorted-Arrays/</id>
     <published>2016-12-03T10:48:58.000Z</published>
-    <updated>2016-12-03T12:26:28.000Z</updated>
+    <updated>2016-12-03T13:05:35.000Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：两个有序数组的中位数<br><strong>Abstract</strong>: Median of Two Sorted Arrays<br>最近遇到一个有意思的题，求两个有序数组的中位数，亲自做了一下发现坑很多，除了二分查找的思想运用的很巧妙，还有各种边界条件把我搞得很崩溃。于是记录下来。<br><a id="more"></a><br>首先，题目是这样的：<br>有两个有序数组，长度分别是m和n，找到两个数组的中位数，要求时间复杂度是<code>O(log (m+n))</code></p>
 <figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Example</span> 1:</span><br><span class="line"><span class="keyword">nums1</span> =<span class="sqbracket"> [1, 3]</span></span><br><span class="line"><span class="keyword">nums2</span> =<span class="sqbracket"> [2]</span></span><br><span class="line"><span class="keyword">The</span> median is 2.0</span><br><span class="line"></span><br><span class="line"><span class="keyword">Example</span> 2:</span><br><span class="line"><span class="keyword">nums1</span> =<span class="sqbracket"> [1, 2]</span></span><br><span class="line"><span class="keyword">nums2</span> =<span class="sqbracket"> [3, 4]</span></span><br><span class="line"><span class="keyword">The</span> median is (2 + 3)/2 = 2.5</span><br></pre></td></tr></table></figure>
 <p><code>O(m+n)</code>的解法就是一趟归并排序然后再取中位数，比较简单。<code>O(log(m+n))</code>的解法需要用到二分的思想。<br>假设<code>i</code>,<code>j</code>将数组<code>A</code>，<code>B</code>分为左右两部分：</p>
@@ -2480,63 +2536,6 @@ us.freeMemory(p);
       <category term="Algorithm" scheme="http://zuoqy.com/tags/Algorithm/"/>
     
       <category term="DP" scheme="http://zuoqy.com/tags/DP/"/>
-    
-      <category term="动态规划" scheme="http://zuoqy.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
-    
-      <category term="coding gym" scheme="http://zuoqy.com/categories/coding-gym/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[1214 线段覆盖]]></title>
-    <link href="http://zuoqy.com/2013/11/09/1214-segment-coverage/"/>
-    <id>http://zuoqy.com/2013/11/09/1214-segment-coverage/</id>
-    <published>2013-11-09T04:24:01.000Z</published>
-    <updated>2015-04-21T09:29:46.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="题目描述_Description"><a href="http://www.wikioi.com/problem/1214/" target="_blank" rel="external">题目描述 Description</a></h2><p>给定x轴上的N（0&lt;N&lt;100）条线段，每个线段由它的二个端点a_I和b_I确定，I=1,2,……N.这些坐标都是区间（－999，999）的整数。有些线段之间会相互交叠或覆盖。请你编写一个程序，从给出的线段中去掉尽量少的线段，使得剩下的线段两两之间没有内部公共点。所谓的内部公共点是指一个点同时属于两条线段且至少在其中一条线段的内部（即除去端点的部分）。</p>
-<a id="more"></a>
-<p>输入描述 Input Description<br>输入第一行是一个整数N。接下来有N行，每行有二个空格隔开的整数，表示一条线段的二个端点的坐标。<br><strong>输出描述 Output Description</strong><br>输出第一行是一个整数表示最多剩下的线段数。<br><strong>样例输入 Sample Input</strong><br>3<br>6 3<br>1 3<br>2 5<br><strong>样例输出 Sample Output</strong><br>2</p>
-<h2 id="动态规划思路:">动态规划思路:</h2><p>最优子结构：到j为止最多的线段数<br>子问题重叠：用f[j]数组存放重叠计算的子问题</p>
-<ol>
-<li>对输入的数据，把左端点放在左边</li>
-<li>按左端点坐标从小到大排序</li>
-<li>用数组f[j]存放到线段j为止，最多留下的线段数目，初始都是1。</li>
-<li>按顺序扫描线段，如果线段j的左端点大于等于之前线段的右端点，到j最多线段数为f[i] + 1， 如果有多个这样的情况，就取f[i] + 1（i = 1….j-1）中最大的一个。</li>
-</ol>
-<h2 id="代码示例:">代码示例:</h2><pre><code><span class="built_in">int</span> n;
-cin &gt;&gt; n;
-<span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; n; i++){
-    cin &gt;&gt; lines[i].start;
-    cin &gt;&gt; lines[i].end;
-    f[i] = <span class="number">1</span>;
-    <span class="keyword">if</span>(lines[i].start &gt; lines[i].end){
-        swap(lines[i].start, lines[i].end);
-    }
-}
-qsort(lines, n, sizeof(<span class="built_in">line</span>),cmp);
-<span class="keyword">for</span>(<span class="built_in">int</span> j = <span class="number">1</span>; j &lt; n; j++){<span class="comment">//scan all</span>
-    <span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; j; i++){ 
-        <span class="keyword">if</span>(lines[i].end &lt;= lines[j].start){<span class="comment">//如果与前面的不重叠</span>
-            f[j] = <span class="built_in">max</span>(f[j], f[i] + <span class="number">1</span>); <span class="comment">// 取最多的线段数</span>
-        }
-    }
-}
-<span class="built_in">int</span> <span class="built_in">max</span> = <span class="number">0</span>;
-<span class="keyword">for</span>(<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; n; i++){
-    <span class="keyword">if</span>(f[i] &gt; <span class="built_in">max</span>){
-        <span class="built_in">max</span> = f[i];
-    }
-}
-cout &lt;&lt; <span class="built_in">max</span> &lt;&lt; endl;
-</code></pre>]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="题目描述_Description"><a href="http://www.wikioi.com/problem/1214/">题目描述 Description</a></h2><p>给定x轴上的N（0&lt;N&lt;100）条线段，每个线段由它的二个端点a_I和b_I确定，I=1,2,……N.这些坐标都是区间（－999，999）的整数。有些线段之间会相互交叠或覆盖。请你编写一个程序，从给出的线段中去掉尽量少的线段，使得剩下的线段两两之间没有内部公共点。所谓的内部公共点是指一个点同时属于两条线段且至少在其中一条线段的内部（即除去端点的部分）。</p>]]>
-    
-    </summary>
-    
-      <category term="DP" scheme="http://zuoqy.com/tags/DP/"/>
-    
-      <category term="wikioi" scheme="http://zuoqy.com/tags/wikioi/"/>
     
       <category term="动态规划" scheme="http://zuoqy.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
     

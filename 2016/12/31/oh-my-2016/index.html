@@ -22,7 +22,7 @@
 
 
 
-  <meta name="keywords" content="HTTP,redirect,重定向," />
+  <meta name="keywords" content="2016,summary," />
 
 
 
@@ -35,7 +35,7 @@
 
 
 
-  <title> HTTP重定向状态码的区别 | Q.Y Zuo Believes </title>
+  <title> 2016——和时间赛跑的我 | Q.Y Zuo Believes </title>
 </head>
 
 <body>
@@ -114,7 +114,7 @@
           
           
             
-              HTTP重定向状态码的区别
+              2016——和时间赛跑的我
             
           
         </h1>
@@ -122,14 +122,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2016-05-23
+          Posted on 2016-12-31
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; In
             
-              <a href="/categories/HTTP/">HTTP</a>
+              <a href="/categories/summary/">summary</a>
 
               
               
@@ -142,8 +142,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2016/05/23/HTTP-redirect-codes/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/05/23/HTTP-redirect-codes/"></span>
+            <a href="/2016/12/31/oh-my-2016/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/12/31/oh-my-2016/"></span>
             </a>
           </span>
           
@@ -157,43 +157,41 @@
       
 
       
-        <p><strong>摘要</strong>：HTTP重定向状态码区分。<br><strong>Abstract</strong>: Difference between HTTP redirect code 301, 302, 303, 307<br><a id="more"></a></p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">状态码</th>
-<th style="text-align:left">原因短语</th>
-<th style="text-align:left">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">301</td>
-<td style="text-align:left">Moved Permanently</td>
-<td style="text-align:left">资源被永久移除。客户端后续应该请求到新的URI上（相应报文首部给出），客户端需要向新的URI重新发起请求。后续的请求也都应该请求新的URI。</td>
-</tr>
-<tr>
-<td style="text-align:left">302</td>
-<td style="text-align:left">Found</td>
-<td style="text-align:left">临时重定向。客户端后续请求仍然使用原有的URI。</td>
-</tr>
-<tr>
-<td style="text-align:left">303</td>
-<td style="text-align:left">See Other(since HTTP/1.1)</td>
-<td style="text-align:left">告诉客户端，用Get方法请求给定的新URI中的资源。对于POST/PUT/DELETE请求，客户端应该假定服务器已经收到并处理了该请求，应该向新的URI再发一次GET请求来获取结果。后续请求还需要请求到老URI上。</td>
-</tr>
-<tr>
-<td style="text-align:left">307</td>
-<td style="text-align:left">Temporary Redirect (since HTTP/1.1)</td>
-<td style="text-align:left">临时重定向。对于所有POST/PUT/DELETE请求，客户端<strong>应当重新发起本次请求</strong>。后续的请求还应该使用老的URI。</td>
-</tr>
-</tbody>
-</table>
-<p><code>302 Found</code>标准与实现有偏差，The HTTP/1.0（RFC 1945）规定客户端需要做临时重定向，原始的描述是<code>&quot;Moved Temporarily&quot;</code>，本应实现成307所描述的功能，但是主流的浏览器实现成了类似303 See Other的功能。因此在HTTP/1.1中，增加了303和307两个状态码来区分两种不同的行为。</p>
+        <p>新年临近，转眼间已经是2016年的最后一天了。抓紧这最后的几个小时，跟风写个总结。</p>
+<p>如果说要我2016年的关键词，那我想就想题目那样，和时间赛跑。从2011年来到北京，到现在已经有五年时间了。想起来北京上学之前，和长辈们、朋友们聊天，总会说到，北京的生活节奏很快blabla，我一直没有什么深刻的体会。如今我挤在早班地铁里，或者9点多下班打车回家的路上，有时想起那些话，心里琢磨难道这就是所谓的”生活节奏快吗”？只是我不知不觉地习惯了这样的”节奏”，很少有时间静下心来回顾和反思。李笑来在其公众号文章中曾说”慢即是快，快即是无”。我认为不光是读书是这样，一味的”快”，缺乏精益和反思，和懒惰一样可怕，整个人很容易被这样的节奏淹没。<br>2016年，我的最大敌人就是时间。繁忙的工作让我更加珍惜时间，深感时间流逝太快。人的年龄越大，越感到时间变快，可能是因为对于一个3岁小孩，他的一天占到他人生的一千分之一，一年占到他人生的三分之一，而对于一个70岁的老人，他的一天占到人生的两万分之一<code>[1]</code>。和时间赛跑，就是在和这样的节奏抗争，让我能继续保持进取心、继续保持好奇心、继续我的业余爱好，从看似重复的工作和生活中获取新鲜的东西。</p>
+<ol>
+<li>工作</li>
+</ol>
+<p>毕业之后便加入阿里巴巴，算上实习，已经有三年半的时间。虽然平时工作很忙，但很庆幸当时选择了互联网这个行业，没错过这个飞速发展时代。科技发展日新月异，互联网的发展最为抢眼，人们的生活方式也正在被互联网改变：人工智能、互联网汽车、共享单车、直播、VR正在影响千千万万普通的家庭。互联网改变了人们的出行方式、支付方式、娱乐方式，时常因为自己身处浪潮之中并有幸能贡献微薄之力而感到兴奋。用一个词去概括过去一年的工作，我想就是”变化”。互联网行业发展瞬息万变，要做102年的阿里巴巴，有一个很重要的理念，就是”拥抱变化”。在阿里巴巴的1000多天中，我已经经历了很多次业务变化。每一次变化都有”涅槃重生”的感觉，每经历一次都更加强。从开始的迷茫和愤愤，到现在能快速的调整和适应，内心更加强大，专注力更强，对业务的理解更快速。变化让我接触到更多项目的初创和死亡，遇到了更多在大公司中业务发展各阶段的各种问题和困难。有句话说的一点都不错，过的不那么”舒服”的时候，才是进步最快的时候。2016年经历了两次大的业务调整和变化，有幸接触到智能交互服务领域。2016年，各大互联网公司争相推出自己的智能语音交互服务，Google发布了Google Home、亚马逊发布了Echo、微软也推出小冰……身在其中，才感受到了这个领域所面临的各种挑战，而我又这么喜欢挑战。</p>
+<ol>
+<li>阅读</li>
+</ol>
+<p>读书占去了我大部分的业余时间。从2015年底开始到现在这一年多的时间里，我总共读过22本书。还剩着一堆进度为40%-50%的烂尾书没有读完（实在惭愧）。完成的书单按照时间顺序排列分别是：《重来》、《曾国藩的正面与侧面》、《极客与团队》、《HBase in Action》、《支付战争》、《文学回忆录》、《量子理论：爱因斯坦与波尔关于世界本质的伟大论战》、《一万小时天才理论》、《把你的英语用起来》、《失控》、《七周七并发模型》、《巴菲特之道》、《黑客与画家》、《第一本Docker书》、《囚徒健身》、《Java 8函数式编程》、《精进》、《Java性能优化权威指南》、《我最想要的记忆魔法书》、《神奇的眼脑直映快读法》、《激荡三十年（上）中国企业1978-2008》、《刻意练习》。书单还算比较多样，什么类型的都有，甚至还有文学类<code>- - ！</code>。现在看着这个书单就像是一个日历摆在我面前，回忆书中的内容，总会想到写看书时所经历的事情。比如其中的技术书完全依据业务的需要，有些书则是在杭州出差期间，深夜的宾馆里静静看完的。读书的感觉很好，可以让浮躁的心安静下来，如同在时空中畅游，了解自己未知的领域、和作者对话。</p>
+<ol>
+<li>旅行</li>
+</ol>
+<p>读万卷书，行万里路。年初难得的两周假期，我和妻子去了美国旅行，期间从东岸飞到西岸，从纽约到旧金山，还去了夏威夷。在美国的两周多时间，我的身心的到了彻底的放松，在纽约时去了大都会博物馆、自然历史博物馆、帝国大厦、洛克菲勒、时代广场、中央公园和自由女神。被一个短短几百年时间建设起来的国家的文化积淀深深的震撼到了。自然环境、人文环境和文化气息，每每想起都感觉那么不真实，感觉我们的祖国还有很长很长的路要走啊。在旧金山，我们拜访了我向往的斯坦福大学，在金门大桥上徒步走过，迟到了渔人码头的海鲜大餐（感谢小伙伴在旧金山的招待）。在夏威夷，我们去过Maui和Honolulu两个岛，干净的沙滩和海水让我们流连忘返。</p>
+<ol>
+<li>写作</li>
+</ol>
+<p>2016年，我总共写了7篇博客。博客和微信公众号改变了我对写作的看法。原来越觉得一个人的能力在很大程度上体现在其阅读理解和写作上。同样的文字，不同人的理解程度千差万别，读过不一定全部理解，全部理解不一定能用自己的话写出来，能写出来，不一定能在Presentation中流畅的讲出来。而很多重要的机会都是看演讲和写作中能表达多少，你比别人多读了多少，多理解了多少。个人认为自己在写作方面有待提高，而且没有太多时间投入到写作上。这可能是和我在中学时代严重偏向理科导致的。其实，无论身处什么行业，偏爱什么学科，都离不开阅读理解和写作。</p>
+<ol>
+<li>业余爱好</li>
+</ol>
+<p>还好，我还有个业余爱好一直没有放弃。虽然能弹吉他的时间原来越少，但总有那么一些时间练习。音乐和阅读一样美妙，让大脑得到另一种形式的锻炼和休息。学习一样乐器的乐趣很多，吉他让我有机会真正去想了解音乐以及一些乐理知识。在中学时代，音乐课其实教授了不少有用的知识，知识当时不够重视。而有些能力比如音阶调式的听力、乐感等如果幼年时没有得到足够的锻炼，一旦成年是很难再去补救的<code>[2]</code>。在阅读《一万小时天才理论》和《精进》等书时从中获得的学习方法用在音乐中同样得到了良好的效果，避免无效练习之后，我节省了更多的时间获得真正的进步，也有了更多的成就感和乐趣。</p>
+<ol>
+<li>健身</li>
+</ol>
+<p>身体是一切的前提，工作后运动减少，让我开始了解健身知识，增加在健身方面投入。每周有一天少加半小时一小时班跑去健身房，回报就是身体状态和工作效率的提高。除了让大脑时刻保持良好的状态，让身体得到足够的锻炼是保持健康状态的不错选择。<em>种一棵树最好的时间是十年前，其次是现在。</em>不要等身体出了问题再去补救。从办健身卡到现在，坚持的还算不错，基本保持着一周去两次的状态。坚持健身也增强了我的意志力和身体状态，能够更好的投入工作和生活。</p>
+<ol>
+<li>公开课</li>
+</ol>
+<p>2016年，我业余时间完成了一门Coursera公开课的自修，并拿到证书。相比之前有所减少，主要是我的时间越来越少，很少有大块的时间用来完成课程作业了。两年前，我得益于住在公司附近，用大量早上早起的时间选修了人工智能和机器学习方面的课程，它们后来在我的工作中起到了很关键的作用并改变了我对好多事情的看法。</p>
+<p>最后，感谢我的家人和我的妻子对我的支持和理解。在新的一年，希望家人和朋友们身体健康，特别祝愿我九十岁的姥姥身体健康。</p>
+<p>2016年12月31日<br>于石家庄</p>
 <h2 id="参考">参考</h2><ul>
-<li>1 <a href="http://stackoverflow.com/questions/4764297/difference-between-http-redirect-codes" target="_blank" rel="external">Difference between HTTP redirect codes</a></li>
-<li>2 Gourley, David, and Brian Totty. HTTP: the definitive guide. “ O’Reilly Media, Inc.”, 2002.</li>
-<li>3 <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#3xx_Redirection" target="_blank" rel="external">List of HTTP status codes</a></li>
+<li><code>[1]</code> 《把时间当做朋友》</li>
+<li><code>[2]</code> 《一万小时天才理论》《精进》《刻意练习》</li>
 </ul>
 
       
@@ -203,11 +201,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/HTTP/"> #HTTP </a>
+            <a href="/tags/2016/"> #2016 </a>
           
-            <a href="/tags/redirect/"> #redirect </a>
-          
-            <a href="/tags/重定向/"> #重定向 </a>
+            <a href="/tags/summary/"> #summary </a>
           
         </div>
       
@@ -216,13 +212,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/06/21/Gartner-Hyper-Cycle/">Gartner Hyper Cycle</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/22/sharing-objects/">Java对象的共享</a>
+              <a href="/2016/12/03/Median-of-Two-Sorted-Arrays/">Median of Two Sorted Arrays</a>
             
           </div>
         </div>
@@ -897,8 +891,8 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'zuoqycom';
-      var disqus_identifier = '2016/05/23/HTTP-redirect-codes/';
-      var disqus_url = 'http://zuoqy.com/2016/05/23/HTTP-redirect-codes/';
+      var disqus_identifier = '2016/12/31/oh-my-2016/';
+      var disqus_url = 'http://zuoqy.com/2016/12/31/oh-my-2016/';
 
       (function(){
         var dsq = document.createElement('script');
