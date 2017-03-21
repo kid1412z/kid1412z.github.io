@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Qiyang Zuo's Blog]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2016-12-31T15:43:09.000Z</updated>
+  <updated>2017-03-21T07:23:02.000Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -15,11 +15,43 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[matplotlib unicode]]></title>
+    <link href="http://zuoqy.com/2017/03/21/matplotlib-unicode/"/>
+    <id>http://zuoqy.com/2017/03/21/matplotlib-unicode/</id>
+    <published>2017-03-21T07:05:11.000Z</published>
+    <updated>2017-03-21T07:23:02.000Z</updated>
+    <content type="html"><![CDATA[<p><strong>摘要</strong>：解决matplotlib中文乱码的问题<br><strong>Abstract</strong>:How to plot unicode using matplotlib<br><a id="more"></a></p>
+<h2 id="方法一">方法一</h2><p>在plot之前加上如下代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">mpl.rcParams[<span class="string">'font.sans-serif'</span>] = [<span class="string">'FangSong'</span>] <span class="comment"># 指定默认字体</span></span><br><span class="line">mpl.rcParams[<span class="string">'axes.unicode_minus'</span>] = <span class="keyword">False</span>     <span class="comment"># 解决保存图像是负号'-'显示为方块的问题</span></span><br></pre></td></tr></table></figure>
+<p>方法的优点是不需要改动任何配置文件，缺点是每次都要加上这样的额外代码。</p>
+<h2 id="方法二">方法二</h2><p>找到matplotlib 所在的安装目录，在mac下，使用anaconda2时，所在路径为：<code>~/anaconda2/pkgs/matplotlib-2.0.0-np111py36_0/lib/python3.6/site-packages/matplotlib/mpl-data</code><br>然后copy其中的matplotlibrc 文件到用户目录下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp matplotlibrc ~/.matplotlib/</span><br></pre></td></tr></table></figure>
+<p>修改其中的：<code>font.sans-serif</code> 加上支持中文的字体，修改<code>axes.unicode_minus</code>为<code>False</code><br>保存之后，删除<code>~/matplotlib/</code>下的<code>fontList.py3k.cache</code>字体缓存，重新加载程序即可。如果系统没有所选的字体，需要把字体文件拷贝到<code>~/anaconda2/pkgs/matplotlib-2.0.0-np111py36_0/lib/python3.6/site-packages/matplotlib/mpl-data/fonts/ttf</code>。</p>
+<p>此方法的有点就是全局生效，对所有依赖该类库的程序都可以在plot中显示unicode字符。</p>
+<p>验证：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">x = np.linspace(<span class="number">0</span>, <span class="number">3</span>*np.pi, <span class="number">500</span>)</span><br><span class="line">plt.plot(x, np.sin(x**<span class="number">2</span>))</span><br><span class="line">plt.title(<span class="string">'中文'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2017-03-21/1.png"></p>
+<blockquote>
+<p>以上方法可以解决包括nltk在内的所有用到matplotlib而不能打印中文的问题。</p>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><strong>摘要</strong>：解决matplotlib中文乱码的问题<br><strong>Abstract</strong>:How to plot unicode using matplotlib<br>]]>
+    
+    </summary>
+    
+      <category term="matplotlib" scheme="http://zuoqy.com/tags/matplotlib/"/>
+    
+      <category term="nltk" scheme="http://zuoqy.com/tags/nltk/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[2016——和时间赛跑的我]]></title>
     <link href="http://zuoqy.com/2016/12/31/oh-my-2016/"/>
     <id>http://zuoqy.com/2016/12/31/oh-my-2016/</id>
     <published>2016-12-31T09:38:07.000Z</published>
-    <updated>2016-12-31T15:43:09.000Z</updated>
+    <updated>2017-03-21T07:05:40.000Z</updated>
     <content type="html"><![CDATA[<p>新年临近，转眼间已经是2016年的最后一天了。抓紧这最后的几个小时，跟风写个总结。</p>
 <p>如果说要我2016年的关键词，那我想就想题目那样，和时间赛跑。从2011年来到北京，到现在已经有五年时间了。想起来北京上学之前，和长辈们、朋友们聊天，总会说到，北京的生活节奏很快blabla，我一直没有什么深刻的体会。如今我挤在早班地铁里，或者9点多下班打车回家的路上，有时想起那些话，心里琢磨难道这就是所谓的”生活节奏快吗”？只是我不知不觉地习惯了这样的”节奏”，很少有时间静下心来回顾和反思。李笑来在其公众号文章中曾说”慢即是快，快即是无”。我认为不光是读书是这样，一味的”快”，缺乏精益和反思，和懒惰一样可怕，整个人很容易被这样的节奏淹没。<br>2016年，我的最大敌人就是时间。繁忙的工作让我更加珍惜时间，深感时间流逝太快。人的年龄越大，越感到时间变快，可能是因为对于一个3岁小孩，他的一天占到他人生的一千分之一，一年占到他人生的三分之一，而对于一个70岁的老人，他的一天占到人生的两万分之一<code>[1]</code>。和时间赛跑，就是在和这样的节奏抗争，让我能继续保持进取心、继续保持好奇心、继续我的业余爱好，从看似重复的工作和生活中获取新鲜的东西。<br><a id="more"></a></p>
 <ol>
@@ -50,7 +82,7 @@
 <li>公开课</li>
 </ol>
 <p>2016年，我业余时间完成了一门Coursera公开课的自修，并拿到证书。相比之前有所减少，主要是我的时间越来越少，很少有大块的时间用来完成课程作业了。两年前，我得益于住在公司附近，用大量早上早起的时间选修了人工智能和机器学习方面的课程，它们后来在我的工作中起到了很关键的作用并改变了我对好多事情的看法。</p>
-<p>最后，感谢我的家人和我的妻子对我的支持和理解。在新的一年，希望家人和朋友们身体健康，特别祝愿我九十岁的姥姥身体健康。祝大家工作顺利，每天都有新的进步！</p>
+<p>最后，感谢我的家人和我的妻子对我的支持和理解。在新的一年，希望家人和朋友们身体健康，特别祝愿我九十岁的姥姥身体健康。工作顺利，每天都有新的进步！</p>
 <p>2016年12月31日<br>于石家庄</p>
 <h2 id="参考">参考</h2><ul>
 <li><code>[1]</code> 《把时间当做朋友》</li>
@@ -2486,57 +2518,6 @@ us.freeMemory(p);
       <category term="DP" scheme="http://zuoqy.com/tags/DP/"/>
     
       <category term="wikioi" scheme="http://zuoqy.com/tags/wikioi/"/>
-    
-      <category term="动态规划" scheme="http://zuoqy.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
-    
-      <category term="coding gym" scheme="http://zuoqy.com/categories/coding-gym/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[3027 线段覆盖 2]]></title>
-    <link href="http://zuoqy.com/2013/11/11/3027-segment-coverage2/"/>
-    <id>http://zuoqy.com/2013/11/11/3027-segment-coverage2/</id>
-    <published>2013-11-11T03:55:17.000Z</published>
-    <updated>2015-04-21T09:29:29.000Z</updated>
-    <content type="html"><![CDATA[<h2 id="题目描述_Description"><a href="http://www.wikioi.com/problem/3027/" target="_blank" rel="external">题目描述 Description</a></h2><p>数轴上有n条线段，线段的两端都是整数坐标，坐标范围在0~1000000，每条线段有一个价值，请从n条线段中挑出若干条线段，使得这些线段两两不覆盖（端点可以重合）且线段价值之和最大。<br>n&lt;=1000</p>
-<a id="more"></a>
-<p>输入描述 Input Description<br>第一行一个整数n，表示有多少条线段。<br>接下来n行每行三个整数, ai bi ci，分别代表第i条线段的左端点ai，右端点bi（保证左端点&lt;右端点）和价值ci。<br>输出描述 Output Description<br>输出能够获得的最大价值<br>样例输入 Sample Input<br>3<br>1 2 1<br>2 3 2<br>1 3 4<br>样例输出 Sample Output<br>4<br>数据范围及提示 Data Size &amp; Hint<br>数据范围<br>对于40%的数据，n≤10；<br>对于100%的数据，n≤1000；<br>0&lt;=ai,bi&lt;=1000000<br>0&lt;=ci&lt;=1000000</p>
-<h2 id="思路：">思路：</h2><p>对线段按照左端点进行排序<br>子问题描述：用v[i] 表示到第i个线段为止的最大价值<br>状态迁移方程： v[i] = max(v[j]) + a[i].value (0&lt;= j &lt; i &amp;&amp; a[j].end &lt;= a[i].start)</p>
-<h2 id="代码示例：">代码示例：</h2><pre><code><span class="built_in">int</span> cmp(<span class="keyword">const</span> <span class="built_in">line</span> lhs, <span class="keyword">const</span> <span class="built_in">line</span> rhs)
-{
-    <span class="keyword">return</span> lhs.start &lt; rhs.start;
-}
-
-<span class="built_in">int</span> cover(<span class="built_in">line</span> *a, <span class="built_in">int</span> n)
-{
-    <span class="built_in">sort</span>(a, a + n, cmp);
-    <span class="built_in">int</span> pmax = <span class="number">0</span>;
-    v[<span class="number">0</span>] = a[<span class="number">0</span>].value;
-    <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">1</span>; i &lt; n; i++) {
-        v[i] = a[i].value;
-        <span class="built_in">int</span> <span class="built_in">max</span> = <span class="number">0</span>;
-        <span class="keyword">for</span> (<span class="built_in">int</span> j = <span class="number">0</span>; j &lt; i; j++) {
-            <span class="keyword">if</span> (a[j].end &lt;= a[i].start &amp;&amp; <span class="built_in">max</span> &lt; v[j]) {
-                <span class="built_in">max</span> = v[j];
-            }
-        }
-        v[i] += <span class="built_in">max</span>;
-        <span class="keyword">if</span> (pmax &lt; v[i]) {
-            pmax = v[i];
-        }
-    }
-    <span class="keyword">return</span> pmax;
-}
-</code></pre>]]></content>
-    <summary type="html">
-    <![CDATA[<h2 id="题目描述_Description"><a href="http://www.wikioi.com/problem/3027/">题目描述 Description</a></h2><p>数轴上有n条线段，线段的两端都是整数坐标，坐标范围在0~1000000，每条线段有一个价值，请从n条线段中挑出若干条线段，使得这些线段两两不覆盖（端点可以重合）且线段价值之和最大。<br>n&lt;=1000</p>]]>
-    
-    </summary>
-    
-      <category term="Algorithm" scheme="http://zuoqy.com/tags/Algorithm/"/>
-    
-      <category term="DP" scheme="http://zuoqy.com/tags/DP/"/>
     
       <category term="动态规划" scheme="http://zuoqy.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/"/>
     
