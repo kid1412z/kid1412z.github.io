@@ -12,7 +12,7 @@ JDK java.util 包中包含了几个重要的集合类(主要包含实现了Colle
 
 ## Java集合框架核心接口
 
-![The core collection interfaces](http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-06/1.png)
+![The core collection interfaces](http://zuoqy.com/images/2015-05-06/1.png)
 
 ### Iterable
 

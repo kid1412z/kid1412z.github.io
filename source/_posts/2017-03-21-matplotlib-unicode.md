@@ -42,6 +42,6 @@ plt.title('中文')
 plt.show()
 ```
 
-<img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2017-03-21/1.png">
+<img src="http://zuoqy.com/images/2017-03-21/1.png">
 
 > 以上方法可以解决包括nltk在内的所有用到matplotlib而不能打印中文的问题。

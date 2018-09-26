@@ -456,7 +456,7 @@ V get(Object key)
 
 boxTest方法会接受什么类型的参数？如果传入`Box<Integer>`或者`Box<Double>`可以吗？答案是*不可以*，因为**`Box<Integer>`和`Box<Double>`不是`Box<Number>`的子类型**！
 
-![generic subtypes](http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/1.png)
+![generic subtypes](http://zuoqy.com/images/2015-05-19/1.png)
 
 > 注意：给定两个具体类型A和B（如：Integer和Double），无论A，B两个类有什么样的关系，`MyClass<A>` 和 `MyClass<B>` 两个类没有任何关系，他们唯一相同的父类就是Object。关于如何创建一个泛型类的子类型，参见[通配符和子类型](#wildcards-and-subtyping)
 
@@ -464,7 +464,7 @@ boxTest方法会接受什么类型的参数？如果传入`Box<Integer>`或者`B
 
 你可以通过继承泛型类或者实现泛型接口来创建一个泛型类或者泛型接口的子类型（subtype）。以Java集合类为例：
 
-![Collections hierarchy](http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/2.png)
+![Collections hierarchy](http://zuoqy.com/images/2015-05-19/2.png)
 
 若自己实现一个PayloadList类：
 
@@ -710,12 +710,12 @@ Java编译器利用目标类型推断泛型方法调用时的参数类型。表�
 
 Integer是Number类的子类，`List<Integer>`和`List<Number>`是什么关系？
 
-![subtype](http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/3.png)
+![subtype](http://zuoqy.com/images/2015-05-19/3.png)
 
 尽管Integer是Number的子类型，但是`List<Integer>`和`List<Number>`并没有继承关系。它们之间仅有的关系就是共同的父类是`List<?>`.
 下图说明了有上下界通配符的泛型类之间的继承关系：
 
-![subtype-wildcard](http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/4.png)
+![subtype-wildcard](http://zuoqy.com/images/2015-05-19/4.png)
 
 在[通配符使用指南](#wildcards-guidline)一节，将介绍更多关于上下界通配符的使用方法。
 

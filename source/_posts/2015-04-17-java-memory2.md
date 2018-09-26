@@ -26,7 +26,7 @@ tags: [Java,JVM,OOM]
     jmap -dump:live,format=b,file=heap.bin
     
 使用MAT分析结果会有如下的描述：
-![oom](http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-17/1.png)
+![oom](http://zuoqy.com/images/2015-04-17/1.png)
 帮助查找问题所在
 
 ## 虚拟机栈和本地方法栈溢出

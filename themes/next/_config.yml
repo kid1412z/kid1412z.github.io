@@ -6,7 +6,7 @@ menu:
   #about: /about
 
 # Place your favicon.ico to /source directory.
-favicon: http://7xi4cl.com1.z0.glb.clouddn.com/favicon.ico
+favicon: http://zuoqy.com/favicon.ico
 
 # Set default keywords (Use a comma to separate)
 keywords: "Java,Algorithm,Machine Learning"
@@ -58,9 +58,9 @@ use_motion: true
 fancybox: true
 
 # Static files
-vendors: http://7xi4cl.com1.z0.glb.clouddn.com/vendors
-css: http://7xi4cl.com1.z0.glb.clouddn.com/css
-images: http://7xi4cl.com1.z0.glb.clouddn.com/images
+vendors: http://zuoqy.com/vendors
+css: http://zuoqy.com/css
+images: http://zuoqy.com/images
 
 # Theme version
 version: 0.4.2

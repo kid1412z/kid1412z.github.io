@@ -9,7 +9,7 @@ tags: [Theory]
 ## 概要
 
 高德纳技术成熟度曲线如图所示,其描述了一个技术成熟度和该技术实际被应用和接受程度的关系.
-![Gartner Hyper Cycle](http://7xi4cl.com1.z0.glb.clouddn.com/images/2016-06-21/1.png)
+![Gartner Hyper Cycle](http://zuoqy.com/images/2016-06-21/1.png)
 
 ## 如何使用
 

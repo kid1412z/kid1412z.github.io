@@ -12,7 +12,7 @@ tags: [Java,JVM]
 ## 运行时数据区域
 
 JVM在程序运行过程中，会把内存划分成以下区域：
-![img](http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-16/1.png)
+![img](http://zuoqy.com/images/2015-04-16/1.png)
 
 ### 程序计数器
 
@@ -75,9 +75,9 @@ Hotspot虚拟机要求对象的大小是8字节的整数倍，不够的用Paddin
 ### 对象的访问定位
 
 * 句柄：reference中包含了对象的句柄地址，句柄中包含对象各部分的地址
-![img](http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-16/2.png)
+![img](http://zuoqy.com/images/2015-04-16/2.png)
 * 直接指针：reference中直接存储对象的地址（Hotspot实现）
-![img](http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-16/2.png)
+![img](http://zuoqy.com/images/2015-04-16/2.png)
 
 ## References
 
