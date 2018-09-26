@@ -70,7 +70,7 @@ scroll_to_more: true
 # 是否为侧边栏文章的目录自动添加索引，默认开启。设置为 `false` 关闭。
 toc_list_number: true
 
-disqus_shortname: zuoqycom
+#disqus_shortname: zuoqycom
 google_analytics: UA-53494336-3
 google_site_verification: GgXgmwmTNbQickN-preU_L3kzGIRPxHZeE43Gxd_Fo8
 # Deployment
