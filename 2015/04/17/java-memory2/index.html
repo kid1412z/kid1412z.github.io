@@ -12,10 +12,10 @@
 
 
 
-  <link rel="stylesheet" type="text/css" href="http://7xi4cl.com1.z0.glb.clouddn.com/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="http://zuoqy.com/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
 
 
-<link rel="stylesheet" type="text/css" href="http://7xi4cl.com1.z0.glb.clouddn.com/css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="http://zuoqy.com/css/main.css?v=0.4.2"/>
 
 
     <meta name="description" content="Write something about Java Web development distributed computing technologies." />
@@ -30,7 +30,7 @@
 
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="http://7xi4cl.com1.z0.glb.clouddn.com/favicon.ico" />
+  <link rel="shorticon icon" type="image/x-icon" href="http://zuoqy.com/favicon.ico" />
 
 
 
@@ -140,13 +140,6 @@
 
         
           
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/04/17/java-memory2/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/17/java-memory2/"></span>
-            </a>
-          </span>
-          
         
       </div>
     </div>
@@ -170,7 +163,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
 }
 </code></pre><p>-XX:+HeapDumpOnOutOfMemoryError 设置JVM在出现OOM时，对Heap进行转储，可以使用Eclipse MemoryAnalyzer 进行分析。<br>如果对运行中的服务进行dump，可以使用jmap命令：</p>
 <pre><code>jmap -dump:live,<span class="keyword">format</span>=b,<span class="keyword">file</span>=heap.bin
-</code></pre><p>使用MAT分析结果会有如下的描述：<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-17/1.png" alt="oom"><br>帮助查找问题所在</p>
+</code></pre><p>使用MAT分析结果会有如下的描述：<br><img src="http://zuoqy.com/images/2015-04-17/1.png" alt="oom"><br>帮助查找问题所在</p>
 <h2 id="虚拟机栈和本地方法栈溢出">虚拟机栈和本地方法栈溢出</h2><p>HotSpot JVM不区分虚拟机栈和本地方法栈，虽然存在-Xoss设置，但是<em>实际上是无效的</em>。栈容量只有-Xss来确定。<br>虚拟机规范中规定了虚拟机栈和本地方法栈的两种异常：</p>
 <h3 id="StackOverflowError:">StackOverflowError:</h3><p>线程请求的栈深度大于虚拟机允许的最大深度。</p>
 <pre><code><span class="comment">//JVM args: -Xss256k (规定最小栈大小是160k)</span>
@@ -307,10 +300,6 @@ us.freeMemory(p);
     
       <div class="comments" id="comments">
         
-          <div id="disqus_thread">
-            <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-          </div>
-        
       </div>
     
   </div>
@@ -345,14 +334,14 @@ us.freeMemory(p);
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="http://7xi4cl.com1.z0.glb.clouddn.com/images/default_avatar.jpg" alt="Qiyang Zuo" />
+          <img class="site-author-image" src="http://zuoqy.com/images/default_avatar.jpg" alt="Qiyang Zuo" />
           <p class="site-author-name">Qiyang Zuo</p>
         </div>
         <p class="site-description motion-element">Write something about Java Web development distributed computing technologies.</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">24</span>
+              <span class="site-state-item-count">25</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -366,7 +355,7 @@ us.freeMemory(p);
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">35</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>
@@ -441,13 +430,13 @@ us.freeMemory(p);
     <div class="back-to-top"></div>
   </div>
 
-  <script type="text/javascript" src="http://7xi4cl.com1.z0.glb.clouddn.com/vendors/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="http://zuoqy.com/vendors/jquery/index.js?v=2.1.3"></script>
 
   
   
 
   
-  <script type="text/javascript" src="http://7xi4cl.com1.z0.glb.clouddn.com/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="http://zuoqy.com/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
       $('.content img').each(function () {
@@ -498,8 +487,8 @@ us.freeMemory(p);
 
   
 
-  <script type="text/javascript" src="http://7xi4cl.com1.z0.glb.clouddn.com/vendors/velocity/velocity.min.js"></script>
-  <script type="text/javascript" src="http://7xi4cl.com1.z0.glb.clouddn.com/vendors/velocity/velocity.ui.min.js"></script>
+  <script type="text/javascript" src="http://zuoqy.com/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="http://zuoqy.com/vendors/velocity/velocity.ui.min.js"></script>
 
   <script type="text/javascript" id="motion.global">
   $(document).ready(function () {
@@ -962,25 +951,6 @@ us.freeMemory(p);
   
   
 
-  
-
-    
-      
-    
-
-    <script type="text/javascript">
-      var disqus_shortname = 'zuoqycom';
-      var disqus_identifier = '2015/04/17/java-memory2/';
-      var disqus_url = 'http://zuoqy.com/2015/04/17/java-memory2/';
-
-      (function(){
-        var dsq = document.createElement('script');
-        dsq.type = 'text/javascript';
-        dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      }());
-    </script>
   
 
 

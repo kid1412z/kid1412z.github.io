@@ -12,10 +12,10 @@
 
 
 
-  <link rel="stylesheet" type="text/css" href="http://7xi4cl.com1.z0.glb.clouddn.com/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="http://zuoqy.com/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
 
 
-<link rel="stylesheet" type="text/css" href="http://7xi4cl.com1.z0.glb.clouddn.com/css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="http://zuoqy.com/css/main.css?v=0.4.2"/>
 
 
     <meta name="description" content="Write something about Java Web development distributed computing technologies." />
@@ -30,7 +30,7 @@
 
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="http://7xi4cl.com1.z0.glb.clouddn.com/favicon.ico" />
+  <link rel="shorticon icon" type="image/x-icon" href="http://zuoqy.com/favicon.ico" />
 
 
 
@@ -139,13 +139,6 @@
         
 
         
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/05/19/java-generic/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/05/19/java-generic/"></span>
-            </a>
-          </span>
           
         
       </div>
@@ -437,12 +430,12 @@ someMethod(<span class="keyword">new</span> Double(<span class="number">10.1</sp
 </code></pre><p>但是考虑如下的方法：</p>
 <pre><code><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">boxTest</span><span class="params">(Box&lt;Number&gt; n)</span> </span>{ <span class="comment">/* ... */</span> }
 </code></pre><p>boxTest方法会接受什么类型的参数？如果传入<code>Box&lt;Integer&gt;</code>或者<code>Box&lt;Double&gt;</code>可以吗？答案是<em>不可以</em>，因为<strong><code>Box&lt;Integer&gt;</code>和<code>Box&lt;Double&gt;</code>不是<code>Box&lt;Number&gt;</code>的子类型</strong>！</p>
-<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/1.png" alt="generic subtypes"></p>
+<p><img src="http://zuoqy.com/images/2015-05-19/1.png" alt="generic subtypes"></p>
 <blockquote>
 <p>注意：给定两个具体类型A和B（如：Integer和Double），无论A，B两个类有什么样的关系，<code>MyClass&lt;A&gt;</code> 和 <code>MyClass&lt;B&gt;</code> 两个类没有任何关系，他们唯一相同的父类就是Object。关于如何创建一个泛型类的子类型，参见<a href="#wildcards-and-subtyping">通配符和子类型</a></p>
 </blockquote>
 <h3 id="泛型类和子类型">泛型类和子类型</h3><p>你可以通过继承泛型类或者实现泛型接口来创建一个泛型类或者泛型接口的子类型（subtype）。以Java集合类为例：</p>
-<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/2.png" alt="Collections hierarchy"></p>
+<p><img src="http://zuoqy.com/images/2015-05-19/2.png" alt="Collections hierarchy"></p>
 <p>若自己实现一个PayloadList类：</p>
 <pre><code><span class="class"><span class="keyword">interface</span> <span class="title">PayloadList</span>&lt;<span class="title">E</span>,<span class="title">P</span>&gt; <span class="keyword">extends</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt; </span>{
   <span class="keyword">void</span> setPayload(<span class="keyword">int</span> <span class="keyword">index</span>, P val);
@@ -588,9 +581,9 @@ printList(ls);
 <figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">B b = new B()<span class="comment">;</span></span><br><span class="line"><span class="literal">A</span> <span class="literal">a</span> = b<span class="comment">;</span></span><br></pre></td></tr></table></figure>
 <p>对于普通的类来说，子类型规则是成立的：如果B继承A，那么B是A的子类型。但是这个规则对于泛型类型来说，不适用。</p>
 <p>Integer是Number类的子类，<code>List&lt;Integer&gt;</code>和<code>List&lt;Number&gt;</code>是什么关系？</p>
-<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/3.png" alt="subtype"></p>
+<p><img src="http://zuoqy.com/images/2015-05-19/3.png" alt="subtype"></p>
 <p>尽管Integer是Number的子类型，但是<code>List&lt;Integer&gt;</code>和<code>List&lt;Number&gt;</code>并没有继承关系。它们之间仅有的关系就是共同的父类是<code>List&lt;?&gt;</code>.<br>下图说明了有上下界通配符的泛型类之间的继承关系：</p>
-<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/4.png" alt="subtype-wildcard"></p>
+<p><img src="http://zuoqy.com/images/2015-05-19/4.png" alt="subtype-wildcard"></p>
 <p>在<a href="#wildcards-guidline">通配符使用指南</a>一节，将介绍更多关于上下界通配符的使用方法。</p>
 <h3 id="通配符捕获和辅助方法">通配符捕获和辅助方法</h3><p>在某些情况下，编译器会推断通配符的类型。例如，一个列表被定义为<code>List&lt;?&gt;</code>，当计算表达式的值的时候，编译器会根据代码推断出特定的类型。这种场景就叫做<em>通配符捕获（Wildcard Capture）</em>。<br>在大部分情况下，你都不需要关注通配符捕获，除非你得到包含<em>capture of</em>的错误提示。</p>
 <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"><span class="keyword">import</span> java.util.List;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WildcardError</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> foo(List&lt;?&gt; i) &#123;</span><br><span class="line">        i.<span class="keyword">set</span>(<span class="number">0</span>, i.<span class="keyword">get</span>(<span class="number">0</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -836,10 +829,6 @@ WildcardErrorBad.java:<span class="number">15</span>: error: <span class="functi
     
       <div class="comments" id="comments">
         
-          <div id="disqus_thread">
-            <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-          </div>
-        
       </div>
     
   </div>
@@ -874,14 +863,14 @@ WildcardErrorBad.java:<span class="number">15</span>: error: <span class="functi
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="http://7xi4cl.com1.z0.glb.clouddn.com/images/default_avatar.jpg" alt="Qiyang Zuo" />
+          <img class="site-author-image" src="http://zuoqy.com/images/default_avatar.jpg" alt="Qiyang Zuo" />
           <p class="site-author-name">Qiyang Zuo</p>
         </div>
         <p class="site-description motion-element">Write something about Java Web development distributed computing technologies.</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">24</span>
+              <span class="site-state-item-count">25</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -895,7 +884,7 @@ WildcardErrorBad.java:<span class="number">15</span>: error: <span class="functi
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">35</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>
@@ -970,13 +959,13 @@ WildcardErrorBad.java:<span class="number">15</span>: error: <span class="functi
     <div class="back-to-top"></div>
   </div>
 
-  <script type="text/javascript" src="http://7xi4cl.com1.z0.glb.clouddn.com/vendors/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="http://zuoqy.com/vendors/jquery/index.js?v=2.1.3"></script>
 
   
   
 
   
-  <script type="text/javascript" src="http://7xi4cl.com1.z0.glb.clouddn.com/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="http://zuoqy.com/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
       $('.content img').each(function () {
@@ -1027,8 +1016,8 @@ WildcardErrorBad.java:<span class="number">15</span>: error: <span class="functi
 
   
 
-  <script type="text/javascript" src="http://7xi4cl.com1.z0.glb.clouddn.com/vendors/velocity/velocity.min.js"></script>
-  <script type="text/javascript" src="http://7xi4cl.com1.z0.glb.clouddn.com/vendors/velocity/velocity.ui.min.js"></script>
+  <script type="text/javascript" src="http://zuoqy.com/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="http://zuoqy.com/vendors/velocity/velocity.ui.min.js"></script>
 
   <script type="text/javascript" id="motion.global">
   $(document).ready(function () {
@@ -1491,25 +1480,6 @@ WildcardErrorBad.java:<span class="number">15</span>: error: <span class="functi
   
   
 
-  
-
-    
-      
-    
-
-    <script type="text/javascript">
-      var disqus_shortname = 'zuoqycom';
-      var disqus_identifier = '2015/05/19/java-generic/';
-      var disqus_url = 'http://zuoqy.com/2015/05/19/java-generic/';
-
-      (function(){
-        var dsq = document.createElement('script');
-        dsq.type = 'text/javascript';
-        dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      }());
-    </script>
   
 
 

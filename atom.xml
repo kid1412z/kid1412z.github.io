@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Qiyang Zuo's Blog]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2018-04-19T14:13:32.082Z</updated>
+  <updated>2018-09-26T15:43:05.549Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -13,6 +13,67 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[关于回溯算法的几点心得]]></title>
+    <link href="http://zuoqy.com/2018/09/26/About-Backtracking/"/>
+    <id>http://zuoqy.com/2018/09/26/About-Backtracking/</id>
+    <published>2018-09-26T15:23:54.000Z</published>
+    <updated>2018-09-26T15:43:05.549Z</updated>
+    <content type="html"><![CDATA[<p><strong>摘要</strong>：关于回溯算法的几点心得<br><strong>Abstract</strong>: Some inspirations about backtracking algorithms.</p>
+<h2 id="回溯（Backtracking）算法思路：">回溯（Backtracking）算法思路：</h2><p>在当前局面下，你有若干种选择。逐一尝试每一种选择。<br>如果发现某种选择行不通（违反了某些限定条件）就返回；<br>如果某种选择试到最后发现是正确解，就将其加入解集。</p>
+<blockquote>
+<p>这里需要注意的是，为了能够回溯，多个选择都是从相同起点出发的，注意在同一层次下的多个选择结果之间不要相互影响。</p>
+</blockquote>
+<p>使用递归解决问题需要明确以下三点：<strong>选择 (Options)</strong>、<strong>限制 (Restraints)</strong> 和 <strong>结束条件 (Termination)</strong>。即“ORT原则”。</p>
+<a id="more"></a>
+<h2 id="例题">例题</h2><h3 id="例1：generate_parentheses">例1：<a href="https://leetcode.com/problems/generate-parentheses/" target="_blank" rel="external">generate parentheses</a></h3><p>Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.</p>
+<p>For example, given n = 3, a solution set is:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  <span class="string">"((()))"</span>,</span><br><span class="line">  <span class="string">"(()())"</span>,</span><br><span class="line">  <span class="string">"(())()"</span>,</span><br><span class="line">  <span class="string">"()(())"</span>,</span><br><span class="line">  <span class="string">"()()()"</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>思路：</p>
+<ul>
+<li>选择：有两种选择：</li>
+</ul>
+<p>加左括号。<br>加右括号。</p>
+<ul>
+<li>限制：同时有以下限制：</li>
+</ul>
+<p>如果左括号已经用完了，则不能再加左括号了。<br>如果已经出现的右括号和左括号一样多，则不能再加右括号了。因为那样的话新加入的右括号一定无法匹配。</p>
+<ul>
+<li>结束条件： 左右括号都已经用完。</li>
+</ul>
+<p>结束后的正确性： 左右括号用完以后，一定是正确解。因为</p>
+<ol>
+<li>左右括号一样多</li>
+<li>每个右括号都一定有与之配对的左括号。因此一旦结束就可以加入解集（有时也可能出现结束以后不一定是正确解的情况，这时要多一步判断）。</li>
+</ol>
+<p>递归函数传入参数： 限制和结束条件中有“用完”和“一样多”字样，因此你需要知道左右括号的数目，还有参数记录解集。</p>
+<p>因此，把上面的思路拼起来就是代码：</p>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="comment">(左右括号都已用完)</span> &#123;</span><br><span class="line">  加入解集，返回</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//否则开始试各种选择</span></span><br><span class="line"><span class="keyword">if</span> <span class="comment">(还有左括号可以用)</span> &#123;</span><br><span class="line">  加一个左括号，继续递归</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> <span class="comment">(右括号小于左括号)</span> &#123;</span><br><span class="line">  加一个右括号，继续递归</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Java代码如下：</p>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span> generateParenthesis(int n) &#123;</span><br><span class="line">        <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span> <span class="built_in">list</span> <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;&gt;</span>();</span><br><span class="line">        gen(<span class="built_in">list</span>, <span class="string">""</span>, n, n);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">list</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="literal">void</span> gen(<span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span> <span class="built_in">list</span>, <span class="built_in">String</span> s, int leftCount, int rightCount) &#123;</span><br><span class="line">        <span class="keyword">if</span> (leftCount <span class="subst">==</span> <span class="number">0</span> <span class="subst">&amp;&amp;</span> rightCount <span class="subst">==</span> <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="built_in">list</span><span class="built_in">.</span>add(s);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (leftCount <span class="subst">&gt;</span> <span class="number">0</span>) &#123;</span><br><span class="line">            gen(<span class="built_in">list</span>, s <span class="subst">+</span> <span class="string">"("</span>, leftCount <span class="subst">-</span> <span class="number">1</span>, rightCount);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (rightCount <span class="subst">&gt;</span> leftCount) &#123;</span><br><span class="line">            gen(<span class="built_in">list</span>, s <span class="subst">+</span> <span class="string">")"</span>, leftCount, rightCount <span class="subst">-</span> <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参考：">参考：</h2><ul>
+<li><ol>
+<li><a href="http://www.1point3acres.com/bbs/forum.php?mod=viewthread&amp;tid=172641&amp;page=1#pid2237150" target="_blank" rel="external">http://www.1point3acres.com/bbs/forum.php?mod=viewthread&amp;tid=172641&amp;page=1#pid2237150</a></li>
+</ol>
+</li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><strong>摘要</strong>：关于回溯算法的几点心得<br><strong>Abstract</strong>: Some inspirations about backtracking algorithms.</p>
+<h2 id="回溯（Backtracking）算法思路：">回溯（Backtracking）算法思路：</h2><p>在当前局面下，你有若干种选择。逐一尝试每一种选择。<br>如果发现某种选择行不通（违反了某些限定条件）就返回；<br>如果某种选择试到最后发现是正确解，就将其加入解集。</p>
+<blockquote>
+<p>这里需要注意的是，为了能够回溯，多个选择都是从相同起点出发的，注意在同一层次下的多个选择结果之间不要相互影响。</p>
+</blockquote>
+<p>使用递归解决问题需要明确以下三点：<strong>选择 (Options)</strong>、<strong>限制 (Restraints)</strong> 和 <strong>结束条件 (Termination)</strong>。即“ORT原则”。</p>]]>
+    
+    </summary>
+    
+      <category term="algorithm" scheme="http://zuoqy.com/tags/algorithm/"/>
+    
+      <category term="backtracking" scheme="http://zuoqy.com/tags/backtracking/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[kotlin01 基本语法]]></title>
@@ -93,7 +154,7 @@
     <link href="http://zuoqy.com/2017/03/21/matplotlib-unicode/"/>
     <id>http://zuoqy.com/2017/03/21/matplotlib-unicode/</id>
     <published>2017-03-21T07:05:11.000Z</published>
-    <updated>2017-03-21T07:23:02.000Z</updated>
+    <updated>2018-09-26T15:22:33.368Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：解决matplotlib中文乱码的问题<br><strong>Abstract</strong>:How to plot unicode using matplotlib<br><a id="more"></a></p>
 <h2 id="方法一">方法一</h2><p>在plot之前加上如下代码：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pylab <span class="keyword">import</span> mpl</span><br><span class="line">mpl.rcParams[<span class="string">'font.sans-serif'</span>] = [<span class="string">'FangSong'</span>] <span class="comment"># 指定默认字体</span></span><br><span class="line">mpl.rcParams[<span class="string">'axes.unicode_minus'</span>] = <span class="keyword">False</span>     <span class="comment"># 解决保存图像是负号'-'显示为方块的问题</span></span><br></pre></td></tr></table></figure>
@@ -104,7 +165,7 @@
 <p>此方法的有点就是全局生效，对所有依赖该类库的程序都可以在plot中显示unicode字符。</p>
 <p>验证：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">x = np.linspace(<span class="number">0</span>, <span class="number">3</span>*np.pi, <span class="number">500</span>)</span><br><span class="line">plt.plot(x, np.sin(x**<span class="number">2</span>))</span><br><span class="line">plt.title(<span class="string">'中文'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2017-03-21/1.png"></p>
+<p><img src="http://zuoqy.com/images/2017-03-21/1.png"></p>
 <blockquote>
 <p>以上方法可以解决包括nltk在内的所有用到matplotlib而不能打印中文的问题。</p>
 </blockquote>
@@ -212,9 +273,9 @@
     <link href="http://zuoqy.com/2016/06/21/Gartner-Hyper-Cycle/"/>
     <id>http://zuoqy.com/2016/06/21/Gartner-Hyper-Cycle/</id>
     <published>2016-06-21T03:29:19.000Z</published>
-    <updated>2016-06-21T07:06:54.000Z</updated>
+    <updated>2018-09-26T15:22:33.368Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：高德纳技术成熟度曲线。<br><strong>Abstract</strong>: Theory of Gartner Hyper Cycle.<br><a id="more"></a></p>
-<h2 id="概要">概要</h2><p>高德纳技术成熟度曲线如图所示,其描述了一个技术成熟度和该技术实际被应用和接受程度的关系.<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2016-06-21/1.png" alt="Gartner Hyper Cycle"></p>
+<h2 id="概要">概要</h2><p>高德纳技术成熟度曲线如图所示,其描述了一个技术成熟度和该技术实际被应用和接受程度的关系.<br><img src="http://zuoqy.com/images/2016-06-21/1.png" alt="Gartner Hyper Cycle"></p>
 <h2 id="如何使用">如何使用</h2><p>人们使用技术成熟度曲线获得新兴技术的承诺和业界对风险的控制偏好.<br>你是否要抢先尝试使用新兴技术? 如果你结合承担的风险并理解风险投资不会经常得到应有的回报,你有所收获.<br>使用温和的方式是否合适? 新技术采纳者应该明白,新兴的技术往往没有得到足够的证明.<br>需要等待其更成熟之后再使用吗?如果你还存在很多关于商业可行性方面的额问题不能回答,你最好等待其他人给出更靠谱的答案之后再尝试使用.</p>
 <h2 id="技术成熟度曲线">技术成熟度曲线</h2><p>1995年开始，高德纳咨询公司依其专业分析预测与推论各种新科技的成熟演变速度及要达到成熟所需的时间，分成5个阶段：</p>
 <table>
@@ -515,7 +576,7 @@
     <link href="http://zuoqy.com/2015/12/01/vmstat/"/>
     <id>http://zuoqy.com/2015/12/01/vmstat/</id>
     <published>2015-12-01T04:37:58.000Z</published>
-    <updated>2015-12-01T07:04:34.000Z</updated>
+    <updated>2018-09-26T15:22:33.367Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：vmstat用法<br><strong>Abstract</strong>: usage of vmstat<br><a id="more"></a></p>
 <h2 id="注记">注记</h2><p>vmstat - virtual memory statistics</p>
 <h2 id="概要">概要</h2><figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="atom">vmstat</span> [-<span class="atom">a</span>] [-<span class="atom">n</span>] [-<span class="name">S</span> <span class="atom">unit</span>] [<span class="atom">delay</span> [ <span class="atom">count</span>]]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">s</span>] [-<span class="atom">n</span>] [-<span class="name">S</span> <span class="atom">unit</span>]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">m</span>] [-<span class="atom">n</span>] [<span class="atom">delay</span> [ <span class="atom">count</span>]]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">d</span>] [-<span class="atom">n</span>] [<span class="atom">delay</span> [ <span class="atom">count</span>]]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">p</span> <span class="atom">disk</span> <span class="atom">partition</span>] [-<span class="atom">n</span>] [<span class="atom">delay</span> [ <span class="atom">count</span>]]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="atom">f</span>]</span><br><span class="line">       <span class="atom">vmstat</span> [-<span class="name">V</span>]</span><br></pre></td></tr></table></figure>
@@ -584,9 +645,9 @@
 </ul>
 <h2 id="重要">重要</h2><p>vmstat不需要特殊的权限。当前所有linux的块大小都是1024 bytes。旧版内核可能是512 bytes 2048 bytes 或 4096bytes。</p>
 <h2 id="示例：">示例：</h2><p>在CPU密集型机器上：</p>
-<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-12-01/1.png" alt="vmstat1"></p>
+<p><img src="http://zuoqy.com/images/2015-12-01/1.png" alt="vmstat1"></p>
 <p>在GPU机器上：</p>
-<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-12-01/2.png" alt="vmstat2"></p>
+<p><img src="http://zuoqy.com/images/2015-12-01/2.png" alt="vmstat2"></p>
 <h2 id="参考">参考</h2><ul>
 <li><em>vmstat man page</em></li>
 </ul>
@@ -890,13 +951,13 @@
     <link href="http://zuoqy.com/2015/06/22/java-hashmap/"/>
     <id>http://zuoqy.com/2015/06/22/java-hashmap/</id>
     <published>2015-06-22T13:51:04.000Z</published>
-    <updated>2015-12-01T06:46:11.000Z</updated>
+    <updated>2018-09-26T15:22:33.367Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：JDK1.7 HashMap源码阅读<br><strong>Abstract</strong>: Source code analysis of JDK1.7</p>
 <a id="more"></a>
 <h2 id="概述">概述</h2><p>HashMap实现了Map接口，HashMap和Hashtable唯一的区别就是HashMap不是线程安全的，并且允许插入空值。影响HashMap性能的参数有两个：<em>初始大小</em>和<em>填装因子（Load Factor）</em>，初始大小设置HashMap中初始有多少个bucket，填装因子则设置HashMap中的元素占总容量的最大比例，超过这一比例时，HashMap将自动扩容。当Entry数量超过容量乘以填装因子时，HashMap中的元素将会被rehash到一个二倍于原来容量的新哈希表中。<br>一般情况下，填装因子默认设置为0.75，这个数值是空间和时间的折中。填装因子增大会减少HashMap所占空间，但会增加查找时间。为了保证效率，最好能对放入HashMap中的元素总数有一个预估，设置适当的初始大小从而避免<em>rehash</em>发生。<br>需要注意的是，HashMap不是线程安全的，当多个线程同时改变同一个HashMap实例的结构时（structural modification），必须有额外的同步。所谓改变HashMap的结构，就是添加或者删除Mapping。只是改变key对应的value的值，不能算改变结构。同步操作可以在额外的Object实例上同步，也可以使用<code>Map m = Collections.synchronizedMap(new HashMap(...));</code>，如果没有做正确的同步，HashMap上的并发操作会<em>快速失败（fail-fast）</em>（事实上，它并不能保证未经同步的并发修改操作绝对能够快速失败），并抛出<code>ConcurrentModificationException</code>，这个异常机制只能用来检查程序是否有潜在的BUG，不能依赖这个异常去做程序逻辑的其他判断。</p>
-<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-06-22/1.png" alt="HashMap-dia"></p>
+<p><img src="http://zuoqy.com/images/2015-06-22/1.png" alt="HashMap-dia"></p>
 <h2 id="结构">结构</h2><p>HashMap最基本的构成单位是Entry，在HashMap内部，所有的键值对都存储在Entry数组中，如果放入HashMap的键值对有冲突，则用拉链法，把具有相同哈希值的Entry存放在一个链表中，如下图所示：</p>
-<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-06-22/2.png" alt="HashMap-structure"></p>
+<p><img src="http://zuoqy.com/images/2015-06-22/2.png" alt="HashMap-structure"></p>
 <p>Entry类的定义如下：</p>
 <figure class="highlight processing"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> class Entry&lt;K,V&gt; implements Map.Entry&lt;K,V&gt; &#123;</span><br><span class="line">    <span class="keyword">final</span> K <span class="variable">key</span>;</span><br><span class="line">    V value;</span><br><span class="line">    Entry&lt;K,V&gt; next;</span><br><span class="line">    <span class="built_in">int</span> hash;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * Creates new entry.</span><br><span class="line">     */</span></span><br><span class="line">    Entry(<span class="built_in">int</span> h, K k, V v, Entry&lt;K,V&gt; n) &#123;</span><br><span class="line">        value = v;</span><br><span class="line">        next = n;</span><br><span class="line">        <span class="variable">key</span> = k;</span><br><span class="line">        hash = h;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> K getKey() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">key</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> V getValue() &#123;</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> V setValue(V newValue) &#123;</span><br><span class="line">        V oldValue = value;</span><br><span class="line">        value = newValue;</span><br><span class="line">        <span class="keyword">return</span> oldValue;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="built_in">boolean</span> equals(<span class="keyword">Object</span> o) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!(o <span class="keyword">instanceof</span> Map.Entry))</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        Map.Entry e = (Map.Entry)o;</span><br><span class="line">        <span class="keyword">Object</span> k1 = getKey();</span><br><span class="line">        <span class="keyword">Object</span> k2 = e.getKey();</span><br><span class="line">        <span class="keyword">if</span> (k1 == k2 || (k1 != <span class="keyword">null</span> &amp;&amp; k1.equals(k2))) &#123;</span><br><span class="line">            <span class="keyword">Object</span> v1 = getValue();</span><br><span class="line">            <span class="keyword">Object</span> v2 = e.getValue();</span><br><span class="line">            <span class="keyword">if</span> (v1 == v2 || (v1 != <span class="keyword">null</span> &amp;&amp; v1.equals(v2)))</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="built_in">int</span> hashCode() &#123;</span><br><span class="line">        <span class="keyword">return</span> Objects.hashCode(getKey()) ^ Objects.hashCode(getValue());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">String</span> toString() &#123;</span><br><span class="line">        <span class="keyword">return</span> getKey() + <span class="string">"="</span> + getValue();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * This method is invoked whenever the value in an entry is</span><br><span class="line">     * overwritten by an invocation of put(k,v) for a key k that's already</span><br><span class="line">     * in the HashMap.</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">void</span> recordAccess(<span class="keyword">HashMap</span>&lt;K,V&gt; m) &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * This method is invoked whenever the entry is</span><br><span class="line">     * removed from the table.</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">void</span> recordRemoval(<span class="keyword">HashMap</span>&lt;K,V&gt; m) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="重要的属性和常量">重要的属性和常量</h2><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 默认的初始容量，必须是2的指数幂</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">4</span>; <span class="comment">// aka 16</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// HashMap的最大容量</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXIMUM_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">30</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 默认填装因子load factor</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">float</span> DEFAULT_LOAD_FACTOR = <span class="number">0.75</span>f;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 空哈希表 </span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> Entry&lt;?,?&gt;[] EMPTY_TABLE = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 哈希表，长度必须是2的整数指数幂</span></span><br><span class="line"><span class="keyword">transient</span> Entry&lt;K,V&gt;[] table = (Entry&lt;K,V&gt;[]) EMPTY_TABLE;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 键值对的数量</span></span><br><span class="line"><span class="keyword">transient</span> <span class="keyword">int</span> <span class="keyword">size</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 阈值（capacity * load factor），当键值对数量超过该值时扩容</span></span><br><span class="line"><span class="comment">// 当表为空表时，该值是默认初始大小</span></span><br><span class="line"><span class="keyword">int</span> threshold;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 填装因子</span></span><br><span class="line"><span class="keyword">final</span> <span class="keyword">float</span> loadFactor;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 哈希表结构改变（Structurally Modified）的次数</span></span><br><span class="line"><span class="comment">// 结构改变：键值对数量变化、rehash</span></span><br><span class="line"><span class="comment">// 用于快速未经同步的并发操作的失败</span></span><br><span class="line"><span class="keyword">transient</span> <span class="keyword">int</span> modCount;</span><br><span class="line"></span><br><span class="line"> <span class="comment">// 使用替代hash算法的阈值</span></span><br><span class="line"> <span class="comment">// 替代Hash算法降低了String类型的key的冲突的可能性</span></span><br><span class="line"> <span class="comment">// 容量超过这个阈值的时候，将使用替代Hash算法</span></span><br><span class="line"> <span class="comment">// 这个值可由系统参数jdk.map.althashing.threshold指定</span></span><br><span class="line"> <span class="comment">// 当此系统参数为1时，确保总是使用替代hash算法</span></span><br><span class="line"> <span class="comment">// 为-1时，确保永远不适用替代hash算法</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> ALTERNATIVE_HASHING_THRESHOLD_DEFAULT = Integer.MAX_VALUE;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * A randomizing value associated with this instance that is applied to</span><br><span class="line"> * hash code of keys to make hash collisions harder to find. If 0 then</span><br><span class="line"> * alternative hashing is disabled.</span><br><span class="line"> */</span></span><br><span class="line"><span class="comment">// 用于减少key的hash code冲突</span></span><br><span class="line"><span class="comment">// 如果是0，表示不使用替代的hash算法</span></span><br><span class="line"><span class="keyword">transient</span> <span class="keyword">int</span> hashSeed = <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
@@ -964,7 +1025,7 @@
     <link href="http://zuoqy.com/2015/05/19/java-generic/"/>
     <id>http://zuoqy.com/2015/05/19/java-generic/</id>
     <published>2015-05-19T13:34:22.000Z</published>
-    <updated>2015-06-10T14:15:14.000Z</updated>
+    <updated>2018-09-26T15:22:33.366Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：泛型可以将某些类型相关的错误从运行时提前到编译时显现，但Java的泛型有很多特点和限制。本文介绍了泛型类型、原始类型、泛型方法、有界类型参数、泛型的继承和子类型、类型推断、通配符、类型擦除、非具体化类型和泛型的限制，之前用到的和以后要用的，都在这里了。<br><strong>Abstract</strong>: Java generics add stability to your code by making some bugs about types be detected early on complie-time. This article gives a comprehensive introduction to the important points Java generics.</p>
 <h2 id="写在最前面">写在最前面</h2><p>一说泛型，好像都会。但前些天在看源码的时候，发现一个警告，引出了好多泛型的问题，最终让我下定决心整理一下Java泛型的坑（感谢Oracle，有一个很全面的Tutorial，Java编程思想都没有它介绍的详尽）。如果你也觉得你掌握了泛型，不妨试试以下问题，这些问题的解释，就包含在本篇文章里。</p>
 <p>先看几个问题：</p>
@@ -1245,12 +1306,12 @@ someMethod(<span class="keyword">new</span> Double(<span class="number">10.1</sp
 </code></pre><p>但是考虑如下的方法：</p>
 <pre><code><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">boxTest</span><span class="params">(Box&lt;Number&gt; n)</span> </span>{ <span class="comment">/* ... */</span> }
 </code></pre><p>boxTest方法会接受什么类型的参数？如果传入<code>Box&lt;Integer&gt;</code>或者<code>Box&lt;Double&gt;</code>可以吗？答案是<em>不可以</em>，因为<strong><code>Box&lt;Integer&gt;</code>和<code>Box&lt;Double&gt;</code>不是<code>Box&lt;Number&gt;</code>的子类型</strong>！</p>
-<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/1.png" alt="generic subtypes"></p>
+<p><img src="http://zuoqy.com/images/2015-05-19/1.png" alt="generic subtypes"></p>
 <blockquote>
 <p>注意：给定两个具体类型A和B（如：Integer和Double），无论A，B两个类有什么样的关系，<code>MyClass&lt;A&gt;</code> 和 <code>MyClass&lt;B&gt;</code> 两个类没有任何关系，他们唯一相同的父类就是Object。关于如何创建一个泛型类的子类型，参见<a href="#wildcards-and-subtyping">通配符和子类型</a></p>
 </blockquote>
 <h3 id="泛型类和子类型">泛型类和子类型</h3><p>你可以通过继承泛型类或者实现泛型接口来创建一个泛型类或者泛型接口的子类型（subtype）。以Java集合类为例：</p>
-<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/2.png" alt="Collections hierarchy"></p>
+<p><img src="http://zuoqy.com/images/2015-05-19/2.png" alt="Collections hierarchy"></p>
 <p>若自己实现一个PayloadList类：</p>
 <pre><code><span class="class"><span class="keyword">interface</span> <span class="title">PayloadList</span>&lt;<span class="title">E</span>,<span class="title">P</span>&gt; <span class="keyword">extends</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt; </span>{
   <span class="keyword">void</span> setPayload(<span class="keyword">int</span> <span class="keyword">index</span>, P val);
@@ -1396,9 +1457,9 @@ printList(ls);
 <figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">B b = new B()<span class="comment">;</span></span><br><span class="line"><span class="literal">A</span> <span class="literal">a</span> = b<span class="comment">;</span></span><br></pre></td></tr></table></figure>
 <p>对于普通的类来说，子类型规则是成立的：如果B继承A，那么B是A的子类型。但是这个规则对于泛型类型来说，不适用。</p>
 <p>Integer是Number类的子类，<code>List&lt;Integer&gt;</code>和<code>List&lt;Number&gt;</code>是什么关系？</p>
-<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/3.png" alt="subtype"></p>
+<p><img src="http://zuoqy.com/images/2015-05-19/3.png" alt="subtype"></p>
 <p>尽管Integer是Number的子类型，但是<code>List&lt;Integer&gt;</code>和<code>List&lt;Number&gt;</code>并没有继承关系。它们之间仅有的关系就是共同的父类是<code>List&lt;?&gt;</code>.<br>下图说明了有上下界通配符的泛型类之间的继承关系：</p>
-<p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-19/4.png" alt="subtype-wildcard"></p>
+<p><img src="http://zuoqy.com/images/2015-05-19/4.png" alt="subtype-wildcard"></p>
 <p>在<a href="#wildcards-guidline">通配符使用指南</a>一节，将介绍更多关于上下界通配符的使用方法。</p>
 <h3 id="通配符捕获和辅助方法">通配符捕获和辅助方法</h3><p>在某些情况下，编译器会推断通配符的类型。例如，一个列表被定义为<code>List&lt;?&gt;</code>，当计算表达式的值的时候，编译器会根据代码推断出特定的类型。这种场景就叫做<em>通配符捕获（Wildcard Capture）</em>。<br>在大部分情况下，你都不需要关注通配符捕获，除非你得到包含<em>capture of</em>的错误提示。</p>
 <figure class="highlight actionscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="preprocessor"><span class="keyword">import</span> java.util.List;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WildcardError</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">void</span> foo(List&lt;?&gt; i) &#123;</span><br><span class="line">        i.<span class="keyword">set</span>(<span class="number">0</span>, i.<span class="keyword">get</span>(<span class="number">0</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -2007,11 +2068,11 @@ breakable {
     <link href="http://zuoqy.com/2015/05/06/java-containers-interfaces/"/>
     <id>http://zuoqy.com/2015/05/06/java-containers-interfaces/</id>
     <published>2015-05-06T07:20:43.000Z</published>
-    <updated>2015-05-19T13:35:15.000Z</updated>
+    <updated>2018-09-26T15:22:33.365Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：本文介绍了Java容器类的核心接口，以及容器泛型的使用原则。<br><strong>Abstract</strong>: This article describes the core interfaces of Java Collections, and the principles of using generic.</p>
 <a id="more"></a>
 <p>JDK java.util 包中包含了几个重要的集合类(主要包含实现了Collection接口和Map接口的类)，从本篇文章开始总结JDK中自带的几个重要的容器类。</p>
-<h2 id="Java集合框架核心接口">Java集合框架核心接口</h2><p><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-05-06/1.png" alt="The core collection interfaces"></p>
+<h2 id="Java集合框架核心接口">Java集合框架核心接口</h2><p><img src="http://zuoqy.com/images/2015-05-06/1.png" alt="The core collection interfaces"></p>
 <h3 id="Iterable">Iterable</h3><p>实现了Iterable接口的类，可以使用foreach语法迭代，从JDK1.5开始加入。</p>
 <pre><code>package java.lang;
 
@@ -2377,7 +2438,7 @@ public interface SortedSet&lt;<span class="keyword">E</span>&gt; extends <span c
     <link href="http://zuoqy.com/2015/04/17/java-memory2/"/>
     <id>http://zuoqy.com/2015/04/17/java-memory2/</id>
     <published>2015-04-17T06:59:40.000Z</published>
-    <updated>2015-04-20T03:04:25.000Z</updated>
+    <updated>2018-09-26T15:22:33.364Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：<em>本文介绍了Java内存溢出的四种形式：Java堆溢出、虚拟机栈和本地方法栈溢出、方法区和运行时常量池溢出、直接内存溢出。并对JVM堆外内存使用做了简单了介绍。</em><br><strong>Abstract</strong>: <em>This article describes the four types of memory overflow in Java: Java heap overflow, virtual machine stack and local method stack overflow, the method area and runtime constant pool overflow, direct memory overflow. And a simple introduction of off-heap memory usage.</em></p>
 <a id="more"></a>
 <h2 id="Java堆溢出">Java堆溢出</h2><pre><code><span class="comment">//JVM args: -Xms20m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError</span>
@@ -2391,7 +2452,7 @@ public <span class="class"><span class="keyword">class</span> <span class="title
 }
 </code></pre><p>-XX:+HeapDumpOnOutOfMemoryError 设置JVM在出现OOM时，对Heap进行转储，可以使用Eclipse MemoryAnalyzer 进行分析。<br>如果对运行中的服务进行dump，可以使用jmap命令：</p>
 <pre><code>jmap -dump:live,<span class="keyword">format</span>=b,<span class="keyword">file</span>=heap.bin
-</code></pre><p>使用MAT分析结果会有如下的描述：<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-17/1.png" alt="oom"><br>帮助查找问题所在</p>
+</code></pre><p>使用MAT分析结果会有如下的描述：<br><img src="http://zuoqy.com/images/2015-04-17/1.png" alt="oom"><br>帮助查找问题所在</p>
 <h2 id="虚拟机栈和本地方法栈溢出">虚拟机栈和本地方法栈溢出</h2><p>HotSpot JVM不区分虚拟机栈和本地方法栈，虽然存在-Xoss设置，但是<em>实际上是无效的</em>。栈容量只有-Xss来确定。<br>虚拟机规范中规定了虚拟机栈和本地方法栈的两种异常：</p>
 <h3 id="StackOverflowError:">StackOverflowError:</h3><p>线程请求的栈深度大于虚拟机允许的最大深度。</p>
 <pre><code><span class="comment">//JVM args: -Xss256k (规定最小栈大小是160k)</span>
@@ -2496,58 +2557,6 @@ us.freeMemory(p);
       <category term="Java" scheme="http://zuoqy.com/tags/Java/"/>
     
       <category term="OOM" scheme="http://zuoqy.com/tags/OOM/"/>
-    
-      <category term="Java" scheme="http://zuoqy.com/categories/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Java内存区域]]></title>
-    <link href="http://zuoqy.com/2015/04/16/java-memory1/"/>
-    <id>http://zuoqy.com/2015/04/16/java-memory1/</id>
-    <published>2015-04-16T13:38:41.000Z</published>
-    <updated>2015-04-20T03:04:07.000Z</updated>
-    <content type="html"><![CDATA[<p><strong>摘要</strong>：本文主要介绍了Java运行时数据区域的划分、各个区域的职能、对象内存分配和定位方法。<br><strong>Abstract</strong>: This article describes the division of the Java runtime data area, the functions of the corresponding region, the object memory allocation and positioning methods.</p>
-<a id="more"></a>
-<h2 id="运行时数据区域">运行时数据区域</h2><p>JVM在程序运行过程中，会把内存划分成以下区域：<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-16/1.png" alt="img"></p>
-<h3 id="程序计数器">程序计数器</h3><p>每个线程都有独立存储的程序计数器，互不影响，独立存储，属于<em>线程私有</em>内存。如果线程执行的是Java方法，计数器记录的是正在执行的虚拟机字节指令的地址；如果正在执行的时Native方法，这个计数器的值则为空(Undefined)。<br>此内存区域是唯一一个在JVM规范中没有规定任何OutOfMemoryError情况的区域。</p>
-<h3 id="Java虚拟机栈(Java_Virtual_Machine_Stacks)">Java虚拟机栈(Java Virtual Machine Stacks)</h3><p>虚拟机栈描述的时Java方法执行的内存模型，每个方法在执行的时候都会创建一个栈帧(Stack Frame)用于存储局部变量表、操作数栈、动态链接、方法出口等信息。<br>局部变量表存放了<em>编译期</em>可知的各种基本数据类型、对象引用、和返回地址类型。其所需的内存空间在<em>编译期</em>分配，运行时不会改变局部变量表的大小。<br>异常状况：1）StackOverflowError: 线程请求的栈深度大于JVM允许的深度。2）OutOfMemoryError:虚拟机栈动态扩展的时候无法申请到足够的内存。</p>
-<h3 id="本地方法栈(Native_Method_Stack)">本地方法栈(Native Method Stack)</h3><p>本地方法栈为虚拟机使用到的Native方法提供栈空间，本地方法栈也有上述两种异常情况。</p>
-<h3 id="Java堆">Java堆</h3><p>Java堆是被所有线程共享的一块内存区域，在虚拟机启动时创建。几乎所有的对象实例都在这里分配内存。（逃逸分析和标量替换允许在栈上分配对象内存）<br>Java堆是垃圾收集器管理的主要区域，也被成为GC堆。从内存分代回收的角度看，Java堆可以细分为：新生代和老年代；从内存分配的角度看，Java堆可能分出多个线程私有的分配缓冲区(Thread Local Allocation Buffer, TLAB)</p>
-<h3 id="方法区(Method_Area)">方法区(Method Area)</h3><p>线程共享内存区域，用于存储虚拟机加载的类信息、常量、静态变量、及时编译器编译后的代码等数据。HotSpot JVM用永久代(Permanent Generation)实现方法区，但两者并不等价。但这种实现方法容易导致内存溢出（可通过-XX:MaxPermSize设置永久代上限），新版的JDK1.7 Hotspot 已经把原本放在永久带的字符串常量池移出。<br>这个区域的内存回收主要针对类型的卸载和常量池的回收。异常情况：OutOfMemoryError.</p>
-<h3 id="直接内存(Direct_Memory)">直接内存(Direct Memory)</h3><p>直接内存不是JVM运行时数据区域，但在Java NIO中引入了基于Channel和Buffer的I/O方式，可以直接使用Native函数库分配<em>堆外内存</em>。申请直接内存大小超过限制，同样会有OutOfMemory异常。</p>
-<h3 id="新生对象内存分配方式">新生对象内存分配方式</h3><ul>
-<li>指针碰撞(Bump The Pointer): 指针作为分配和未分配的界限，要求JAVA堆规整。</li>
-<li>空闲列表(Free List): Java堆不规整。</li>
-</ul>
-<p>为了解决以上两种分配方式并发安全问题，可以采用：</p>
-<ul>
-<li>CAS失败重试</li>
-<li>本地线程分配缓冲TLAB (配置参数：-XX:+/-UseTLAB)(只有本地缓冲用完，需要重新分配的时候才需要同步锁定)</li>
-</ul>
-<h2 id="对象的创建">对象的创建</h2><h3 id="对象的内存布局">对象的内存布局</h3><p>对象的内存布局可以分为三块：对象头(Header)、实例数据（Instance Data）、对齐填充（Padding）。</p>
-<h4 id="对象头">对象头</h4><ul>
-<li>运行时数据：HashCode、GC分代、锁状态标识、线程持有的锁、偏向线程ID、偏向时间戳。这部分数据的长度与虚拟机位数相同。官方称为<em>“MarkWord”</em></li>
-<li>类型指针：确定对象是哪个类的实例。（不一定所有的虚拟机都通过保留类型指针来确定对象的类型）</li>
-</ul>
-<h4 id="实例数据">实例数据</h4><p>存放代码中定义的各种类型的字段内容，顺序收到JVM内存分配策略的影响，相同长度的字段往往相邻分配。</p>
-<h4 id="对齐填充">对齐填充</h4><p>Hotspot虚拟机要求对象的大小是8字节的整数倍，不够的用Padding字段补全。</p>
-<h3 id="对象的访问定位">对象的访问定位</h3><ul>
-<li>句柄：reference中包含了对象的句柄地址，句柄中包含对象各部分的地址<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-16/2.png" alt="img"></li>
-<li>直接指针：reference中直接存储对象的地址（Hotspot实现）<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-16/2.png" alt="img"></li>
-</ul>
-<h2 id="References">References</h2><ul>
-<li>图片来自：《深入理解Java虚拟机》</li>
-</ul>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p><strong>摘要</strong>：本文主要介绍了Java运行时数据区域的划分、各个区域的职能、对象内存分配和定位方法。<br><strong>Abstract</strong>: This article describes the division of the Java runtime data area, the functions of the corresponding region, the object memory allocation and positioning methods.</p>]]>
-    
-    </summary>
-    
-      <category term="JVM" scheme="http://zuoqy.com/tags/JVM/"/>
-    
-      <category term="Java" scheme="http://zuoqy.com/tags/Java/"/>
     
       <category term="Java" scheme="http://zuoqy.com/categories/Java/"/>
     

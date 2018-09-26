@@ -12,10 +12,10 @@
 
 
 
-  <link rel="stylesheet" type="text/css" href="http://7xi4cl.com1.z0.glb.clouddn.com/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+  <link rel="stylesheet" type="text/css" href="http://zuoqy.com/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
 
 
-<link rel="stylesheet" type="text/css" href="http://7xi4cl.com1.z0.glb.clouddn.com/css/main.css?v=0.4.2"/>
+<link rel="stylesheet" type="text/css" href="http://zuoqy.com/css/main.css?v=0.4.2"/>
 
 
     <meta name="description" content="Write something about Java Web development distributed computing technologies." />
@@ -30,7 +30,7 @@
 
 
 
-  <link rel="shorticon icon" type="image/x-icon" href="http://7xi4cl.com1.z0.glb.clouddn.com/favicon.ico" />
+  <link rel="shorticon icon" type="image/x-icon" href="http://zuoqy.com/favicon.ico" />
 
 
 
@@ -140,13 +140,6 @@
 
         
           
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/04/16/java-memory1/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/04/16/java-memory1/"></span>
-            </a>
-          </span>
-          
         
       </div>
     </div>
@@ -159,7 +152,7 @@
       
         <p><strong>摘要</strong>：本文主要介绍了Java运行时数据区域的划分、各个区域的职能、对象内存分配和定位方法。<br><strong>Abstract</strong>: This article describes the division of the Java runtime data area, the functions of the corresponding region, the object memory allocation and positioning methods.</p>
 <a id="more"></a>
-<h2 id="运行时数据区域">运行时数据区域</h2><p>JVM在程序运行过程中，会把内存划分成以下区域：<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-16/1.png" alt="img"></p>
+<h2 id="运行时数据区域">运行时数据区域</h2><p>JVM在程序运行过程中，会把内存划分成以下区域：<br><img src="http://zuoqy.com/images/2015-04-16/1.png" alt="img"></p>
 <h3 id="程序计数器">程序计数器</h3><p>每个线程都有独立存储的程序计数器，互不影响，独立存储，属于<em>线程私有</em>内存。如果线程执行的是Java方法，计数器记录的是正在执行的虚拟机字节指令的地址；如果正在执行的时Native方法，这个计数器的值则为空(Undefined)。<br>此内存区域是唯一一个在JVM规范中没有规定任何OutOfMemoryError情况的区域。</p>
 <h3 id="Java虚拟机栈(Java_Virtual_Machine_Stacks)">Java虚拟机栈(Java Virtual Machine Stacks)</h3><p>虚拟机栈描述的时Java方法执行的内存模型，每个方法在执行的时候都会创建一个栈帧(Stack Frame)用于存储局部变量表、操作数栈、动态链接、方法出口等信息。<br>局部变量表存放了<em>编译期</em>可知的各种基本数据类型、对象引用、和返回地址类型。其所需的内存空间在<em>编译期</em>分配，运行时不会改变局部变量表的大小。<br>异常状况：1）StackOverflowError: 线程请求的栈深度大于JVM允许的深度。2）OutOfMemoryError:虚拟机栈动态扩展的时候无法申请到足够的内存。</p>
 <h3 id="本地方法栈(Native_Method_Stack)">本地方法栈(Native Method Stack)</h3><p>本地方法栈为虚拟机使用到的Native方法提供栈空间，本地方法栈也有上述两种异常情况。</p>
@@ -183,8 +176,8 @@
 <h4 id="实例数据">实例数据</h4><p>存放代码中定义的各种类型的字段内容，顺序收到JVM内存分配策略的影响，相同长度的字段往往相邻分配。</p>
 <h4 id="对齐填充">对齐填充</h4><p>Hotspot虚拟机要求对象的大小是8字节的整数倍，不够的用Padding字段补全。</p>
 <h3 id="对象的访问定位">对象的访问定位</h3><ul>
-<li>句柄：reference中包含了对象的句柄地址，句柄中包含对象各部分的地址<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-16/2.png" alt="img"></li>
-<li>直接指针：reference中直接存储对象的地址（Hotspot实现）<br><img src="http://7xi4cl.com1.z0.glb.clouddn.com/images/2015-04-16/2.png" alt="img"></li>
+<li>句柄：reference中包含了对象的句柄地址，句柄中包含对象各部分的地址<br><img src="http://zuoqy.com/images/2015-04-16/2.png" alt="img"></li>
+<li>直接指针：reference中直接存储对象的地址（Hotspot实现）<br><img src="http://zuoqy.com/images/2015-04-16/2.png" alt="img"></li>
 </ul>
 <h2 id="References">References</h2><ul>
 <li>图片来自：《深入理解Java虚拟机》</li>
@@ -230,10 +223,6 @@
     
       <div class="comments" id="comments">
         
-          <div id="disqus_thread">
-            <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-          </div>
-        
       </div>
     
   </div>
@@ -268,14 +257,14 @@
 
       <div class="site-overview">
         <div class="site-author motion-element">
-          <img class="site-author-image" src="http://7xi4cl.com1.z0.glb.clouddn.com/images/default_avatar.jpg" alt="Qiyang Zuo" />
+          <img class="site-author-image" src="http://zuoqy.com/images/default_avatar.jpg" alt="Qiyang Zuo" />
           <p class="site-author-name">Qiyang Zuo</p>
         </div>
         <p class="site-description motion-element">Write something about Java Web development distributed computing technologies.</p>
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">24</span>
+              <span class="site-state-item-count">25</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -289,7 +278,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">33</span>
+              <span class="site-state-item-count">35</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>
@@ -364,13 +353,13 @@
     <div class="back-to-top"></div>
   </div>
 
-  <script type="text/javascript" src="http://7xi4cl.com1.z0.glb.clouddn.com/vendors/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="http://zuoqy.com/vendors/jquery/index.js?v=2.1.3"></script>
 
   
   
 
   
-  <script type="text/javascript" src="http://7xi4cl.com1.z0.glb.clouddn.com/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="http://zuoqy.com/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
       $('.content img').each(function () {
@@ -421,8 +410,8 @@
 
   
 
-  <script type="text/javascript" src="http://7xi4cl.com1.z0.glb.clouddn.com/vendors/velocity/velocity.min.js"></script>
-  <script type="text/javascript" src="http://7xi4cl.com1.z0.glb.clouddn.com/vendors/velocity/velocity.ui.min.js"></script>
+  <script type="text/javascript" src="http://zuoqy.com/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="http://zuoqy.com/vendors/velocity/velocity.ui.min.js"></script>
 
   <script type="text/javascript" id="motion.global">
   $(document).ready(function () {
@@ -885,25 +874,6 @@
   
   
 
-  
-
-    
-      
-    
-
-    <script type="text/javascript">
-      var disqus_shortname = 'zuoqycom';
-      var disqus_identifier = '2015/04/16/java-memory1/';
-      var disqus_url = 'http://zuoqy.com/2015/04/16/java-memory1/';
-
-      (function(){
-        var dsq = document.createElement('script');
-        dsq.type = 'text/javascript';
-        dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-      }());
-    </script>
   
 
 
