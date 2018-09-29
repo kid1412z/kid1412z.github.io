@@ -75,7 +75,7 @@ if (右括号小于左括号) {
 
 Java代码如下：
 
-```
+```java
 class Solution {
     public List<String> generateParenthesis(int n) {
         List<String> list = new ArrayList<>();
@@ -97,6 +97,52 @@ class Solution {
 }
 ```
 
+
+### 例2： [Letter Combinations of a Phone Number](https://leetcode.com/problems/letter-combinations-of-a-phone-number/description/)
+
+Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent.
+
+A mapping of digit to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.
+
+Input: "23"
+Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+
+思路：
+
+* 选择：当前数字上的所有letters，每个letter都是一个选择
+* 限制：只能使用当前数字键上的letters，每次只能选一个
+* 结束条件： 数字串结束
+
+```java
+class Solution {
+    
+    private static final String[] MAPPER = {"0", "1", "abc", "def", "ghi", "jkl", "mno", "qprs", "tuv", "wxyz"};
+    
+    public List<String> letterCombinations(String digits) {
+        List<String> list = new ArrayList<>();
+        if (digits == null || digits.length() == 0) {
+            return list;
+        }
+        combine(list, "", digits, 0);
+        return list;
+    }
+    
+    private void combine(List<String> list, String value, String digits, int n) {
+        // 结束条件
+        if (n >= digits.length()) {
+            list.add(value);
+            return;
+        }
+        // 选择
+        String letters = MAPPER[digits.charAt(n) - '0'];
+        for (int i = 0; i < letters.length(); i++) {
+            // 限制
+            combine(list, value + letters.charAt(i), digits, n+1);
+        }
+    }
+}
+```
+
 ## 参考：
 
-* 1. http://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=172641&page=1#pid2237150
+* http://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=172641&page=1#pid2237150
