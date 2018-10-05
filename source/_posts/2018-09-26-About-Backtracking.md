@@ -143,6 +143,95 @@ class Solution {
 }
 ```
 
+
+### 例3： [Combination Sum](https://leetcode.com/problems/combination-sum/description/)
+
+Given a set of candidate numbers (candidates) (without duplicates) and a target number (target), find all unique combinations in candidates where the candidate numbers sums to target.
+
+The same repeated number may be chosen from candidates unlimited number of times.
+
+Note:
+
+All numbers (including target) will be positive integers.
+The solution set must not contain duplicate combinations.
+```text
+Example 1:
+Input: candidates = [2,3,6,7], target = 7,
+A solution set is:
+[
+  [7],
+  [2,2,3]
+]
+Example 2:
+
+Input: candidates = [2,3,5], target = 8,
+A solution set is:
+[
+  [2,2,2,2],
+  [2,3,3],
+  [3,5]
+]
+```
+
+思路：
+
+* 选择：所有candidates中的一个
+* 限制： 当前任何情况下，list中元素的和需要小于target
+* 结束条件： 当前list中的元素和等于target
+
+需要注意： 
+
+* 结果去重， 引入index解决
+* list副本在回溯过程中不应该相互影响
+
+
+```java
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> results = new ArrayList<>();
+        if (candidates == null || candidates.length == 0) {
+            return results;
+        }
+        Arrays.sort(candidates);
+        combinations(results, new ArrayList<>(), candidates, target, 0);
+        return results;
+    }
+
+    private void combinations(List<List<Integer>> results, List<Integer> list, int[] candidates, int target, int index) {
+        int s = sum(list);
+        if (s == target) {
+            results.add(copyOf(list));
+            return;
+        }
+        if (s > target) {
+            return;
+        }
+
+        for (int i = index; i < candidates.length; i++) {
+            list.add(candidates[i]);
+            combinations(results, list, candidates, target, i);
+            list.remove(list.size() - 1);
+        }
+    }
+
+    private int sum(List<Integer> list) {
+        if (list == null) {
+            return 0;
+        }
+        int sum = 0;
+        for (Integer i : list) {
+            sum += i;
+        }
+        return sum;
+    }
+
+    private List<Integer> copyOf(List<Integer> list) {
+        return new ArrayList(list);
+    }
+}
+```
+
+
 ## 参考：
 
 * http://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=172641&page=1#pid2237150
