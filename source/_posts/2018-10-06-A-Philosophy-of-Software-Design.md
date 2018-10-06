@@ -42,7 +42,7 @@ categories: Software Design
 
 ### 注重设计 vs. 注重速度
 
-如果目标是尽快把feature作为，把bug都fix掉，最终导致的结果就是设计缺陷，越来越复杂。
+如果目标是尽快把feature作完，把bug都fix掉，最终导致的结果就是设计缺陷，越来越复杂。
 
 ![tactical](http://zuoqy.com/images/2018-10-06/5.png) 
 
