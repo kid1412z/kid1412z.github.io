@@ -231,7 +231,64 @@ class Solution {
 }
 ```
 
+### 例4 [Permutations](https://leetcode.com/problems/permutations/description/)
 
+Given a collection of distinct integers, return all possible permutations.
+
+Example:
+
+```text
+Input: [1,2,3]
+Output:
+[
+  [1,2,3],
+  [1,3,2],
+  [2,1,3],
+  [2,3,1],
+  [3,1,2],
+  [3,2,1]
+]
+```
+
+
+思路：
+
+* 选择：余下的nums中的一个
+* 限制：不重复的使用nums中的数字
+* 结束条件：当前list长度等于nums个数
+
+Java代码如下：
+
+```java
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> resultList = new LinkedList<>();
+        permute(resultList, nums, new LinkedList(), new boolean[nums.length]);
+        return resultList;
+    }
+    
+    private void permute(List<List<Integer>> resultList, int[] nums, List<Integer> current, boolean[] visited) {
+        if (current.size() == nums.length) {
+            resultList.add(copyOf(current));
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (visited[i]) {
+                continue;
+            }
+            current.add(nums[i]);
+            visited[i] = true;
+            permute(resultList, nums, current, visited);
+            current.remove(current.size() -1);
+            visited[i] = false;
+        }
+    }
+    
+    private List<Integer> copyOf(List<Integer> list) {
+        return new ArrayList<>(list);
+    }
+}
+
+```
 ## 参考：
 
 * http://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=172641&page=1#pid2237150
