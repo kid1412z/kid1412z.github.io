@@ -289,6 +289,89 @@ class Solution {
 }
 
 ```
+
+### 例5 [N-Queens](https://leetcode.com/problems/n-queens/description/)
+
+The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.
+
+Given an integer n, return all distinct solutions to the n-queens puzzle.
+
+Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate a queen and an empty space respectively.
+
+Example:
+```text
+Input: 4
+Output: [
+ [".Q..",  // Solution 1
+  "...Q",
+  "Q...",
+  "..Q."],
+
+ ["..Q.",  // Solution 2
+  "Q...",
+  "...Q",
+  ".Q.."]
+]
+Explanation: There exist two distinct solutions to the 4-queens puzzle as shown above.
+```
+
+思路：
+
+* 选择: 当前行中的任意一个不与前面所有行上皇后冲突的列
+* 限制：横、竖、斜 都不能有两个皇后在同一线上 条件：x1 != x2 && y1 != y2 && |x1 - x2| != |y1 - y2|
+* 结束条件：所有行上都放了皇后
+
+```java
+class Solution {
+    public List<List<String>> solveNQueens(int n) {
+        boolean[][] board = new boolean[n][n];
+        List<List<String>> results= new LinkedList<>();
+        solve(results, board, 0);
+        return results;
+    }
+    
+    private void solve(List<List<String>> results, boolean[][] board, int index) {
+        if (index == board.length) {
+            results.add(build(board));
+            return;
+        }
+        for (int i = 0; i < board.length; i++) { // 对于当前行
+            if (valid(i, index, board)) { // 可放皇后则继续搜索
+                board[index][i] = true;
+                solve(results, board, index + 1);
+                board[index][i] = false;
+            }
+        }
+    }
+    
+    private boolean valid(int x1, int y1, boolean[][] board) {
+        for (int y2 = 0; y2 < y1; y2++) {
+            for (int x2 = 0; x2 < board.length; x2++) {
+                if (board[y2][x2] && (x1 == x2 || y1 == y2 || Math.abs(x1-x2) == Math.abs(y1 - y2))) { // heng
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    private List<String> build(boolean[][] board) {
+        List<String> list = new LinkedList<>();
+        for (int i = 0; i < board.length; i++) {
+            StringBuilder sb = new StringBuilder();
+            for (int j = 0; j < board.length; j++) {
+                if (board[i][j]) {
+                    sb.append("Q");
+                } else {
+                    sb.append(".");
+                }
+            }
+            list.add(sb.toString());
+        }
+        return list;
+    }
+}
+```
 ## 参考：
 
 * http://www.1point3acres.com/bbs/forum.php?mod=viewthread&tid=172641&page=1#pid2237150
