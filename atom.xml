@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Qiyang Zuo's Blog]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2018-09-26T15:43:05.549Z</updated>
+  <updated>2018-10-09T16:47:41.024Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -15,11 +15,230 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[Pattern Service Mesh]]></title>
+    <link href="http://zuoqy.com/2018/10/07/Pattern-Service-Mesh/"/>
+    <id>http://zuoqy.com/2018/10/07/Pattern-Service-Mesh/</id>
+    <published>2018-10-07T06:25:57.000Z</published>
+    <updated>2018-10-09T16:47:41.024Z</updated>
+    <content type="html"><![CDATA[<h2 id="当网络刚刚出现">当网络刚刚出现</h2><p>当人们刚想到让两台计算机通信，模型是这样的：</p>
+<p><img src="http://zuoqy.com/images/2018-10-07/1.png" alt="1"></p>
+<p>但上面过于简单的建模，无法使任意两台计算机之间的通信变得通用。分层的网络协议，使应用之间的通信时，应用本身不用关心网络的底层细节，例如如何拆包粘包，如何将字节序列转化成电信号等等。</p>
+<p><img src="http://zuoqy.com/images/2018-10-07/2.png" alt="2"></p>
+<p>上面的模型依然存在问题，因为应用A在向B发送请求和数据包时，并不知道B是否能处理过来，如果B不能及时处理网络包，则会丢失数据。因此应用除了业务逻辑之外，还需要有专门的模块控制数据包的发送速度。</p>
+<p><img src="http://zuoqy.com/images/2018-10-07/3.png" alt="3"></p>
+<p>幸运的是TCP/IP传输层协议的出现，从底层解决了流量控制和拥塞避免的问题，实现了可靠传输。</p>
+<p><img src="http://zuoqy.com/images/2018-10-07/4.png" alt="4"></p>
+<p>上面的模型也成功的沿用了很长一段时间。</p>
+<h2 id="微服务出现">微服务出现</h2><p>随后计算机逐渐变得便宜，出现了更多的节点和更可靠的网络连接。业界开始使用各种类型的网络系统，出现了更细粒度的分布式agent和面向服务的体系架构（SOA，Service Oriented Architectures）但依旧较重的服务组件。</p>
+<p>90年代，Peter Deutsch和他的同事共同提出了<em>有关分布式系统的8条错误假设</em>(<a href="https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing" target="_blank" rel="external">The 8 Fallacies of Distributed Computing</a>):</p>
+<ul>
+<li>网络是可靠的</li>
+<li>没有延迟</li>
+<li>带宽无限大</li>
+<li>网络是安全的</li>
+<li>网络拓扑不会改变</li>
+<li>只有一个管理员</li>
+<li>传输成本是0</li>
+<li>网络是同构的</li>
+</ul>
+<a id="more"></a>
+<p>这8条谬误，是为了提醒分布式系统的工程师们，不能简单忽视上面的问题，需要显式的处理它们。在分布式系统或者说微服务框架体系下，我们至少需要做以下事情：</p>
+<ul>
+<li>快速配置计算资源</li>
+<li>基本的监控系统</li>
+<li>快速的部署</li>
+<li>易于配置的存储系统</li>
+<li>轻松的访问边缘节点</li>
+<li>权限验证和授权</li>
+<li>标准RPC协议</li>
+</ul>
+<p>虽然TCP/IP协议和和通用的网络模型，仍然起到了很大的作用，但现如今，更智能的微服务架构模型需要新的服务层。例如服务发现（Service Discovery）和断路器(Circuit Breaker)。</p>
+<p><img src="http://zuoqy.com/images/2018-10-07/5.png" alt="5"></p>
+<p><a href="https://martinfowler.com/bliki/CircuitBreaker.html" target="_blank" rel="external">Martin Fowler这样概括断路器</a>：</p>
+<blockquote>
+<p>The basic idea behind the circuit breaker is very simple. You wrap a protected function call in a circuit breaker object, which monitors for failures. Once the failures reach a certain threshold, the circuit breaker trips, and all further calls to the circuit breaker return with an error, without the protected call being made at all. Usually you’ll also want some kind of monitor alert if the circuit breaker trips.</p>
+</blockquote>
+<p>像断路器这样的简单装置，可以为服务之间的交互提供可靠性保证。（个人使用过Netflix公司的<a href="https://github.com/Netflix/Hystrix" target="_blank" rel="external">Hystrix</a>）即便如此，随着分布式系统规模的增长，某个组件出问题的可能性也成指数级增加。在一个庞大系统中的某个组件出问题，可能导致其客户端以及客户端的客户端相继发生断路。</p>
+<p><strong>在过去需要几行代码搞定的东西，现在需要在各个client端重复模板代码来处理断路逻辑</strong></p>
+<p>如果你使用过Hystrix，则你一定知道，你的代码中将大量包含类似:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CommandMayFailure</span> <span class="keyword">extends</span> <span class="title">HystrixCommand</span>&lt;<span class="title">String</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CommandMayFailure</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(Setter</span><br><span class="line">            .withGroupKey(HystrixCommandGroupKey.Factory.asKey(<span class="string">"SystemX"</span>))</span><br><span class="line">            .andCommandKey(HystrixCommandKey.Factory.asKey(<span class="string">"SecondaryCommand"</span>))</span><br><span class="line">            .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey(<span class="string">"SecondaryCommand"</span>))</span><br><span class="line">            .andCommandPropertiesDefaults(</span><br><span class="line">                    <span class="comment">// we default to a 100ms timeout for secondary</span></span><br><span class="line">                    HystrixCommandProperties.Setter().withExecutionTimeoutInMilliseconds(<span class="number">100</span>)));</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> String <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"this command always fails"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> String <span class="title">getFallback</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Hello Failure "</span> + name + <span class="string">"!"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这些样板代码往往需要设置线程池大小，断路器的失败阈值，超时时间，失败时的fallback逻辑等等。他们会遍布整个分布式系统的每个服务，他们与主要业务逻辑无关，大部分都是相同的。是不是很烦？</p>
+<p>实际上，Facebook的<a href="https://code.fb.com/networking-traffic/introducing-proxygen-facebook-s-c-http-framework/" target="_blank" rel="external">Proxygen</a>和Twitter的<a href="https://finagle.github.io/blog/" target="_blank" rel="external">Finagle</a>这样的类库，意在避免这样的模板代码。</p>
+<p><img src="http://zuoqy.com/images/2018-10-07/6.png" alt="6"></p>
+<p>上图描述了像Netflix、SoundCloud、Twitter这样的微服务先驱的微服务架构。</p>
+<p>把断路器和服务发现下沉到类库中，有以下几个缺点：</p>
+<ul>
+<li>团队需要有专门的人力和时间，为适配这种类库构建生态系统</li>
+<li>类库限制了你在微服务中使用什么样的工具、运行时环境和开发语言</li>
+<li>在庞大分布式系统中，使用上述类库模型，类库本身也需要维护，版本适配将非常复杂。</li>
+</ul>
+<h2 id="Sidecar">Sidecar</h2><p>对比分层的网络协议栈，我们更希望断路和服务发现作为一个服务层（如下图所示），屏蔽底层的逻辑，对应用透明。但更改网络协议栈短期内是没有可能的事情。</p>
+<p><img src="http://zuoqy.com/images/2018-10-07/7.png" alt="7"></p>
+<p>有些将这个服务层实现成一个代理应用（Proxy），服务之间不直接相互调用，而是将流量直接打到代理上，由代理做服务发现和路由。</p>
+<p>这里衍生出的一个重要概念，就是<strong>Sidecars</strong>。<strong>Sidecar</strong>是和主应用进程相伴运行的进程，用来为主应用进程提供额外的功能特性。这里可以参见<a href="https://medium.com/airbnb-engineering/smartstack-service-discovery-in-the-cloud-4b8a080de619" target="_blank" rel="external">AirBnb</a>和<a href="https://medium.com/netflix-techblog/prana-a-sidecar-for-your-netflix-paas-based-applications-and-services-258a5790a015" target="_blank" rel="external">Netflix</a>的两篇有关Sidecar的文章。</p>
+<p><img src="http://zuoqy.com/images/2018-10-07/8.png" alt="8"></p>
+<h2 id="Service_Mesh">Service Mesh</h2><p>如果你的微服务系统中各个应用间通过Sidecar proxy相互调用，则你的部署图可能是下图这样的：</p>
+<p><img src="http://zuoqy.com/images/2018-10-07/9.png" alt="9"></p>
+<p>2017年William在文章中这样定义<strong>Service Mesh</strong>:</p>
+<blockquote>
+<p>A service mesh is a dedicated infrastructure layer for handling service-to-service communication. It’s responsible for the reliable delivery of requests through the complex topology of services that comprise a modern, cloud native application. In practice, the service mesh is typically implemented as an array of lightweight network proxies that are deployed alongside application code, without the application needing to be aware.</p>
+</blockquote>
+<p>而这套机制，已经在先进的PaaS运行时环境Kubernates和Mesos完美支持：</p>
+<p><img src="http://zuoqy.com/images/2018-10-07/10.png" alt="10"></p>
+<p>最近火爆的项目<em><a href="https://istio.io/" target="_blank" rel="external">Istio project</a></em>则是Service Mesh系统的重要实例。</p>
+<h2 id="参考">参考</h2><ul>
+<li><a href="http://philcalcado.com/2017/08/03/pattern_service_mesh.html" target="_blank" rel="external">http://philcalcado.com/2017/08/03/pattern_service_mesh.html</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing" target="_blank" rel="external">https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing</a></li>
+<li><a href="https://martinfowler.com/bliki/CircuitBreaker.html" target="_blank" rel="external">https://martinfowler.com/bliki/CircuitBreaker.html</a></li>
+<li><a href="https://github.com/Netflix/Hystrix" target="_blank" rel="external">https://github.com/Netflix/Hystrix</a></li>
+<li><a href="https://code.fb.com/networking-traffic/introducing-proxygen-facebook-s-c-http-framework/" target="_blank" rel="external">https://code.fb.com/networking-traffic/introducing-proxygen-facebook-s-c-http-framework/</a></li>
+<li><a href="https://finagle.github.io/blog/" target="_blank" rel="external">https://finagle.github.io/blog/</a></li>
+<li><a href="https://medium.com/airbnb-engineering/smartstack-service-discovery-in-the-cloud-4b8a080de619" target="_blank" rel="external">https://medium.com/airbnb-engineering/smartstack-service-discovery-in-the-cloud-4b8a080de619</a></li>
+<li><a href="https://medium.com/netflix-techblog/prana-a-sidecar-for-your-netflix-paas-based-applications-and-services-258a5790a015" target="_blank" rel="external">https://medium.com/netflix-techblog/prana-a-sidecar-for-your-netflix-paas-based-applications-and-services-258a5790a015</a></li>
+<li><a href="https://istio.io/" target="_blank" rel="external">https://istio.io/</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="当网络刚刚出现">当网络刚刚出现</h2><p>当人们刚想到让两台计算机通信，模型是这样的：</p>
+<p><img src="http://zuoqy.com/images/2018-10-07/1.png" alt="1"></p>
+<p>但上面过于简单的建模，无法使任意两台计算机之间的通信变得通用。分层的网络协议，使应用之间的通信时，应用本身不用关心网络的底层细节，例如如何拆包粘包，如何将字节序列转化成电信号等等。</p>
+<p><img src="http://zuoqy.com/images/2018-10-07/2.png" alt="2"></p>
+<p>上面的模型依然存在问题，因为应用A在向B发送请求和数据包时，并不知道B是否能处理过来，如果B不能及时处理网络包，则会丢失数据。因此应用除了业务逻辑之外，还需要有专门的模块控制数据包的发送速度。</p>
+<p><img src="http://zuoqy.com/images/2018-10-07/3.png" alt="3"></p>
+<p>幸运的是TCP/IP传输层协议的出现，从底层解决了流量控制和拥塞避免的问题，实现了可靠传输。</p>
+<p><img src="http://zuoqy.com/images/2018-10-07/4.png" alt="4"></p>
+<p>上面的模型也成功的沿用了很长一段时间。</p>
+<h2 id="微服务出现">微服务出现</h2><p>随后计算机逐渐变得便宜，出现了更多的节点和更可靠的网络连接。业界开始使用各种类型的网络系统，出现了更细粒度的分布式agent和面向服务的体系架构（SOA，Service Oriented Architectures）但依旧较重的服务组件。</p>
+<p>90年代，Peter Deutsch和他的同事共同提出了<em>有关分布式系统的8条错误假设</em>(<a href="https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing">The 8 Fallacies of Distributed Computing</a>):</p>
+<ul>
+<li>网络是可靠的</li>
+<li>没有延迟</li>
+<li>带宽无限大</li>
+<li>网络是安全的</li>
+<li>网络拓扑不会改变</li>
+<li>只有一个管理员</li>
+<li>传输成本是0</li>
+<li>网络是同构的</li>
+</ul>]]>
+    
+    </summary>
+    
+      <category term="Cloud Compute" scheme="http://zuoqy.com/tags/Cloud-Compute/"/>
+    
+      <category term="Distributing System" scheme="http://zuoqy.com/tags/Distributing-System/"/>
+    
+      <category term="Service Mesh" scheme="http://zuoqy.com/tags/Service-Mesh/"/>
+    
+      <category term="Distributing System, Service Mesh" scheme="http://zuoqy.com/categories/Distributing-System-Service-Mesh/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[软件设计的哲学（John Ousterhout分享）]]></title>
+    <link href="http://zuoqy.com/2018/10/06/A-Philosophy-of-Software-Design/"/>
+    <id>http://zuoqy.com/2018/10/06/A-Philosophy-of-Software-Design/</id>
+    <published>2018-10-06T14:37:57.000Z</published>
+    <updated>2018-10-09T16:47:41.024Z</updated>
+    <content type="html"><![CDATA[<h2 id="软件设计的目标">软件设计的目标</h2><ol>
+<li><p>软件设计最大的目标是降低软件的复杂性（Complexity），复杂性使软件难于理解和维护。</p>
+</li>
+<li><p>复杂性的来源：</p>
+<ul>
+<li>含义模糊（Obscurity）： 重要信息不突出。</li>
+<li>相互依赖：模块无法独立于其他模块而被理解。</li>
+</ul>
+</li>
+<li><p>复杂性的危害</p>
+</li>
+</ol>
+<p>复杂性会逐渐递增，前面埋的坑，会导致后面的设计越来越复杂。</p>
+<h2 id="设计原则">设计原则</h2><h3 id="暴露简单通用的接口，隐藏复杂的实现。">暴露简单通用的接口，隐藏复杂的实现。</h3><a id="more"></a>
+<p><img src="http://zuoqy.com/images/2018-10-06/1.png" alt="Class should go deep"> </p>
+<p>正例：Unix 文件I/O 接口</p>
+<ul>
+<li>Unix文件操作逻辑极为复杂，但前端模块只暴露的5个简单的接口。</li>
+<li>隐藏了文件在磁盘上的表现形式、块分配、目录管理、权限管理、磁盘调度、块缓存和设备信息等复杂的底层内容。</li>
+</ul>
+<p><img src="http://zuoqy.com/images/2018-10-06/2.png" alt="A deep interface"> </p>
+<p>反例：Java文件操作接口，读写一个文件要客户端感知很多类和细节：</p>
+<p><img src="http://zuoqy.com/images/2018-10-06/3.png" alt="A deep interface cont&#39;d"> </p>
+<h3 id="模块外部需要感知和必须处理的异常越少越好：">模块外部需要感知和必须处理的异常越少越好：</h3><p><img src="http://zuoqy.com/images/2018-10-06/4.png" alt="minimize exceptions outside"> </p>
+<h3 id="注重设计_vs-_注重速度">注重设计 vs. 注重速度</h3><p>如果目标是尽快把feature作完，把bug都fix掉，最终导致的结果就是设计缺陷，越来越复杂。</p>
+<p><img src="http://zuoqy.com/images/2018-10-06/5.png" alt="tactical"> </p>
+<p>如果初始有一个良好的设计，则在后面的迭代中形成良性循环，最小化复杂性。长远看来则节省了很多时间。</p>
+<p><img src="http://zuoqy.com/images/2018-10-06/6.png" alt="strategy"> </p>
+<p>Facebook由最初的口号”Move quickly and break things”转变为”Move quickly with solid infrastructure”<br>Google和VMWare由于注重设计而成功，吸引了大量顶级工程师。</p>
+<p><img src="http://zuoqy.com/images/2018-10-06/7.png" alt="invest"> </p>
+<p>持续的在设计上的小投入，最终换来巨大回报。</p>
+<p><img src="http://zuoqy.com/images/2018-10-06/8.png" alt="invest"> </p>
+<h2 id="参考">参考</h2><ul>
+<li><a href="https://www.youtube.com/watch?v=bmSAYlu0NcY" target="_blank" rel="external">https://www.youtube.com/watch?v=bmSAYlu0NcY</a></li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="软件设计的目标">软件设计的目标</h2><ol>
+<li><p>软件设计最大的目标是降低软件的复杂性（Complexity），复杂性使软件难于理解和维护。</p>
+</li>
+<li><p>复杂性的来源：</p>
+<ul>
+<li>含义模糊（Obscurity）： 重要信息不突出。</li>
+<li>相互依赖：模块无法独立于其他模块而被理解。</li>
+</ul>
+</li>
+<li><p>复杂性的危害</p>
+</li>
+</ol>
+<p>复杂性会逐渐递增，前面埋的坑，会导致后面的设计越来越复杂。</p>
+<h2 id="设计原则">设计原则</h2><h3 id="暴露简单通用的接口，隐藏复杂的实现。">暴露简单通用的接口，隐藏复杂的实现。</h3>]]>
+    
+    </summary>
+    
+      <category term="Software Design" scheme="http://zuoqy.com/tags/Software-Design/"/>
+    
+      <category term="Software Design" scheme="http://zuoqy.com/categories/Software-Design/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Kubernates学习笔记01: 一点历史]]></title>
+    <link href="http://zuoqy.com/2018/10/02/Kubernates1-Some-History/"/>
+    <id>http://zuoqy.com/2018/10/02/Kubernates1-Some-History/</id>
+    <published>2018-10-02T14:02:34.000Z</published>
+    <updated>2018-10-09T16:47:41.024Z</updated>
+    <content type="html"><![CDATA[<h2 id="1">1</h2><p>2013年，作为云计算PaaS热潮中的一份子，dotCloud相比于OpenStack、 Cloud Foundry、Heroku、Pivotal、RedHat似乎有些微不足道。</p>
+<p>Cloud Foundry的开源PaaS项目，代表了当时PaaS技术的事实标准，被广泛接纳。它提供了一种”应用托管”能力，通过提供简单的命令，使开发者可以方便的将应用”上云”, 例如：<code>cf push &quot;my_app&quot;</code>其核心是应用的打包和分发。Cloud Foundry为每种主流语言都定义了一种打包格式， <code>cf push</code>的作用，就是将应用包、启动脚本上传到云端，通过调度器选择一批应用的虚拟机，<br>将脚本和应用包分发到机器上并启动执行。一个虚拟机上，往往启动多个来自不同用户的应用，PaaS平台会调用操作系统的Cgroups和Namespace机制，为每个应用单独创建隔离环境。<br>实现多个租户之间互不干涉的在虚拟机中部署和执行应用。整个过程就是PaaS项目最核心的能力。所谓的隔离环境，就是现在的容器技术。</p>
+<p>在dotCloud公司开源自己的Docker项目之前，容器技术作为PaaS底层机制，并没有太多人关注。可就在开源后的短短几个月时间，Docker项目就迅速崛起，席卷了整个PaaS社区，改变了整个云计算领域的发展历程。</p>
+<p>Docker项目区别于传统PaaS项目的秘密武器就是Docker镜像。如前面所述，当时PaaS项目的痛点就是用用的打包分发，用户需要为每一种语言、每一个应用维护一个打好的包，很难保持本地环境和云端环境的一致性。</p>
+<p>Docker镜像的出现，从根本上解决了应用打包分发的问题：相比PaaS应用的压缩包只包含启动脚本加应用执行文件，Docker镜像则直接包含一个完整的操作系统所有文件和目录和应用启动的所有文件和脚本。轻松的保持了本地和云端环境的高度一致。<br>使用<code>docker build</code>、 <code>docker push</code> 和 <code>docker run</code> 即可将应用本地环境完整一致的打包推送到云端运行。</p>
+<p>另外，Docker项目还对开发者有者天然的亲和力，开发者无需精通Linux内核原理和太多其他知识，就可以打包定制自己的镜像。简单的几个命令，就可以构建一个网站镜像，一个Nginx集群。深受开发者的欢迎。</p>
+<p>Docker项目，重新定义了PaaS，使其演变为以Docker容器为核心，以Docker镜像为打包标准的”容器化”的PaaS。</p>
+<h2 id="2">2</h2><p>随着Docker项目的崛起，dotCloud公司也将自己的公司名字改为Docker，并且不甘于仅仅提供创建和启停容器的小工具，希望提供更多平台层的能力，向PaaS进化。</p>
+<p>2014年底，Docker公司发布Swarm，展示了Docker公司PaaS方向的野心。Swarm项目的最大亮点，就是它基本保持了单机部署和集群部署API的一致性，操作方式简单明了，受到众多开发者的热捧。（当时在公司的容器控制项目依赖Swarm也是基于这个原因）。</p>
+<p>随后，Docker公司收购了率先提出”容器编排”(Container Orchestration)概念的<a href="http://www.fig.sh/" target="_blank" rel="external">Fig项目</a>(后来改名为Compose)。一时间，容器生态相关的项目层出不穷：容器网络处理SocketPlane项目（后被Docker公司收购），容器存储Flocker项目（后被EMC公司收购）， 集群图形化管理Tutum项目(被Docker公司收购)等。</p>
+<p>2014年6月，Google开源名为Kubernates的项目，再一次改变了容器市场的格局。</p>
+<h2 id="3">3</h2><p>为了限制Docker公司在Docker开源项目中的绝对话语权和强势态度，以及Docker项目在告诉迭代中表现出的不稳定和频繁变更问题，2015年6月，Docker公司、CoreOS、Google、RedHat共同宣布将Libcontainer（Containerd）项目捐出，改名为RunC，交由完全中立的基金会管理，并以其为依据，共同制定标准和规范，即OCI（Open Container Initiative）. </p>
+<p>然而OCI的成立，并没有改变Docker公司一家独大的现状。随后，Google、RedHat牵头发起名为CNCF（Cloud Native Computing Foundation)的基金会。希望以Kubernates项目为基础，建立开源基础设施领域厂商主导的、按照独立基金会方式运营的平台级社区。</p>
+<p>在容器编排方面，RedHat与Google结盟，打造出了一个与众不同的容器编排和管理生态。并在整个社区推进民主化架构。与Docker社区和Mesos社区形成三足鼎立局面。</p>
+<p>2017年10月，DOcker公司在企业版Docker中内置Kubernates，标志编排之争落下帷幕。</p>
+<p>次年3月，Docker公司CTO Solomon Hykes宣布辞职，5年容器纷争尘埃落定。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<h2 id="1">1</h2><p>2013年，作为云计算PaaS热潮中的一份子，dotCloud相比于OpenStack、 Cloud Foundry、Heroku、Pivotal、RedHat似乎有些微不足道。</p>
+<p>Cloud Foundry的开源PaaS项目，]]>
+    </summary>
+    
+      <category term="kubernates" scheme="http://zuoqy.com/tags/kubernates/"/>
+    
+      <category term="Cloud Compute" scheme="http://zuoqy.com/categories/Cloud-Compute/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[关于回溯算法的几点心得]]></title>
     <link href="http://zuoqy.com/2018/09/26/About-Backtracking/"/>
     <id>http://zuoqy.com/2018/09/26/About-Backtracking/</id>
     <published>2018-09-26T15:23:54.000Z</published>
-    <updated>2018-09-26T15:43:05.549Z</updated>
+    <updated>2018-10-09T16:58:18.371Z</updated>
     <content type="html"><![CDATA[<p><strong>摘要</strong>：关于回溯算法的几点心得<br><strong>Abstract</strong>: Some inspirations about backtracking algorithms.</p>
 <h2 id="回溯（Backtracking）算法思路：">回溯（Backtracking）算法思路：</h2><p>在当前局面下，你有若干种选择。逐一尝试每一种选择。<br>如果发现某种选择行不通（违反了某些限定条件）就返回；<br>如果某种选择试到最后发现是正确解，就将其加入解集。</p>
 <blockquote>
@@ -51,12 +270,57 @@
 <p>因此，把上面的思路拼起来就是代码：</p>
 <figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="comment">(左右括号都已用完)</span> &#123;</span><br><span class="line">  加入解集，返回</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//否则开始试各种选择</span></span><br><span class="line"><span class="keyword">if</span> <span class="comment">(还有左括号可以用)</span> &#123;</span><br><span class="line">  加一个左括号，继续递归</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> <span class="comment">(右括号小于左括号)</span> &#123;</span><br><span class="line">  加一个右括号，继续递归</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Java代码如下：</p>
-<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span> generateParenthesis(int n) &#123;</span><br><span class="line">        <span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span> <span class="built_in">list</span> <span class="subst">=</span> <span class="literal">new</span> ArrayList<span class="subst">&lt;&gt;</span>();</span><br><span class="line">        gen(<span class="built_in">list</span>, <span class="string">""</span>, n, n);</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">list</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="literal">void</span> gen(<span class="built_in">List</span><span class="subst">&lt;</span><span class="built_in">String</span><span class="subst">&gt;</span> <span class="built_in">list</span>, <span class="built_in">String</span> s, int leftCount, int rightCount) &#123;</span><br><span class="line">        <span class="keyword">if</span> (leftCount <span class="subst">==</span> <span class="number">0</span> <span class="subst">&amp;&amp;</span> rightCount <span class="subst">==</span> <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="built_in">list</span><span class="built_in">.</span>add(s);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (leftCount <span class="subst">&gt;</span> <span class="number">0</span>) &#123;</span><br><span class="line">            gen(<span class="built_in">list</span>, s <span class="subst">+</span> <span class="string">"("</span>, leftCount <span class="subst">-</span> <span class="number">1</span>, rightCount);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (rightCount <span class="subst">&gt;</span> leftCount) &#123;</span><br><span class="line">            gen(<span class="built_in">list</span>, s <span class="subst">+</span> <span class="string">")"</span>, leftCount, rightCount <span class="subst">-</span> <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">generateParenthesis</span><span class="params">(<span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        gen(list, <span class="string">""</span>, n, n);</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">gen</span><span class="params">(List&lt;String&gt; list, String s, <span class="keyword">int</span> leftCount, <span class="keyword">int</span> rightCount)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (leftCount == <span class="number">0</span> &amp;&amp; rightCount == <span class="number">0</span>) &#123;</span><br><span class="line">            list.add(s);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (leftCount &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            gen(list, s + <span class="string">"("</span>, leftCount - <span class="number">1</span>, rightCount);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (rightCount &gt; leftCount) &#123;</span><br><span class="line">            gen(list, s + <span class="string">")"</span>, leftCount, rightCount - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例2：_Letter_Combinations_of_a_Phone_Number">例2： <a href="https://leetcode.com/problems/letter-combinations-of-a-phone-number/description/" target="_blank" rel="external">Letter Combinations of a Phone Number</a></h3><p>Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent.</p>
+<p>A mapping of digit to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.</p>
+<p>Input: “23”<br>Output: [“ad”, “ae”, “af”, “bd”, “be”, “bf”, “cd”, “ce”, “cf”].</p>
+<p>思路：</p>
+<ul>
+<li>选择：当前数字上的所有letters，每个letter都是一个选择</li>
+<li>限制：只能使用当前数字键上的letters，每次只能选一个</li>
+<li>结束条件： 数字串结束</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String[] MAPPER = &#123;<span class="string">"0"</span>, <span class="string">"1"</span>, <span class="string">"abc"</span>, <span class="string">"def"</span>, <span class="string">"ghi"</span>, <span class="string">"jkl"</span>, <span class="string">"mno"</span>, <span class="string">"qprs"</span>, <span class="string">"tuv"</span>, <span class="string">"wxyz"</span>&#125;;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">letterCombinations</span><span class="params">(String digits)</span> </span>&#123;</span><br><span class="line">        List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">if</span> (digits == <span class="keyword">null</span> || digits.length() == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> list;</span><br><span class="line">        &#125;</span><br><span class="line">        combine(list, <span class="string">""</span>, digits, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">combine</span><span class="params">(List&lt;String&gt; list, String value, String digits, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 结束条件</span></span><br><span class="line">        <span class="keyword">if</span> (n &gt;= digits.length()) &#123;</span><br><span class="line">            list.add(value);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 选择</span></span><br><span class="line">        String letters = MAPPER[digits.charAt(n) - <span class="string">'0'</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; letters.length(); i++) &#123;</span><br><span class="line">            <span class="comment">// 限制</span></span><br><span class="line">            combine(list, value + letters.charAt(i), digits, n+<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例3：_Combination_Sum">例3： <a href="https://leetcode.com/problems/combination-sum/description/" target="_blank" rel="external">Combination Sum</a></h3><p>Given a set of candidate numbers (candidates) (without duplicates) and a target number (target), find all unique combinations in candidates where the candidate numbers sums to target.</p>
+<p>The same repeated number may be chosen from candidates unlimited number of times.</p>
+<p>Note:</p>
+<p>All numbers (including target) will be positive integers.<br>The solution set must not contain duplicate combinations.<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Example 1:&#10;Input: candidates = [2,3,6,7], target = 7,&#10;A solution set is:&#10;[&#10;  [7],&#10;  [2,2,3]&#10;]&#10;Example 2:&#10;&#10;Input: candidates = [2,3,5], target = 8,&#10;A solution set is:&#10;[&#10;  [2,2,2,2],&#10;  [2,3,3],&#10;  [3,5]&#10;]</span><br></pre></td></tr></table></figure></p>
+<p>思路：</p>
+<ul>
+<li>选择：所有candidates中的一个</li>
+<li>限制： 当前任何情况下，list中元素的和需要小于target</li>
+<li>结束条件： 当前list中的元素和等于target</li>
+</ul>
+<p>需要注意： </p>
+<ul>
+<li>结果去重， 引入index解决</li>
+<li>list副本在回溯过程中不应该相互影响</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; combinationSum(<span class="keyword">int</span>[] candidates, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; results = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">if</span> (candidates == <span class="keyword">null</span> || candidates.length == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> results;</span><br><span class="line">        &#125;</span><br><span class="line">        Arrays.sort(candidates);</span><br><span class="line">        combinations(results, <span class="keyword">new</span> ArrayList&lt;&gt;(), candidates, target, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> results;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">combinations</span><span class="params">(List&lt;List&lt;Integer&gt;&gt; results, List&lt;Integer&gt; list, <span class="keyword">int</span>[] candidates, <span class="keyword">int</span> target, <span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> s = sum(list);</span><br><span class="line">        <span class="keyword">if</span> (s == target) &#123;</span><br><span class="line">            results.add(copyOf(list));</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (s &gt; target) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = index; i &lt; candidates.length; i++) &#123;</span><br><span class="line">            list.add(candidates[i]);</span><br><span class="line">            combinations(results, list, candidates, target, i);</span><br><span class="line">            list.remove(list.size() - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">sum</span><span class="params">(List&lt;Integer&gt; list)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (list == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (Integer i : list) &#123;</span><br><span class="line">            sum += i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> List&lt;Integer&gt; <span class="title">copyOf</span><span class="params">(List&lt;Integer&gt; list)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ArrayList(list);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例4_Permutations">例4 <a href="https://leetcode.com/problems/permutations/description/" target="_blank" rel="external">Permutations</a></h3><p>Given a collection of distinct integers, return all possible permutations.</p>
+<p>Example:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Input: [1,2,3]&#10;Output:&#10;[&#10;  [1,2,3],&#10;  [1,3,2],&#10;  [2,1,3],&#10;  [2,3,1],&#10;  [3,1,2],&#10;  [3,2,1]&#10;]</span><br></pre></td></tr></table></figure>
+<p>思路：</p>
+<ul>
+<li>选择：余下的nums中的一个</li>
+<li>限制：不重复的使用nums中的数字</li>
+<li>结束条件：当前list长度等于nums个数</li>
+</ul>
+<p>Java代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; permute(<span class="keyword">int</span>[] nums) &#123;</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; resultList = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        permute(resultList, nums, <span class="keyword">new</span> LinkedList(), <span class="keyword">new</span> <span class="keyword">boolean</span>[nums.length]);</span><br><span class="line">        <span class="keyword">return</span> resultList;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">permute</span><span class="params">(List&lt;List&lt;Integer&gt;&gt; resultList, <span class="keyword">int</span>[] nums, List&lt;Integer&gt; current, <span class="keyword">boolean</span>[] visited)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (current.size() == nums.length) &#123;</span><br><span class="line">            resultList.add(copyOf(current));</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (visited[i]) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            current.add(nums[i]);</span><br><span class="line">            visited[i] = <span class="keyword">true</span>;</span><br><span class="line">            permute(resultList, nums, current, visited);</span><br><span class="line">            current.remove(current.size() -<span class="number">1</span>);</span><br><span class="line">            visited[i] = <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> List&lt;Integer&gt; <span class="title">copyOf</span><span class="params">(List&lt;Integer&gt; list)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;(list);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="例5_N-Queens">例5 <a href="https://leetcode.com/problems/n-queens/description/" target="_blank" rel="external">N-Queens</a></h3><p>The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.</p>
+<p>Given an integer n, return all distinct solutions to the n-queens puzzle.</p>
+<p>Each solution contains a distinct board configuration of the n-queens’ placement, where ‘Q’ and ‘.’ both indicate a queen and an empty space respectively.</p>
+<p>Example:<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Input: 4&#10;Output: [&#10; [&#34;.Q..&#34;,  // Solution 1&#10;  &#34;...Q&#34;,&#10;  &#34;Q...&#34;,&#10;  &#34;..Q.&#34;],&#10;&#10; [&#34;..Q.&#34;,  // Solution 2&#10;  &#34;Q...&#34;,&#10;  &#34;...Q&#34;,&#10;  &#34;.Q..&#34;]&#10;]&#10;Explanation: There exist two distinct solutions to the 4-queens puzzle as shown above.</span><br></pre></td></tr></table></figure></p>
+<p>思路：</p>
+<ul>
+<li>选择: 当前行中的任意一个不与前面所有行上皇后冲突的列</li>
+<li>限制：横、竖、斜 都不能有两个皇后在同一线上 条件：x1 != x2 &amp;&amp; y1 != y2 &amp;&amp; |x1 - x2| != |y1 - y2|</li>
+<li>结束条件：所有行上都放了皇后</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;String&gt;&gt; solveNQueens(<span class="keyword">int</span> n) &#123;</span><br><span class="line">        <span class="keyword">boolean</span>[][] board = <span class="keyword">new</span> <span class="keyword">boolean</span>[n][n];</span><br><span class="line">        List&lt;List&lt;String&gt;&gt; results= <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        solve(results, board, <span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> results;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">solve</span><span class="params">(List&lt;List&lt;String&gt;&gt; results, <span class="keyword">boolean</span>[][] board, <span class="keyword">int</span> index)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (index == board.length) &#123;</span><br><span class="line">            results.add(build(board));</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; board.length; i++) &#123; <span class="comment">// 对于当前行</span></span><br><span class="line">            <span class="keyword">if</span> (valid(i, index, board)) &#123; <span class="comment">// 可放皇后则继续搜索</span></span><br><span class="line">                board[index][i] = <span class="keyword">true</span>;</span><br><span class="line">                solve(results, board, index + <span class="number">1</span>);</span><br><span class="line">                board[index][i] = <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">valid</span><span class="params">(<span class="keyword">int</span> x1, <span class="keyword">int</span> y1, <span class="keyword">boolean</span>[][] board)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> y2 = <span class="number">0</span>; y2 &lt; y1; y2++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> x2 = <span class="number">0</span>; x2 &lt; board.length; x2++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (board[y2][x2] &amp;&amp; (x1 == x2 || y1 == y2 || Math.abs(x1-x2) == Math.abs(y1 - y2))) &#123; <span class="comment">// heng</span></span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> List&lt;String&gt; <span class="title">build</span><span class="params">(<span class="keyword">boolean</span>[][] board)</span> </span>&#123;</span><br><span class="line">        List&lt;String&gt; list = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; board.length; i++) &#123;</span><br><span class="line">            StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; board.length; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (board[i][j]) &#123;</span><br><span class="line">                    sb.append(<span class="string">"Q"</span>);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    sb.append(<span class="string">"."</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            list.add(sb.toString());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="参考：">参考：</h2><ul>
-<li><ol>
 <li><a href="http://www.1point3acres.com/bbs/forum.php?mod=viewthread&amp;tid=172641&amp;page=1#pid2237150" target="_blank" rel="external">http://www.1point3acres.com/bbs/forum.php?mod=viewthread&amp;tid=172641&amp;page=1#pid2237150</a></li>
-</ol>
-</li>
 </ul>
 ]]></content>
     <summary type="html">
@@ -2317,246 +2581,6 @@ public interface SortedSet&lt;<span class="keyword">E</span>&gt; extends <span c
       <category term="Collections" scheme="http://zuoqy.com/tags/Collections/"/>
     
       <category term="Java" scheme="http://zuoqy.com/tags/Java/"/>
-    
-      <category term="Java" scheme="http://zuoqy.com/categories/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Java finalize方法]]></title>
-    <link href="http://zuoqy.com/2015/04/20/java-finalize/"/>
-    <id>http://zuoqy.com/2015/04/20/java-finalize/</id>
-    <published>2015-04-20T02:49:05.000Z</published>
-    <updated>2015-04-20T08:47:01.000Z</updated>
-    <content type="html"><![CDATA[<p><strong>摘要</strong>：本文简单介绍了Java finalize方法，以及运行时是否可能查看对象的GC状态。<br><strong>Abstract</strong>: This article introduces the Java finalize method, and whether it is possible to view the status of the runtime object GC.<br><a id="more"></a></p>
-<p>即使在<a href="/2015/04/20/java-gc-reference/">可达性分析算法</a>中不可达的对象，也并非是非死不可，对象要被回收，至少需要以下两个过程：</p>
-<ul>
-<li>根据是否有必要执行finalize方法进行第一次筛选（如果finalize方法没有被覆盖或者JVM已经调用过，视为<em>没有必要执行</em>）。如果对象被判定为有必要执行finalize方法，则被加入F-Queue队列，稍后由JVM建立的低优先级的Finalizer线程调用其finalize方法（为防止死循环或者调用缓慢阻塞队列中其他对象，JVM不保证等待调用执行完毕）。</li>
-<li>对象在finalize方法中，与GC Roots重新建立了连接，则不会被回收；否则对象将被回收。</li>
-</ul>
-<p><em>注</em>：任何对象的finalize方法都只会被JVM调用一次，如果对象面临第二次回收过程，finalize方法将不会被再次调用。</p>
-<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FinalizeTest</span> </span>{
-    <span class="keyword">public</span> <span class="keyword">static</span> FinalizeTest SAVE_HOOK = <span class="keyword">null</span>;
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">alive</span><span class="params">()</span> </span>{
-        System.out.println(<span class="string">"I am alive!"</span>);
-    }
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">die</span><span class="params">()</span> </span>{
-        System.out.println(<span class="string">"Die!"</span>);
-    }
-
-    <span class="annotation">@Override</span>
-    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>{
-        <span class="keyword">super</span>.finalize();
-        SAVE_HOOK = <span class="keyword">this</span>;
-        System.out.println(<span class="string">"finalize()"</span>);
-    }
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>{
-        SAVE_HOOK = <span class="keyword">new</span> FinalizeTest();
-        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) {
-            gc();
-            <span class="keyword">if</span> (SAVE_HOOK != <span class="keyword">null</span>) {
-                SAVE_HOOK.alive();
-            } <span class="keyword">else</span> {
-                die();
-            }
-        }
-    }
-
-    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">gc</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>{
-        SAVE_HOOK = <span class="keyword">null</span>;
-        System.gc();
-        Thread.sleep(<span class="number">500</span>);
-    }
-}
-</code></pre><p><em>以上代码验证了finalize()方法只会被JVM调用一次，但不能说明对象是否在运行过程中是否已经被回收掉！换句话说，在运行时判断一个对象是否已经被回收掉是<strong>不可能</strong>的（<a href="http://stackoverflow.com/questions/4223956/check-if-object-can-be-fetched-by-garbage-collector" target="_blank" rel="external">参见这里</a>）。</em></p>
-<p><em>finalize方法可以被try-finally替代，并处理的更好更及时。</em></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p><strong>摘要</strong>：本文简单介绍了Java finalize方法，以及运行时是否可能查看对象的GC状态。<br><strong>Abstract</strong>: This article introduces the Java finalize method, and whether it is possible to view the status of the runtime object GC.<br>]]>
-    
-    </summary>
-    
-      <category term="GC" scheme="http://zuoqy.com/tags/GC/"/>
-    
-      <category term="JVM" scheme="http://zuoqy.com/tags/JVM/"/>
-    
-      <category term="Java" scheme="http://zuoqy.com/tags/Java/"/>
-    
-      <category term="Java" scheme="http://zuoqy.com/categories/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Java内存回收算法和引用类型]]></title>
-    <link href="http://zuoqy.com/2015/04/20/java-gc-reference/"/>
-    <id>http://zuoqy.com/2015/04/20/java-gc-reference/</id>
-    <published>2015-04-20T01:52:24.000Z</published>
-    <updated>2015-04-20T07:24:45.000Z</updated>
-    <content type="html"><![CDATA[<p><strong>摘要</strong>：<em>本文介绍了两种内存回收算法和4种Java引用类型。</em><br><strong>Abstract</strong>: <em>This article introduced two kinds of Garbage Collection Algorithm and four kinds of reference type in Java.</em></p>
-<a id="more"></a>
-<h2 id="内存回收算法">内存回收算法</h2><h3 id="引用计数(Reference_Counting)">引用计数(Reference Counting)</h3><p>给对象添加一个引用计数器，当有一个对象引用它，计数值加1；当引用失效时，计数值减1；任何时刻，计数为0的对象可回收。<br>主流的JVM并没有选用该算法，主要原因是：<em>无法解决循环引用的问题</em>。</p>
-<h3 id="可达性分析(Reachability_Analysis)">可达性分析(Reachability Analysis)</h3><p>通过一系列的称为<em>GC Roots</em>的的对象作为起始点，向下搜索（搜索路径为<strong>引用链</strong> (<em>Reference Chain</em>)），当对象没有任何引用链与GC Roots相连时，对象可回收。<br>一般以下对象可作为GC Roots：</p>
-<ul>
-<li>虚拟机栈中本地变量表所引用的对象</li>
-<li>方法区中类静态属性所引用的对象</li>
-<li>方法区中常量引用的对象</li>
-<li>本地方法栈引用的对象</li>
-</ul>
-<h2 id="引用(Reference)">引用(Reference)</h2><p>JDK1.2之前<strong>引用</strong>的定义：如果内存中存储的数值是另一块内存的起始地址，则这块内存代表一个引用。<br>JDK1.2之后，<strong>引用</strong>引用分为强引用(Strong Reference)、软引用(Soft Reference)、弱引用(Weak Reference)、虚引用(Phantom Reference)四种（依次减弱）。</p>
-<h3 id="强引用">强引用</h3><p>类似Object obj = new Object()这类引用，只要引用还存在，对象就不会被回收。</p>
-<h3 id="软引用">软引用</h3><p>用来描述有用但非必须的对象。OOM之前，JVM会在这些对象范围中进行第二次回收。</p>
-<h3 id="弱引用">弱引用</h3><p>弱引用指向的对象只能生存到下一次垃圾回收之前，无论当前内存是否足够，都会回收掉被弱引用关联的对象。</p>
-<h3 id="虚引用">虚引用</h3><p>虚引用也称为幽灵引用或者幻影引用，它使最弱的一种引用关系。虚引用的存在，不会对对象的生存时间构成影响，也无法通过虚引用取得对象实例。<br>为对象设置虚引用管理的唯一目的是能在这个对象<strong>执行了finalize方法，准备好被垃圾回收时</strong>(不能在运行时通过幽灵引用判断对象是否已经被GC[2])收到一个系统通知。</p>
-<blockquote>
-<p>A Phantom Reference can’t tell when an Object was GCed. It is just a signal which says that an Object has been finalized and is ready for GC.</p>
-</blockquote>
-<h2 id="Reference">Reference</h2><ul>
-<li><em>《深入理解Java虚拟机》</em></li>
-<li><em><a href="http://stackoverflow.com/questions/4223956/check-if-object-can-be-fetched-by-garbage-collector" target="_blank" rel="external">有关是否能在运行时得知对象是否已经被GC在StackOverflow上的讨论</a></em></li>
-</ul>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p><strong>摘要</strong>：<em>本文介绍了两种内存回收算法和4种Java引用类型。</em><br><strong>Abstract</strong>: <em>This article introduced two kinds of Garbage Collection Algorithm and four kinds of reference type in Java.</em></p>]]>
-    
-    </summary>
-    
-      <category term="GC" scheme="http://zuoqy.com/tags/GC/"/>
-    
-      <category term="JVM" scheme="http://zuoqy.com/tags/JVM/"/>
-    
-      <category term="Java" scheme="http://zuoqy.com/tags/Java/"/>
-    
-      <category term="Java" scheme="http://zuoqy.com/categories/Java/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Java内存溢出(Java OutOfMemoryError)]]></title>
-    <link href="http://zuoqy.com/2015/04/17/java-memory2/"/>
-    <id>http://zuoqy.com/2015/04/17/java-memory2/</id>
-    <published>2015-04-17T06:59:40.000Z</published>
-    <updated>2018-09-26T15:22:33.364Z</updated>
-    <content type="html"><![CDATA[<p><strong>摘要</strong>：<em>本文介绍了Java内存溢出的四种形式：Java堆溢出、虚拟机栈和本地方法栈溢出、方法区和运行时常量池溢出、直接内存溢出。并对JVM堆外内存使用做了简单了介绍。</em><br><strong>Abstract</strong>: <em>This article describes the four types of memory overflow in Java: Java heap overflow, virtual machine stack and local method stack overflow, the method area and runtime constant pool overflow, direct memory overflow. And a simple introduction of off-heap memory usage.</em></p>
-<a id="more"></a>
-<h2 id="Java堆溢出">Java堆溢出</h2><pre><code><span class="comment">//JVM args: -Xms20m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError</span>
-public <span class="class"><span class="keyword">class</span> <span class="title">TestMemLeak</span> </span>{
-    public <span class="literal">static</span> <span class="keyword">void</span> main(<span class="built_in">String</span>[] args) {
-        <span class="built_in">List</span>&lt;<span class="built_in">Object</span>&gt; list = <span class="keyword">new</span> ArrayList&lt;<span class="built_in">Object</span>&gt;();
-        <span class="keyword">while</span>(<span class="keyword">true</span>) {
-            list.add(<span class="keyword">new</span> <span class="built_in">Object</span>());
-        }
-    }
-}
-</code></pre><p>-XX:+HeapDumpOnOutOfMemoryError 设置JVM在出现OOM时，对Heap进行转储，可以使用Eclipse MemoryAnalyzer 进行分析。<br>如果对运行中的服务进行dump，可以使用jmap命令：</p>
-<pre><code>jmap -dump:live,<span class="keyword">format</span>=b,<span class="keyword">file</span>=heap.bin
-</code></pre><p>使用MAT分析结果会有如下的描述：<br><img src="http://zuoqy.com/images/2015-04-17/1.png" alt="oom"><br>帮助查找问题所在</p>
-<h2 id="虚拟机栈和本地方法栈溢出">虚拟机栈和本地方法栈溢出</h2><p>HotSpot JVM不区分虚拟机栈和本地方法栈，虽然存在-Xoss设置，但是<em>实际上是无效的</em>。栈容量只有-Xss来确定。<br>虚拟机规范中规定了虚拟机栈和本地方法栈的两种异常：</p>
-<h3 id="StackOverflowError:">StackOverflowError:</h3><p>线程请求的栈深度大于虚拟机允许的最大深度。</p>
-<pre><code><span class="comment">//JVM args: -Xss256k (规定最小栈大小是160k)</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TestSOF</span> {
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
-        test();
-    }
-    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">test</span> <span class="params">()</span> </span>{
-        test();
-    }
-}
-</code></pre><h3 id="OutOfMemoryError:">OutOfMemoryError:</h3><p>虚拟机扩展栈的大小时，不能申请到足够的内存空间。可通过不断创建线程的方式，使JVM出现内存溢出的错误。</p>
-<h2 id="方法区和运行时常量池溢出">方法区和运行时常量池溢出</h2><pre><code><span class="comment">//JVM args: -XX:PermSize=2M -XX:MaxPermSize=4M</span>
-public <span class="class"><span class="keyword">class</span> <span class="title">TestConstancePoolOOM</span> </span>{
-    public <span class="literal">static</span> <span class="keyword">void</span> main(<span class="built_in">String</span>[] args) {
-        <span class="built_in">int</span> i = <span class="number">0</span>;
-        <span class="built_in">List</span>&lt;<span class="built_in">String</span>&gt; list = <span class="keyword">new</span> ArrayList&lt;<span class="built_in">String</span>&gt;();
-        <span class="keyword">while</span>(<span class="keyword">true</span>) {
-            list.add(<span class="built_in">String</span>.valueOf(i++).intern());
-        }
-    }
-}
-</code></pre><p>以上代码在JDK1.6运行时会抛<em>java.lang.OutOfMemoryError: PermGen space</em>错误。Jdk1.7不会出现此错误。<em>TODO</em><br>String.intern方法检查当前String是否在常量池中，如果存在，返回该对象；否则将当前对象放入常量池并返回其引用；</p>
-<h2 id="直接内存溢出">直接内存溢出</h2><p>JVM通过参数 -XX:MaxDirectMemorySize 指定可用直接内存的大小，如果不指定，则默认与-Xms最大对内存大小相同<br>Java使用直接内存有两种方法：一种是使用sun.misc.UnSafe类来申请直接内存；另外就是直接调用nio的ByteBuffer.allocateDirect()方法。</p>
-<h3 id="sun-misc-Unsafe申请直接内存：">sun.misc.Unsafe申请直接内存：</h3><p>直接使用以下代码申请直接内存空间：</p>
-<pre><code><span class="keyword">Unsafe</span> <span class="keyword">unsafe</span> = <span class="keyword">Unsafe</span>.getUnsafe();
-<span class="keyword">unsafe</span>.allocateMemory(<span class="number">1024</span>*<span class="number">1024</span>);
-</code></pre><p>会报如下的错误：</p>
-<pre><code>Exception <span class="keyword">in</span> thread <span class="string">"main"</span> java<span class="class">.lang</span><span class="class">.SecurityException</span>: Unsafe
-    at sun<span class="class">.misc</span><span class="class">.Unsafe</span><span class="class">.getUnsafe</span>(Unsafe<span class="class">.java</span>:<span class="number">90</span>)
-    at DirectMemoryOOM.<span class="function"><span class="title">main</span><span class="params">(DirectMemoryOOM.java:<span class="number">9</span>)</span></span>
-    at sun<span class="class">.reflect</span><span class="class">.NativeMethodAccessorImpl</span><span class="class">.invoke0</span>(Native Method)
-    at sun<span class="class">.reflect</span><span class="class">.NativeMethodAccessorImpl</span><span class="class">.invoke</span>(NativeMethodAccessorImpl<span class="class">.java</span>:<span class="number">57</span>)
-    at sun<span class="class">.reflect</span><span class="class">.DelegatingMethodAccessorImpl</span><span class="class">.invoke</span>(DelegatingMethodAccessorImpl<span class="class">.java</span>:<span class="number">43</span>)
-    at java<span class="class">.lang</span><span class="class">.reflect</span><span class="class">.Method</span><span class="class">.invoke</span>(Method<span class="class">.java</span>:<span class="number">606</span>)
-    at com<span class="class">.intellij</span><span class="class">.rt</span><span class="class">.execution</span><span class="class">.application</span><span class="class">.AppMain</span><span class="class">.main</span>(AppMain<span class="class">.java</span>:<span class="number">140</span>)
-</code></pre><p>官方的解释是：</p>
-<blockquote>
-<p>Although the class and all methods are public, use of this class is limited because only trusted code can obtain instances of it.</p>
-</blockquote>
-<p>解决方案就是使用反射：</p>
-<pre><code>Field <span class="variable">f =</span> Unsafe.class.getDeclaredField(<span class="string">"theUnsafe"</span>);
-f.setAccessible(<span class="constant">true</span>);
-Unsafe <span class="variable">us =</span> (Unsafe) f.get(<span class="constant">null</span>);
-long <span class="variable">p =</span> us.allocateMemory(<span class="number">1000</span>);
-us.freeMemory(p);
-</code></pre><p>直接内存溢出代码如下：</p>
-<pre><code><span class="comment">//JVM args: -Xms10m -Xmx10m -XX:MaxDirectMemorySize=10m</span>
-<span class="keyword">public</span> <span class="keyword">class</span> DirectMemoryOOM {
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) <span class="keyword">throws</span> NoSuchFieldException, IllegalAccessException {
-        Field f = Unsafe.<span class="keyword">class</span>.getDeclaredFields()[<span class="number">0</span>];
-        f.setAccessible(<span class="keyword">true</span>);
-        Unsafe us = (Unsafe) f.get(<span class="keyword">null</span>);
-        <span class="keyword">long</span> <span class="keyword">size</span> = <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">1024</span>;
-        <span class="keyword">while</span> (<span class="keyword">true</span>) {
-            <span class="keyword">long</span> p = us.allocateMemory(<span class="keyword">size</span>);
-            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="keyword">size</span>; i++) {
-                us.putByte(p + i, <span class="keyword">Byte</span>.MAX_VALUE);
-            }
-        }
-    }
-}
-</code></pre><p>上述代码在MacOS jdk1.7上运行，内存分配会暴涨并开始使用交换分区，但不会报OOM错误。<br>在<a href="http://stackoverflow.com/questions/28670700/java-unsafe-memory-allocation-limit" target="_blank" rel="external">StackOverFlow</a>上的回答是直接调用了操作系统的malloc函数，从而不受虚拟机参数的限制。呃，太凶险了。尽信书不如无书，周志明的《深入理解JAVA虚拟机》也有BUG。</p>
-<h3 id="Java_NIO申请直接内存：">Java NIO申请直接内存：</h3><p>其实有了Java NIO之后，使用直接内存比Unsafe要方便的多：</p>
-<pre><code><span class="comment">//JVM args: -Xms10m -Xmx10m -XX:MaxDirectMemorySize=10m</span>
-<span class="keyword">public</span> <span class="keyword">class</span> DirectMemoryOOM {
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> main(String[] args) <span class="keyword">throws</span> NoSuchFieldException, IllegalAccessException {
-        <span class="keyword">int</span> <span class="keyword">size</span> = <span class="number">1024</span> * <span class="number">1024</span>;
-        System.out.<span class="keyword">println</span>(sun.misc.VM.maxDirectMemory());
-        <span class="keyword">while</span> (<span class="keyword">true</span>) {
-            ByteBuffer.allocateDirect(<span class="keyword">size</span>);
-        }
-    }
-}
-</code></pre><p>上面这段程序很快就可以造成OOM错误，JVM退出。翻了一下ByteBuffer.allocateDirect()的实现，里面就是用的Unsafe.allocateMemory()函数。这难道不很奇怪？<br>原来是我没有仔细看，JDK1.7 java.nio.Bits line:123 调用了Bits.reserveMemory()，这个方法对申请内存大小进行了检查，超出之后抛出OOM错误。</p>
-<pre><code><span class="comment">// These methods should be called whenever direct memory is allocated or</span>
-<span class="comment">// freed.  They allow the user to control the amount of direct memory</span>
-<span class="comment">// which a process may access.  All sizes are specified in bytes.</span>
-<span class="keyword">static</span> <span class="keyword">void</span> reserveMemory(<span class="keyword">long</span> <span class="keyword">size</span>, <span class="keyword">int</span> cap) {
-    ...
-    <span class="keyword">synchronized</span> (Bits.<span class="keyword">class</span>) {
-                <span class="keyword">if</span> (totalCapacity + cap &gt; maxMemory)
-                    <span class="keyword">throw</span> <span class="keyword">new</span> OutOfMemoryError(<span class="string">"Direct buffer memory"</span>);
-                reservedMemory += <span class="keyword">size</span>;
-                totalCapacity += cap;
-                <span class="keyword">count</span>++;
-    }
-    ...
-}
-</code></pre><p>并且，在Bits.java中，也有根据-XX:MaxDirectMemorySize=<size>初始化的代码：</size></p>
-<pre><code><span class="comment">// initialization if it is launched with "-XX:MaxDirectMemorySize=&lt;size&gt;".</span>
-<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="keyword">long</span> maxMemory = VM.maxDirectMemory();
-</code></pre><p>参见：<a href="http://stackoverflow.com/questions/29702028/why-xxmaxdirectmemorysize-cant-limit-unsafe-allocatememory" target="_blank" rel="external">StackOverFlow</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p><strong>摘要</strong>：<em>本文介绍了Java内存溢出的四种形式：Java堆溢出、虚拟机栈和本地方法栈溢出、方法区和运行时常量池溢出、直接内存溢出。并对JVM堆外内存使用做了简单了介绍。</em><br><strong>Abstract</strong>: <em>This article describes the four types of memory overflow in Java: Java heap overflow, virtual machine stack and local method stack overflow, the method area and runtime constant pool overflow, direct memory overflow. And a simple introduction of off-heap memory usage.</em></p>]]>
-    
-    </summary>
-    
-      <category term="JVM" scheme="http://zuoqy.com/tags/JVM/"/>
-    
-      <category term="Java" scheme="http://zuoqy.com/tags/Java/"/>
-    
-      <category term="OOM" scheme="http://zuoqy.com/tags/OOM/"/>
     
       <category term="Java" scheme="http://zuoqy.com/categories/Java/"/>
     
