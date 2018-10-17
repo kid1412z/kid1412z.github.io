@@ -116,6 +116,84 @@
           
           
             
+              <a class="post-title-link" href="/2018/04/19/kotlin01-基本语法/">
+                kotlin01 基本语法
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2018-04-19
+        </span>
+
+        
+
+        
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p><strong>摘要</strong>：kotlin基本语法<br><strong>Abstract</strong>: kotlin basic syntax</p>
+<h2 id="定义package">定义package</h2><p>包定义需要在文件开头，不需要和文件系统路径一致。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> my.demo</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.*</span><br></pre></td></tr></table></figure>
+<h2 id="定义function">定义function</h2><figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">sum</span><span class="params">(a: <span class="typename">Int, b: Int</span>)</span>: Int &#123;</span></span><br><span class="line">    <span class="keyword">return</span> a + b</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>函数可以是一个表达式，返回类型由编译器推断：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">sum</span><span class="params">(a: <span class="typename">Int, b: Int</span>)</span> = a + b</span></span><br></pre></td></tr></table></figure>
+<p>无返回值的函数返回<code>Unit</code>对象。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">printSum</span><span class="params">(a: <span class="typename">Int, b: Int</span>)</span>: Unit &#123;</span></span><br><span class="line">    println(<span class="string">"sum of $a and $b is $&#123;a + b&#125;"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Unit可以被省略。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">printSum</span><span class="params">(a: <span class="typename">Int, b: Int</span>)</span> &#123;</span></span><br><span class="line">    println(<span class="string">"sum of $a and $b is $&#123;a + b&#125;"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2018/04/19/kotlin01-基本语法/#more">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/kotlin/"> #kotlin </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2017/03/21/matplotlib-unicode/">
                 matplotlib unicode
               </a>
@@ -419,90 +497,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2016/05/23/HTTP-redirect-codes/">
-                HTTP重定向状态码的区别
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2016-05-23
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/HTTP/">HTTP</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p><strong>摘要</strong>：HTTP重定向状态码区分。<br><strong>Abstract</strong>: Difference between HTTP redirect code 301, 302, 303, 307<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/05/23/HTTP-redirect-codes/#more">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/HTTP/"> #HTTP </a>
-          
-            <a href="/tags/redirect/"> #redirect </a>
-          
-            <a href="/tags/重定向/"> #重定向 </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -538,21 +532,21 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">28</span>
+              <span class="site-state-item-count">29</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">categories</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-count">43</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>

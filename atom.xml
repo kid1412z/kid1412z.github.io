@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Qiyang Zuo's Blog]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://zuoqy.com/"/>
-  <updated>2018-10-09T16:47:41.024Z</updated>
+  <updated>2018-10-17T14:57:30.698Z</updated>
   <id>http://zuoqy.com/</id>
   
   <author>
@@ -13,6 +13,37 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[如何有效地沟通]]></title>
+    <link href="http://zuoqy.com/2018/10/17/communicate-effectively/"/>
+    <id>http://zuoqy.com/2018/10/17/communicate-effectively/</id>
+    <published>2018-10-17T14:28:03.000Z</published>
+    <updated>2018-10-17T14:57:30.698Z</updated>
+    <content type="html"><![CDATA[<p>在吴军老师新书《态度》写给其女儿一封信中，提到了如何有效地沟通：</p>
+<p>第一，有效的沟通要以对方确认为准，不要以为话说出去，别人就一定能接收了你传递的信息。<br>（那么反过来，自己要做到对别人来讲”靠谱”，就是”凡事有交代，件件有着落，事事有回应。”）</p>
+<p>第二，要以对方听得懂的话来沟通，不要把简单的问题将复杂了。这里作者举了一个很好的例子：</p>
+<blockquote>
+<p>中国的顾维钧先生是一个优秀的外交家，他在1919年的巴黎和会上向西方国家的代表讲述山东省对中国的重要性时，是这样说的：<br>孔子对中国人来说，相当于耶稣对西方人一样重要。西方人一直把耶路撒冷作为圣地，并且上千年一直要夺回那个地方。<br>山东是孔子的出生地，它在中国人心中的地位，相当于耶路撒冷在西方人心中的地位。</p>
+</blockquote>
+<p>第三，沟通要简洁，切中要害。对不同的人，表达方式也不一样。</p>
+<p>第四，善辩不等于好的沟通，沟通的目的是让对方接受自己的想法，而非把对方驳得哑口无言。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>在吴军老师新书《态度》写给其女儿一封信中，提到了如何有效地沟通：</p>
+<p>第一，有效的沟通要以对方确认为准，不要以为话说出去，别人就一定能接收了你传递的信息。<br>（那么反过来，自己要做到对别人来讲”靠谱”，就是”凡事有交代，件件有着落，事事有回应。”）</p>
+<]]>
+    </summary>
+    
+      <category term="Reading" scheme="http://zuoqy.com/tags/Reading/"/>
+    
+      <category term="态度" scheme="http://zuoqy.com/tags/%E6%80%81%E5%BA%A6/"/>
+    
+      <category term="沟通" scheme="http://zuoqy.com/tags/%E6%B2%9F%E9%80%9A/"/>
+    
+      <category term="Reading" scheme="http://zuoqy.com/categories/Reading/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Pattern Service Mesh]]></title>
@@ -2324,265 +2355,6 @@ breakable {
       <category term="scala" scheme="http://zuoqy.com/tags/scala/"/>
     
       <category term="scala" scheme="http://zuoqy.com/categories/scala/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Java容器类——接口]]></title>
-    <link href="http://zuoqy.com/2015/05/06/java-containers-interfaces/"/>
-    <id>http://zuoqy.com/2015/05/06/java-containers-interfaces/</id>
-    <published>2015-05-06T07:20:43.000Z</published>
-    <updated>2018-09-26T15:22:33.365Z</updated>
-    <content type="html"><![CDATA[<p><strong>摘要</strong>：本文介绍了Java容器类的核心接口，以及容器泛型的使用原则。<br><strong>Abstract</strong>: This article describes the core interfaces of Java Collections, and the principles of using generic.</p>
-<a id="more"></a>
-<p>JDK java.util 包中包含了几个重要的集合类(主要包含实现了Collection接口和Map接口的类)，从本篇文章开始总结JDK中自带的几个重要的容器类。</p>
-<h2 id="Java集合框架核心接口">Java集合框架核心接口</h2><p><img src="http://zuoqy.com/images/2015-05-06/1.png" alt="The core collection interfaces"></p>
-<h3 id="Iterable">Iterable</h3><p>实现了Iterable接口的类，可以使用foreach语法迭代，从JDK1.5开始加入。</p>
-<pre><code>package java.lang;
-
-<span class="keyword">import</span> java.util.<span class="type">Iterator</span>;
-
-public <span class="keyword">interface</span> <span class="type">Iterable</span>&lt;T&gt; {
-
-    /**
-     * <span class="type">Returns</span> an <span class="keyword">iterator</span> over a <span class="type">set</span> <span class="keyword">of</span> elements <span class="keyword">of</span> <span class="keyword">type</span> T.
-     *
-     * @<span class="keyword">return</span> an <span class="type">Iterator</span>.
-     */
-    <span class="type">Iterator</span>&lt;T&gt; <span class="keyword">iterator</span>();
-}
-</code></pre><h3 id="Collection">Collection</h3><p>一组对象的集合。没有规定对象的顺序（如果有）和是否允许重复。Java平台不提供此接口的任何直接实现，但提供了更具体的子接口，如Set和List实现。</p>
-<ul>
-<li>一般实现Collection子接口的类需要提供两个标准构造方法：1.无参构造方法（用于创建空集合）2.只有一个Collection类型参数的构造方法（用于创建一个集合副本）。这虽然不是硬性的规定（接口无法限定构造方法），但是每个实现类都遵循了这个原则。</li>
-<li>对不支持的操作，应当抛出<em>UnsupportedOperationException</em></li>
-</ul>
-<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Collection</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Iterable</span>&lt;<span class="title">E</span>&gt; </span>{
-    <span class="comment">// Query Operations</span>
-    <span class="function"><span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;
-    <span class="function">Iterator&lt;E&gt; <span class="title">iterator</span><span class="params">()</span></span>;   <span class="comment">//from Iterable</span>
-    Object[] toArray();
-    &lt;T&gt; T[] toArray(T[] a);
-
-    <span class="comment">// Modification Operations</span>
-    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;
-
-    <span class="comment">// Bulk Operations</span>
-    <span class="function"><span class="keyword">boolean</span> <span class="title">containsAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(Collection&lt;? extends E&gt; c)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">removeAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">retainAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
-    <span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span>;
-
-    <span class="comment">// Comparison and hashing</span>
-    <span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span></span>;
-    <span class="function"><span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;
-}
-</code></pre><p>这里引入一个小插曲：为什么Collection.add()方法使用了泛型，而remove()方法却使用了Object类型的参数？答案参见这里：<br><a href="http://stackoverflow.com/questions/104799/why-arent-java-collections-remove-methods-generic" target="_blank" rel="external">Why aren’t Java Collections remove methods generic?</a><br><a href="http://smallwig.blogspot.jp/2007/12/why-does-setcontains-take-object-not-e.html" target="_blank" rel="external">Why does Set.contains() take an Object, not an E?</a><br>总结起来有以下几方面的原因：</p>
-<ul>
-<li>当且仅当你需要防止Collection被破坏的时候，才考虑使用泛型约束<blockquote>
-<p>Actually, it’s very simple! If add() took a wrong object, it would break the collection. It would contain things it’s not supposed to! That is not the case for remove(), or contains(). Incidentally, that basic rule — using type parameters to prevent actual damage to the collection only — is followed absolutely consistently in the whole library. –  Kevin Bourrillion</p>
-</blockquote>
-</li>
-<li>在remove上使用泛型限制，可能auto boxing问题</li>
-</ul>
-<p>另外，泛型是编译期的静态类型检查，所以以下的泛型使用方式也是错误的：</p>
-<pre><code><span class="keyword">List</span><span class="preprocessor">&lt;?</span> extends MinCut&gt; <span class="keyword">list</span> = <span class="keyword">new</span> ArrayList&lt;MinCut&gt;();
-</code></pre><p>这将导致除了null，list里不能插入任何对象。</p>
-<h3 id="Set">Set</h3><p>数学集合的抽象，不允许元素重复。</p>
-<pre><code><span class="keyword">package</span> java.util;
-
-<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Set</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Collection</span>&lt;<span class="title">E</span>&gt; </span>{
-    <span class="comment">// Query Operations</span>
-    <span class="function"><span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;
-    Object[] toArray();
-    &lt;T&gt; T[] toArray(T[] a);
-
-    <span class="comment">// Modification Operations</span>
-    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;
-
-    <span class="comment">// Bulk Operations</span>
-    <span class="function"><span class="keyword">boolean</span> <span class="title">containsAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(Collection&lt;? <span class="keyword">extends</span> E&gt; c)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">retainAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">removeAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
-    <span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span>;
-
-    <span class="comment">// Comparison and hashing</span>
-    <span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span></span>;
-    <span class="function"><span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;
-}
-</code></pre><h3 id="SortedSet">SortedSet</h3><p>有序对象集合。SortedSet中的对象会根据Comparable接口或提供的Comparator进行排序。</p>
-<pre><code>package java.util;
-
-public interface SortedSet&lt;<span class="keyword">E</span>&gt; extends <span class="keyword">Set</span>&lt;<span class="keyword">E</span>&gt; {
-    Comparator&lt;? super <span class="keyword">E</span>&gt; comparator();
-    SortedSet&lt;<span class="keyword">E</span>&gt; subSet(<span class="keyword">E</span> fromElement, <span class="keyword">E</span> toElement);
-    SortedSet&lt;<span class="keyword">E</span>&gt; headSet(<span class="keyword">E</span> toElement);
-    SortedSet&lt;<span class="keyword">E</span>&gt; tailSet(<span class="keyword">E</span> fromElement);
-    <span class="keyword">E</span> first();
-    <span class="keyword">E</span> last();
-}
-</code></pre><h3 id="NavigableSet">NavigableSet</h3><p>继承SortedSet并且其中的元素可以按照升序和降序访问。</p>
-<pre><code>package java.util;
-
-public interface SortedSet&lt;<span class="keyword">E</span>&gt; extends <span class="keyword">Set</span>&lt;<span class="keyword">E</span>&gt; {
-    Comparator&lt;? super <span class="keyword">E</span>&gt; comparator();
-    SortedSet&lt;<span class="keyword">E</span>&gt; subSet(<span class="keyword">E</span> fromElement, <span class="keyword">E</span> toElement);
-    SortedSet&lt;<span class="keyword">E</span>&gt; headSet(<span class="keyword">E</span> toElement);
-    SortedSet&lt;<span class="keyword">E</span>&gt; tailSet(<span class="keyword">E</span> fromElement);
-    <span class="keyword">E</span> first();
-    <span class="keyword">E</span> last();
-}
-</code></pre><h3 id="List">List</h3><p>有序集合，也称为序列（<em>Sequence</em>）。一般情况下允许元素重复。允许按位置访问。</p>
-<pre><code><span class="keyword">package</span> java.util;
-
-<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Collection</span>&lt;<span class="title">E</span>&gt; </span>{
-    <span class="comment">// Query Operations</span>
-    <span class="function"><span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;
-    <span class="function">Iterator&lt;E&gt; <span class="title">iterator</span><span class="params">()</span></span>;
-    Object[] toArray();
-    &lt;T&gt; T[] toArray(T[] a);
-
-    <span class="comment">// Modification Operations</span>
-    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;
-
-    <span class="comment">// Bulk Modification Operations</span>
-    <span class="function"><span class="keyword">boolean</span> <span class="title">containsAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(Collection&lt;? extends E&gt; c)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(<span class="keyword">int</span> index, Collection&lt;? extends E&gt; c)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">removeAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">retainAll</span><span class="params">(Collection&lt;?&gt; c)</span></span>;
-    <span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span>;
-
-    <span class="comment">// Comparison and hashing</span>
-    <span class="function"><span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span></span>;
-    <span class="function"><span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span></span>;
-
-    <span class="comment">// Positional Access Operations</span>
-    <span class="function">E <span class="title">get</span><span class="params">(<span class="keyword">int</span> index)</span></span>;
-    <span class="function">E <span class="title">set</span><span class="params">(<span class="keyword">int</span> index, E element)</span></span>;
-    <span class="function"><span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> index, E element)</span></span>;
-    <span class="function">E <span class="title">remove</span><span class="params">(<span class="keyword">int</span> index)</span></span>;
-
-    <span class="comment">// Search Operations</span>
-    <span class="function"><span class="keyword">int</span> <span class="title">indexOf</span><span class="params">(Object o)</span></span>;
-    <span class="function"><span class="keyword">int</span> <span class="title">lastIndexOf</span><span class="params">(Object o)</span></span>;
-
-    <span class="comment">// List Iterators</span>
-    <span class="function">ListIterator&lt;E&gt; <span class="title">listIterator</span><span class="params">()</span></span>;
-    <span class="function">ListIterator&lt;E&gt; <span class="title">listIterator</span><span class="params">(<span class="keyword">int</span> index)</span></span>;
-
-    <span class="comment">// View</span>
-    <span class="function">List&lt;E&gt; <span class="title">subList</span><span class="params">(<span class="keyword">int</span> fromIndex, <span class="keyword">int</span> toIndex)</span></span>;
-}
-</code></pre><h3 id="Queue">Queue</h3><p>专为保存加工前的元素的集合。除了基本的Collection操作，队列提供额外的插入、提取和检查操作。</p>
-<pre><code><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Collection</span>&lt;<span class="title">E</span>&gt; </span>{
-    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e)</span></span>;
-    <span class="function">E <span class="title">remove</span><span class="params">()</span></span>;
-    <span class="function">E <span class="title">poll</span><span class="params">()</span></span>;
-    <span class="function">E <span class="title">element</span><span class="params">()</span></span>;
-    <span class="function">E <span class="title">peek</span><span class="params">()</span></span>;
-}
-</code></pre><h3 id="BlockingQueue">BlockingQueue</h3><p>阻塞队列</p>
-<pre><code><span class="keyword">package</span> java.util.concurrent;
-
-<span class="keyword">import</span> java.util.Collection;
-<span class="keyword">import</span> java.util.Queue;
-
-<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BlockingQueue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; </span>{
-    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e)</span></span>;
-    <span class="function"><span class="keyword">void</span> <span class="title">put</span><span class="params">(E e)</span> <span class="keyword">throws</span> InterruptedException</span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e, <span class="keyword">long</span> timeout, TimeUnit unit)</span>
-        <span class="keyword">throws</span> InterruptedException</span>;
-    <span class="function">E <span class="title">take</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException</span>;
-    <span class="function">E <span class="title">poll</span><span class="params">(<span class="keyword">long</span> timeout, TimeUnit unit)</span>
-        <span class="keyword">throws</span> InterruptedException</span>;
-    <span class="function"><span class="keyword">int</span> <span class="title">remainingCapacity</span><span class="params">()</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;
-    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;
-    <span class="function"><span class="keyword">int</span> <span class="title">drainTo</span><span class="params">(Collection&lt;? <span class="keyword">super</span> E&gt; c)</span></span>;
-    <span class="function"><span class="keyword">int</span> <span class="title">drainTo</span><span class="params">(Collection&lt;? <span class="keyword">super</span> E&gt; c, <span class="keyword">int</span> maxElements)</span></span>;
-}
-</code></pre><h3 id="TransferQueue">TransferQueue</h3><p>生产者可以等待消费者接收元素的阻塞队列。</p>
-<pre><code><span class="keyword">package</span> java.util.concurrent;
-
-<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TransferQueue</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">BlockingQueue</span>&lt;<span class="title">E</span>&gt; </span>{
-    <span class="function"><span class="keyword">boolean</span> <span class="title">tryTransfer</span><span class="params">(E e)</span></span>;
-    <span class="function"><span class="keyword">void</span> <span class="title">transfer</span><span class="params">(E e)</span> <span class="keyword">throws</span> InterruptedException</span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">tryTransfer</span><span class="params">(E e, <span class="keyword">long</span> timeout, TimeUnit unit)</span>
-        <span class="keyword">throws</span> InterruptedException</span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">hasWaitingConsumer</span><span class="params">()</span></span>;
-    <span class="function"><span class="keyword">int</span> <span class="title">getWaitingConsumerCount</span><span class="params">()</span></span>;
-}
-</code></pre><h3 id="Deque">Deque</h3><p>双端队列，支持在两端插入和删除元素。扩展了Queue接口。</p>
-<pre><code><span class="keyword">package</span> java.util;
-
-<span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Deque</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">Queue</span>&lt;<span class="title">E</span>&gt; </span>{
-    <span class="function"><span class="keyword">void</span> <span class="title">addFirst</span><span class="params">(E e)</span></span>;
-    <span class="function"><span class="keyword">void</span> <span class="title">addLast</span><span class="params">(E e)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">offerFirst</span><span class="params">(E e)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">offerLast</span><span class="params">(E e)</span></span>;
-    <span class="function">E <span class="title">removeFirst</span><span class="params">()</span></span>;
-    <span class="function">E <span class="title">removeLast</span><span class="params">()</span></span>;
-    <span class="function">E <span class="title">pollFirst</span><span class="params">()</span></span>;
-    <span class="function">E <span class="title">pollLast</span><span class="params">()</span></span>;
-    <span class="function">E <span class="title">getFirst</span><span class="params">()</span></span>;
-    <span class="function">E <span class="title">getLast</span><span class="params">()</span></span>;
-    <span class="function">E <span class="title">peekFirst</span><span class="params">()</span></span>;
-    <span class="function">E <span class="title">peekLast</span><span class="params">()</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">removeFirstOccurrence</span><span class="params">(Object o)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">removeLastOccurrence</span><span class="params">(Object o)</span></span>;
-
-    <span class="comment">// *** Queue methods ***</span>
-    <span class="function"><span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">offer</span><span class="params">(E e)</span></span>;
-    <span class="function">E <span class="title">remove</span><span class="params">()</span></span>;
-    <span class="function">E <span class="title">poll</span><span class="params">()</span></span>;
-    <span class="function">E <span class="title">element</span><span class="params">()</span></span>;
-    <span class="function">E <span class="title">peek</span><span class="params">()</span></span>;
-
-    <span class="comment">// *** Stack methods ***</span>
-    <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(E e)</span></span>;
-    <span class="function">E <span class="title">pop</span><span class="params">()</span></span>;
-
-    <span class="comment">// *** Collection methods ***</span>
-    <span class="function"><span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object o)</span></span>;
-    <span class="function"><span class="keyword">boolean</span> <span class="title">contains</span><span class="params">(Object o)</span></span>;
-    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span></span>;
-    <span class="function">Iterator&lt;E&gt; <span class="title">iterator</span><span class="params">()</span></span>;
-    <span class="function">Iterator&lt;E&gt; <span class="title">descendingIterator</span><span class="params">()</span></span>;
-}
-</code></pre><h3 id="BlockingDeque">BlockingDeque</h3><p>阻塞双端队列</p>
-<h3 id="Map">Map</h3><p>键值映射，每个键对应一个值。</p>
-<h3 id="SortedMap">SortedMap</h3><p>按Key有序的Map</p>
-<h3 id="NavigableMap">NavigableMap</h3><p>继承SortedMap，并且其中的元素可以按照Key升序和降序访问。</p>
-<h3 id="ConcurrentMap">ConcurrentMap</h3><p>putIfAbsent、remove和replace方法都具有原子性.</p>
-<h3 id="ConcurrentNavigableMap">ConcurrentNavigableMap</h3><p>元素可以按照Key升序和降序访问。</p>
-<h2 id="参考">参考</h2><ul>
-<li><a href="http://docs.oracle.com/javase/7/docs/technotes/guides/collections/reference.html" target="_blank" rel="external">Outline of the Collections Framework</a></li>
-</ul>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p><strong>摘要</strong>：本文介绍了Java容器类的核心接口，以及容器泛型的使用原则。<br><strong>Abstract</strong>: This article describes the core interfaces of Java Collections, and the principles of using generic.</p>]]>
-    
-    </summary>
-    
-      <category term="Collections" scheme="http://zuoqy.com/tags/Collections/"/>
-    
-      <category term="Java" scheme="http://zuoqy.com/tags/Java/"/>
-    
-      <category term="Java" scheme="http://zuoqy.com/categories/Java/"/>
     
   </entry>
   
