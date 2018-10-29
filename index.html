@@ -116,6 +116,98 @@
           
           
             
+              <a class="post-title-link" href="/2018/10/29/Kubernates2-essential-concept/">
+                Kubernates2 基本概念
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2018-10-29
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/Cloud-Compute/">Cloud Compute</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h2 id="要解决什么问题">要解决什么问题</h2><p>可以方便的将用户应用的镜像部署到集群，并提供路由网关、水平扩展、监控、备份灾难恢复等一系列运维能力。这些问题，其实一个PAAS平台都可以解决。</p>
+<p>除了解决以上问题，Kubernates项目区别于其他PAAS平台，重点要解决的问题，来自于Borg项目的研究人员在论文中的一个重要观点：</p>
+<blockquote>
+<p>运行在大规模集群中的各个任务之间，存在着各种各样的关系。这些关系的处理，才是作业编排和管理系统最困难的地方。</p>
+</blockquote>
+<h2 id="需要什么样的架构">需要什么样的架构</h2><ul>
+<li>节点分为控制节点Master和计算节点Node</li>
+<li>Master节点包含kube-controller, kube-api-server 和 kube-scheduler三个组件</li>
+<li>Node节点中的核心组件kubelet：<ul>
+<li>通过CNI(Container Networking Interface)与网络插件交互，配置容器网络；</li>
+<li>通过CSI(Container Storage Interface)与存储插件交互，配置持久化存储；</li>
+<li>通过CRI（Container Runtime Interface）与容器运行时交互，定义容器运行时的各项操作。</li>
+<li>容器运行时通过OCI容器运行时规范，与Linux操作系统交互。
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2018/10/29/Kubernates2-essential-concept/#more">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/kubernates/"> #kubernates </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2018/10/17/communicate-effectively/">
                 如何有效地沟通
               </a>
@@ -481,82 +573,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2018/09/26/About-Backtracking/">
-                关于回溯算法的几点心得
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2018-09-26
-        </span>
-
-        
-
-        
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p><strong>摘要</strong>：关于回溯算法的几点心得<br><strong>Abstract</strong>: Some inspirations about backtracking algorithms.</p>
-<h2 id="回溯（Backtracking）算法思路：">回溯（Backtracking）算法思路：</h2><p>在当前局面下，你有若干种选择。逐一尝试每一种选择。<br>如果发现某种选择行不通（违反了某些限定条件）就返回；<br>如果某种选择试到最后发现是正确解，就将其加入解集。</p>
-<blockquote>
-<p>这里需要注意的是，为了能够回溯，多个选择都是从相同起点出发的，注意在同一层次下的多个选择结果之间不要相互影响。</p>
-</blockquote>
-<p>使用递归解决问题需要明确以下三点：<strong>选择 (Options)</strong>、<strong>限制 (Restraints)</strong> 和 <strong>结束条件 (Termination)</strong>。即“ORT原则”。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2018/09/26/About-Backtracking/#more">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/algorithm/"> #algorithm </a>
-          
-            <a href="/tags/backtracking/"> #backtracking </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -592,7 +608,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">29</span>
+              <span class="site-state-item-count">30</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>

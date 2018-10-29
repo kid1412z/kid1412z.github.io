@@ -22,7 +22,7 @@
 
 
 
-  <meta name="keywords" content="Theory," />
+  <meta name="keywords" content="kubernates," />
 
 
 
@@ -35,7 +35,7 @@
 
 
 
-  <title> Gartner Hyper Cycle | Q.Y Zuo Believes </title>
+  <title> Kubernates2 基本概念 | Q.Y Zuo Believes </title>
 </head>
 
 <body>
@@ -114,7 +114,7 @@
           
           
             
-              Gartner Hyper Cycle
+              Kubernates2 基本概念
             
           
         </h1>
@@ -122,14 +122,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          Posted on 2016-06-21
+          Posted on 2018-10-29
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; In
             
-              <a href="/categories/Theory/">Theory</a>
+              <a href="/categories/Cloud-Compute/">Cloud Compute</a>
 
               
               
@@ -150,43 +150,36 @@
       
 
       
-        <p><strong>摘要</strong>：高德纳技术成熟度曲线。<br><strong>Abstract</strong>: Theory of Gartner Hyper Cycle.<br><a id="more"></a></p>
-<h2 id="概要">概要</h2><p>高德纳技术成熟度曲线如图所示,其描述了一个技术成熟度和该技术实际被应用和接受程度的关系.<br><img src="http://zuoqy.com/images/2016-06-21/1.png" alt="Gartner Hyper Cycle"></p>
-<h2 id="如何使用">如何使用</h2><p>人们使用技术成熟度曲线获得新兴技术的承诺和业界对风险的控制偏好.<br>你是否要抢先尝试使用新兴技术? 如果你结合承担的风险并理解风险投资不会经常得到应有的回报,你有所收获.<br>使用温和的方式是否合适? 新技术采纳者应该明白,新兴的技术往往没有得到足够的证明.<br>需要等待其更成熟之后再使用吗?如果你还存在很多关于商业可行性方面的额问题不能回答,你最好等待其他人给出更靠谱的答案之后再尝试使用.</p>
-<h2 id="技术成熟度曲线">技术成熟度曲线</h2><p>1995年开始，高德纳咨询公司依其专业分析预测与推论各种新科技的成熟演变速度及要达到成熟所需的时间，分成5个阶段：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">阶段</th>
-<th style="text-align:center">含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">科技诞生的促动期 (Technology Trigger)</td>
-<td style="text-align:center">在此阶段，随着媒体大肆的报导过度，非理性的渲染，产品的知名度无所不在，然而随着这个科技的缺点、问题、限制出现，失败的案例大于成功的案例，例如:.com公司 1998~2000年之间的非理性疯狂飙升期。</td>
-</tr>
-<tr>
-<td style="text-align:center">过高期望的峰值（Peak of Inflated Expectations）</td>
-<td style="text-align:center">早期公众的过分关注演绎出了一系列成功的故事——当然同时也有众多失败的例子。对于失败，有些公司采取了补救措施，而大部分却无动于衷。</td>
-</tr>
-<tr>
-<td style="text-align:center">泡沫化的底谷期 (Trough of Disillusionment)</td>
-<td style="text-align:center">在历经前面阶段所存活的科技经过多方扎实有重点的试验，而对此科技的适用范围及限制是以客观的并实际的了解，成功并能存活的经营模式逐渐成长。</td>
-</tr>
-<tr>
-<td style="text-align:center">稳步爬升的光明期 (Slope of Enlightenment)</td>
-<td style="text-align:center">在此阶段，有一新科技的诞生，在市面上受到主要媒体与业界高度的注意，例如:1996年的Internet ，Web。</td>
-</tr>
-<tr>
-<td style="text-align:center">实质生产的高原期 (Plateau of Productivity)</td>
-<td style="text-align:center">在此阶段，新科技产生的利益与潜力被市场实际接受，实质支援此经营模式的工具、方法论经过数代的演进，进入了非常成熟的阶段。</td>
-</tr>
-</tbody>
-</table>
+        <h2 id="要解决什么问题">要解决什么问题</h2><p>可以方便的将用户应用的镜像部署到集群，并提供路由网关、水平扩展、监控、备份灾难恢复等一系列运维能力。这些问题，其实一个PAAS平台都可以解决。</p>
+<p>除了解决以上问题，Kubernates项目区别于其他PAAS平台，重点要解决的问题，来自于Borg项目的研究人员在论文中的一个重要观点：</p>
+<blockquote>
+<p>运行在大规模集群中的各个任务之间，存在着各种各样的关系。这些关系的处理，才是作业编排和管理系统最困难的地方。</p>
+</blockquote>
+<h2 id="需要什么样的架构">需要什么样的架构</h2><ul>
+<li>节点分为控制节点Master和计算节点Node</li>
+<li>Master节点包含kube-controller, kube-api-server 和 kube-scheduler三个组件</li>
+<li>Node节点中的核心组件kubelet：<ul>
+<li>通过CNI(Container Networking Interface)与网络插件交互，配置容器网络；</li>
+<li>通过CSI(Container Storage Interface)与存储插件交互，配置持久化存储；</li>
+<li>通过CRI（Container Runtime Interface）与容器运行时交互，定义容器运行时的各项操作。</li>
+<li>容器运行时通过OCI容器运行时规范，与Linux操作系统交互。<a id="more"></a>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://zuoqy.com/images/2018-10-29/1.png" alt="1"></p>
+<p>其控制节点的架构理论，参考Google内部系统Borg</p>
+<p><img src="http://zuoqy.com/images/2018-10-29/2.png" alt="2"></p>
+<p>Kubernates项目的设计思想，就是从更宏观的角度，以统一的方式来定义任务之间的各种关系，并未将来支持更多类型的关系留有余地。</p>
+<p>如果应用内部各个子服务之间的依赖关系不复杂，则用Swarm+Compose的方式完全可以解决。在Compose文件中，经常会出现类似这样的编排配置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">DB_NAME=/web/db</span><br><span class="line">DB_PORT=tcp://<span class="number">172.17</span>.<span class="number">0.5</span>:<span class="number">5432</span></span><br><span class="line">DB_PORT_5432_TCP=tcp://<span class="number">172.17</span>.<span class="number">0.5</span>:<span class="number">5432</span></span><br><span class="line">DB_PORT_5432_TCP_PROTO=tcp</span><br><span class="line">DB_PORT_5432_TCP_PORT=<span class="number">5432</span></span><br><span class="line">DB_PORT_5432_TCP_ADDR=<span class="number">172.17</span>.<span class="number">0.5</span></span><br></pre></td></tr></table></figure>
+<p>对应子系统之间依赖负责的应用，例如：有的子服务需要部署在同一台机器上（例如需要本地进程间通信，如<a href="http://zuoqy.com/2018/10/07/Pattern-Service-Mesh/" target="_blank" rel="external">Service Mesh</a>），有的需要安排在不同的机器上(如web服务和DB)。</p>
+<p>此时，Kubernates的设计理念就派上了用场。Kubernates以Pod为核心，抽象出了处理容器间关系的各种上层对象，如下图所示：</p>
+<p><img src="http://zuoqy.com/images/2018-10-29/3.png" alt="3"></p>
+<p>例如，容器间需要紧密协作，则需要Pod；容器间需要访问授权，则由Secret对象来完成等等。</p>
 <h2 id="参考">参考</h2><ul>
-<li><a href="https://en.wikipedia.org/wiki/Hype_cycle" target="_blank" rel="external">https://en.wikipedia.org/wiki/Hype_cycle</a></li>
-<li><a href="http://www.gartner.com/technology/research/methodologies/hype-cycle.jsp" target="_blank" rel="external">http://www.gartner.com/technology/research/methodologies/hype-cycle.jsp</a></li>
+<li><a href="http://malteschwarzkopf.de/research/assets/google-stack.pdf" target="_blank" rel="external">http://malteschwarzkopf.de/research/assets/google-stack.pdf</a></li>
+<li><a href="https://time.geekbang.org/column/article/23132" target="_blank" rel="external">https://time.geekbang.org/column/article/23132</a></li>
 </ul>
 
       
@@ -196,7 +189,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Theory/"> #Theory </a>
+            <a href="/tags/kubernates/"> #kubernates </a>
           
         </div>
       
@@ -205,13 +198,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/12/03/Median-of-Two-Sorted-Arrays/">Median of Two Sorted Arrays</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/23/HTTP-redirect-codes/">HTTP重定向状态码的区别</a>
+              <a href="/2018/10/17/communicate-effectively/">如何有效地沟通</a>
             
           </div>
         </div>
@@ -327,7 +318,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概要"><span class="nav-number">1.</span> <span class="nav-text">概要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用"><span class="nav-number">2.</span> <span class="nav-text">如何使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#技术成熟度曲线"><span class="nav-number">3.</span> <span class="nav-text">技术成熟度曲线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#要解决什么问题"><span class="nav-number">1.</span> <span class="nav-text">要解决什么问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#需要什么样的架构"><span class="nav-number">2.</span> <span class="nav-text">需要什么样的架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
