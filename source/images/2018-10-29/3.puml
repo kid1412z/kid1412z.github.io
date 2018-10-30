@@ -1,0 +1,17 @@
+@startuml
+hide empty description
+state Ingress
+state Pod #red
+state Container #lightgreen
+Ingress-r-> Service:I want to expose my Services
+Service-r->Deployment:I want to proxy my Pod replicas
+Pod-d->Job: I only run for once
+Pod-u->Deployment:I have many Pod replicas
+Container-r->Pod:I need co-scheduling
+Pod-->CronJob:I run periodically
+HorizontalPodAutoscaler-u->Pod:I need auto-scaling
+Pod--> StatefulSet: I am stateful
+Pod--> DaemonSet: I run as daemon
+Secret-u->Pod: I need confidential data
+ConfigMap-u->Pod: I read config file
+@enduml

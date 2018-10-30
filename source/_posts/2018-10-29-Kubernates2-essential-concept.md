@@ -52,4 +52,3 @@ Kubernates项目的设计思想，就是从更宏观的角度，以统一的方�
 ## 参考
 
 * http://malteschwarzkopf.de/research/assets/google-stack.pdf
-* https://time.geekbang.org/column/article/23132
