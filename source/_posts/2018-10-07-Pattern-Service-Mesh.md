@@ -129,7 +129,7 @@ public class CommandMayFailure extends HystrixCommand<String> {
 
 > A service mesh is a dedicated infrastructure layer for handling service-to-service communication. It’s responsible for the reliable delivery of requests through the complex topology of services that comprise a modern, cloud native application. In practice, the service mesh is typically implemented as an array of lightweight network proxies that are deployed alongside application code, without the application needing to be aware.
 
-而这套机制，已经在先进的PaaS运行时环境Kubernates和Mesos完美支持：
+而这套机制，已经在先进的PaaS运行时环境Kubernetes和Mesos完美支持：
 
 ![10](http://zuoqy.com/images/2018-10-07/10.png)
 

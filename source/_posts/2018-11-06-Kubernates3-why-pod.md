@@ -1,7 +1,7 @@
-title: "Kubernates3 为什么需要Pod"
+title: "Kubernetes3 为什么需要Pod"
 date: 2018-11-06 23:01:09
 categories: Cloud Compute
-tags: [kubernates]
+tags: [kubernetes]
 ---
 
 ## 为什么需要Pod
@@ -9,7 +9,7 @@ tags: [kubernates]
 1. 在工业实际部署中，经常需要多个进程部署在同一个节点上。类似于Linux操作系统中的进程组的概念（`pstree -g` 命令查看进程组），他们之间有着"超亲密关系"，例如相互之间会发生直接的文件交换、使用localhost或者Socket文件进行本地通信、共享某些Linux Namespace等。
 2. 容器的"单进程模型"，PID=1的进程往往是应用本身，无法像正常操作系统中的init进程那样拥有进程管理的功能。
 3. 存在"超亲密关系"的进程，需要按照严格的拓扑顺序启动。也就是需要对容器成组进行调度（gang scheduling）。
-基于上述原因，Kubernates提供了Pod这个逻辑概念，将需要在同一节点上，可能共享Namespace以及其他本地资源的容器进行成组调度。
+基于上述原因，Kubernetes提供了Pod这个逻辑概念，将需要在同一节点上，可能共享Namespace以及其他本地资源的容器进行成组调度。
 
 ## Pod的实现机制
 
@@ -20,7 +20,7 @@ $ docker run --net=B --volumes-from=B --name=A image-A ...
 ```
 但容器B就必须先于容器A启动，改变了容器A和容器B的对等关系。
 
-因此，在Kubernates项目中，Pod的是基于一个中间容器——**Infra容器**来实现的。
+因此，在Kubernetes项目中，Pod的是基于一个中间容器——**Infra容器**来实现的。
 
 ![1](http://zuoqy.com/images/2018-11-06/1.png)
 `k8s.gcr.io/pause`这个镜像，是用汇编写的永远暂停的很小的镜像。用户容器通过加入Infra容器的Network Namespace实现资源的本地共享。
@@ -35,7 +35,7 @@ $ docker run --net=B --volumes-from=B --name=A image-A ...
 
 ## [容器设计模式](https://www.usenix.org/conference/hotcloud16/workshop-program/presentation/burns)
 
-Kubernates 希望当用户想在同一个容器中跑多个不相关的应用时，优先考虑使用Pod模式，看它们是否可以被描述为一个Pod中的多个容器。
+Kubernetes 希望当用户想在同一个容器中跑多个不相关的应用时，优先考虑使用Pod模式，看它们是否可以被描述为一个Pod中的多个容器。
 
 典型的例子：
 

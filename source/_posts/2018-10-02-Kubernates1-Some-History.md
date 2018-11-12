@@ -1,5 +1,5 @@
-title: "Kubernates学习笔记01: 一点历史"
-tags: [kubernates]
+title: "Kubernetes学习笔记01: 一点历史"
+tags: [kubernetes]
 date: 2018-10-02 22:02:34
 categories: Cloud Compute
 ---
@@ -31,17 +31,17 @@ Docker项目，重新定义了PaaS，使其演变为以Docker容器为核心，�
 
 随后，Docker公司收购了率先提出"容器编排"(Container Orchestration)概念的[Fig项目](http://www.fig.sh/)(后来改名为Compose)。一时间，容器生态相关的项目层出不穷：容器网络处理SocketPlane项目（后被Docker公司收购），容器存储Flocker项目（后被EMC公司收购）， 集群图形化管理Tutum项目(被Docker公司收购)等。
 
-2014年6月，Google开源名为Kubernates的项目，再一次改变了容器市场的格局。
+2014年6月，Google开源名为Kubernetes的项目，再一次改变了容器市场的格局。
 
 ## 3
 
 为了限制Docker公司在Docker开源项目中的绝对话语权和强势态度，以及Docker项目在告诉迭代中表现出的不稳定和频繁变更问题，2015年6月，Docker公司、CoreOS、Google、RedHat共同宣布将Libcontainer（Containerd）项目捐出，改名为RunC，交由完全中立的基金会管理，并以其为依据，共同制定标准和规范，即OCI（Open Container Initiative）. 
 
-然而OCI的成立，并没有改变Docker公司一家独大的现状。随后，Google、RedHat牵头发起名为CNCF（Cloud Native Computing Foundation)的基金会。希望以Kubernates项目为基础，建立开源基础设施领域厂商主导的、按照独立基金会方式运营的平台级社区。
+然而OCI的成立，并没有改变Docker公司一家独大的现状。随后，Google、RedHat牵头发起名为CNCF（Cloud Native Computing Foundation)的基金会。希望以Kubernetes项目为基础，建立开源基础设施领域厂商主导的、按照独立基金会方式运营的平台级社区。
 
 在容器编排方面，RedHat与Google结盟，打造出了一个与众不同的容器编排和管理生态。并在整个社区推进民主化架构。与Docker社区和Mesos社区形成三足鼎立局面。
 
-2017年10月，DOcker公司在企业版Docker中内置Kubernates，标志编排之争落下帷幕。
+2017年10月，DOcker公司在企业版Docker中内置Kubernetes，标志编排之争落下帷幕。
 
 次年3月，Docker公司CTO Solomon Hykes宣布辞职，5年容器纷争尘埃落定。
 
