@@ -22,7 +22,7 @@
 
 
 
-  <meta name="keywords" content="kubernates," />
+  <meta name="keywords" content="kubernetes," />
 
 
 
@@ -35,7 +35,7 @@
 
 
 
-  <title> Kubernates3 为什么需要Pod | Q.Y Zuo Believes </title>
+  <title> Kubernetes3 为什么需要Pod | Q.Y Zuo Believes </title>
 </head>
 
 <body>
@@ -114,7 +114,7 @@
           
           
             
-              Kubernates3 为什么需要Pod
+              Kubernetes3 为什么需要Pod
             
           
         </h1>
@@ -153,11 +153,11 @@
         <h2 id="为什么需要Pod">为什么需要Pod</h2><ol>
 <li>在工业实际部署中，经常需要多个进程部署在同一个节点上。类似于Linux操作系统中的进程组的概念（<code>pstree -g</code> 命令查看进程组），他们之间有着”超亲密关系”，例如相互之间会发生直接的文件交换、使用localhost或者Socket文件进行本地通信、共享某些Linux Namespace等。</li>
 <li>容器的”单进程模型”，PID=1的进程往往是应用本身，无法像正常操作系统中的init进程那样拥有进程管理的功能。</li>
-<li>存在”超亲密关系”的进程，需要按照严格的拓扑顺序启动。也就是需要对容器成组进行调度（gang scheduling）。<br>基于上述原因，Kubernates提供了Pod这个逻辑概念，将需要在同一节点上，可能共享Namespace以及其他本地资源的容器进行成组调度。</li>
+<li>存在”超亲密关系”的进程，需要按照严格的拓扑顺序启动。也就是需要对容器成组进行调度（gang scheduling）。<br>基于上述原因，Kubernetes提供了Pod这个逻辑概念，将需要在同一节点上，可能共享Namespace以及其他本地资源的容器进行成组调度。</li>
 </ol>
 <h2 id="Pod的实现机制">Pod的实现机制</h2><p>Pod是逻辑概念，其实是一组共享了某些资源（Network Namespace）的容器组。在没有成组调度时，如要实现容器A和容器B共享网络和Volume，可以通过如下命令实现：<br><a id="more"></a><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --net=B --volumes-from=B --name=A image-A ...</span><br></pre></td></tr></table></figure></p>
 <p>但容器B就必须先于容器A启动，改变了容器A和容器B的对等关系。</p>
-<p>因此，在Kubernates项目中，Pod的是基于一个中间容器——<strong>Infra容器</strong>来实现的。</p>
+<p>因此，在Kubernetes项目中，Pod的是基于一个中间容器——<strong>Infra容器</strong>来实现的。</p>
 <p><img src="http://zuoqy.com/images/2018-11-06/1.png" alt="1"><br><code>k8s.gcr.io/pause</code>这个镜像，是用汇编写的永远暂停的很小的镜像。用户容器通过加入Infra容器的Network Namespace实现资源的本地共享。</p>
 <p>在Pod中，对于AB两个容器：</p>
 <ul>
@@ -167,7 +167,7 @@
 <li>Pod的生命周期只和Infra容器有关，与AB容器无关。</li>
 <li>Volume只需要在Pod中挂载一次，Pod内的所有容器即可共享。</li>
 </ul>
-<h2 id="容器设计模式"><a href="https://www.usenix.org/conference/hotcloud16/workshop-program/presentation/burns" target="_blank" rel="external">容器设计模式</a></h2><p>Kubernates 希望当用户想在同一个容器中跑多个不相关的应用时，优先考虑使用Pod模式，看它们是否可以被描述为一个Pod中的多个容器。</p>
+<h2 id="容器设计模式"><a href="https://www.usenix.org/conference/hotcloud16/workshop-program/presentation/burns" target="_blank" rel="external">容器设计模式</a></h2><p>Kubernetes 希望当用户想在同一个容器中跑多个不相关的应用时，优先考虑使用Pod模式，看它们是否可以被描述为一个Pod中的多个容器。</p>
 <p>典型的例子：</p>
 <ol>
 <li>war包和Web服务器</li>
@@ -189,7 +189,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/kubernates/"> #kubernates </a>
+            <a href="/tags/kubernetes/"> #kubernetes </a>
           
         </div>
       
@@ -198,11 +198,13 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/11/26/Golang-Memory-Model/">Go语言内存模型</a>
+            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/29/Kubernates2-essential-concept/">Kubernates2 基本概念</a>
+              <a href="/2018/10/29/Kubernates2-essential-concept/">Kubernetes2 基本概念</a>
             
           </div>
         </div>
@@ -259,21 +261,21 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">31</span>
+              <span class="site-state-item-count">32</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-count">13</span>
               <span class="site-state-item-name">categories</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">43</span>
+              <span class="site-state-item-count">45</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>

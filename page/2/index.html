@@ -116,8 +116,101 @@
           
           
             
+              <a class="post-title-link" href="/2018/10/06/A-Philosophy-of-Software-Design/">
+                软件设计的哲学（John Ousterhout分享）
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2018-10-06
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/Software-Design/">Software Design</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h2 id="软件设计的目标">软件设计的目标</h2><ol>
+<li><p>软件设计最大的目标是降低软件的复杂性（Complexity），复杂性使软件难于理解和维护。</p>
+</li>
+<li><p>复杂性的来源：</p>
+<ul>
+<li>含义模糊（Obscurity）： 重要信息不突出。</li>
+<li>相互依赖：模块无法独立于其他模块而被理解。</li>
+</ul>
+</li>
+<li><p>复杂性的危害</p>
+</li>
+</ol>
+<p>复杂性会逐渐递增，前面埋的坑，会导致后面的设计越来越复杂。</p>
+<h2 id="设计原则">设计原则</h2><h3 id="暴露简单通用的接口，隐藏复杂的实现。">暴露简单通用的接口，隐藏复杂的实现。</h3>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2018/10/06/A-Philosophy-of-Software-Design/#more">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Software-Design/"> #Software Design </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2018/10/02/Kubernates1-Some-History/">
-                Kubernates学习笔记01: 一点历史
+                Kubernetes学习笔记01: 一点历史
               </a>
             
           
@@ -165,11 +258,11 @@
 <h2 id="2">2</h2><p>随着Docker项目的崛起，dotCloud公司也将自己的公司名字改为Docker，并且不甘于仅仅提供创建和启停容器的小工具，希望提供更多平台层的能力，向PaaS进化。</p>
 <p>2014年底，Docker公司发布Swarm，展示了Docker公司PaaS方向的野心。Swarm项目的最大亮点，就是它基本保持了单机部署和集群部署API的一致性，操作方式简单明了，受到众多开发者的热捧。（当时在公司的容器控制项目依赖Swarm也是基于这个原因）。</p>
 <p>随后，Docker公司收购了率先提出”容器编排”(Container Orchestration)概念的<a href="http://www.fig.sh/" target="_blank" rel="external">Fig项目</a>(后来改名为Compose)。一时间，容器生态相关的项目层出不穷：容器网络处理SocketPlane项目（后被Docker公司收购），容器存储Flocker项目（后被EMC公司收购）， 集群图形化管理Tutum项目(被Docker公司收购)等。</p>
-<p>2014年6月，Google开源名为Kubernates的项目，再一次改变了容器市场的格局。</p>
+<p>2014年6月，Google开源名为Kubernetes的项目，再一次改变了容器市场的格局。</p>
 <h2 id="3">3</h2><p>为了限制Docker公司在Docker开源项目中的绝对话语权和强势态度，以及Docker项目在告诉迭代中表现出的不稳定和频繁变更问题，2015年6月，Docker公司、CoreOS、Google、RedHat共同宣布将Libcontainer（Containerd）项目捐出，改名为RunC，交由完全中立的基金会管理，并以其为依据，共同制定标准和规范，即OCI（Open Container Initiative）. </p>
-<p>然而OCI的成立，并没有改变Docker公司一家独大的现状。随后，Google、RedHat牵头发起名为CNCF（Cloud Native Computing Foundation)的基金会。希望以Kubernates项目为基础，建立开源基础设施领域厂商主导的、按照独立基金会方式运营的平台级社区。</p>
+<p>然而OCI的成立，并没有改变Docker公司一家独大的现状。随后，Google、RedHat牵头发起名为CNCF（Cloud Native Computing Foundation)的基金会。希望以Kubernetes项目为基础，建立开源基础设施领域厂商主导的、按照独立基金会方式运营的平台级社区。</p>
 <p>在容器编排方面，RedHat与Google结盟，打造出了一个与众不同的容器编排和管理生态。并在整个社区推进民主化架构。与Docker社区和Mesos社区形成三足鼎立局面。</p>
-<p>2017年10月，DOcker公司在企业版Docker中内置Kubernates，标志编排之争落下帷幕。</p>
+<p>2017年10月，DOcker公司在企业版Docker中内置Kubernetes，标志编排之争落下帷幕。</p>
 <p>次年3月，Docker公司CTO Solomon Hykes宣布辞职，5年容器纷争尘埃落定。</p>
 
         
@@ -180,7 +273,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/kubernates/"> #kubernates </a>
+            <a href="/tags/kubernetes/"> #kubernetes </a>
           
         </div>
       
@@ -421,89 +514,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2016/12/31/oh-my-2016/">
-                2016——和时间赛跑的我
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2016-12-31
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/summary/">summary</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p>新年临近，转眼间已经是2016年的最后一天了。抓紧这最后的几个小时，跟风写个总结。</p>
-<p>如果说要我2016年的关键词，那我想就想题目那样，和时间赛跑。从2011年来到北京，到现在已经有五年时间了。想起来北京上学之前，和长辈们、朋友们聊天，总会说到，北京的生活节奏很快blabla，我一直没有什么深刻的体会。如今我挤在早班地铁里，或者9点多下班打车回家的路上，有时想起那些话，心里琢磨难道这就是所谓的”生活节奏快吗”？只是我不知不觉地习惯了这样的”节奏”，很少有时间静下心来回顾和反思。李笑来在其公众号文章中曾说”慢即是快，快即是无”。我认为不光是读书是这样，一味的”快”，缺乏精益和反思，和懒惰一样可怕，整个人很容易被这样的节奏淹没。<br>2016年，我的最大敌人就是时间。繁忙的工作让我更加珍惜时间，深感时间流逝太快。人的年龄越大，越感到时间变快，可能是因为对于一个3岁小孩，他的一天占到他人生的一千分之一，一年占到他人生的三分之一，而对于一个70岁的老人，他的一天占到人生的两万分之一<code>[1]</code>。和时间赛跑，就是在和这样的节奏抗争，让我能继续保持进取心、继续保持好奇心、继续我的业余爱好，从看似重复的工作和生活中获取新鲜的东西。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/12/31/oh-my-2016/#more">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/2016/"> #2016 </a>
-          
-            <a href="/tags/summary/"> #summary </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -539,21 +549,21 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">31</span>
+              <span class="site-state-item-count">32</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-count">13</span>
               <span class="site-state-item-name">categories</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">43</span>
+              <span class="site-state-item-count">45</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>

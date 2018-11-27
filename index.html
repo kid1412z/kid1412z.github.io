@@ -116,8 +116,102 @@
           
           
             
+              <a class="post-title-link" href="/2018/11/26/Golang-Memory-Model/">
+                Go语言内存模型
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          Posted on 2018-11-26
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; In
+            
+              <a href="/categories/golang/">golang</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <h2 id="Introduction">Introduction</h2><p>Go内存模型指定了一系列条件，在该条件下，可以保证在一个goroutine中对某个变量的读取操作可以观察（observe）到其他goroutine对这个变量写入的值。（内存可见性）</p>
+<h2 id="Happens-before">Happens-before</h2><p>指令重排序对goroutine内部的读写顺序可能有影响，但不会影响代码定义的当前goroutine整体的行为。<br>例如在goroutine1中有代码<code>a = 1; b = 2;</code>，在其他goroutine中可能观察到b先于a赋值，但对于goroutine1，其行为不会因为指令重排序发生变化。</p>
+<p>Go语言中的Happens-Before：Happens-Before定义了内存操作的顺序。如果e1 happens-before e2, 则 e2 一定在e2发生之后才发生。如果e1 e2 没有happens-before的关系限制，则e1 e2是并发发生的。在单个goroutine内部， happens-before 次序就是程序定义的顺序。</p>
+<p>读取操作r对变量v 可以观察到写入操作w对变量v的写入，必须同时满足如下两个条件：</p>
+<ol>
+<li>r不能先于w发生</li>
+<li>没有其他的对变量v的写入操作w‘ 晚于 w 但 先于r发生</li>
+</ol>
+<p>读取操作保证能观察到写入操作w对变量v的写入，必须同时满足如下两个条件：</p>
+<ol>
+<li>w 先于 r发生</li>
+<li>任何其他对变量v的写入操作，要么先于w发生，要么晚于r发生。</li>
+</ol>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2018/11/26/Golang-Memory-Model/#more">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/golang/"> #golang </a>
+          
+            <a href="/tags/memory-model/"> #memory model </a>
+          
+        </div>
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2018/11/06/Kubernates3-why-pod/">
-                Kubernates3 为什么需要Pod
+                Kubernetes3 为什么需要Pod
               </a>
             
           
@@ -158,7 +252,7 @@
           <h2 id="为什么需要Pod">为什么需要Pod</h2><ol>
 <li>在工业实际部署中，经常需要多个进程部署在同一个节点上。类似于Linux操作系统中的进程组的概念（<code>pstree -g</code> 命令查看进程组），他们之间有着”超亲密关系”，例如相互之间会发生直接的文件交换、使用localhost或者Socket文件进行本地通信、共享某些Linux Namespace等。</li>
 <li>容器的”单进程模型”，PID=1的进程往往是应用本身，无法像正常操作系统中的init进程那样拥有进程管理的功能。</li>
-<li>存在”超亲密关系”的进程，需要按照严格的拓扑顺序启动。也就是需要对容器成组进行调度（gang scheduling）。<br>基于上述原因，Kubernates提供了Pod这个逻辑概念，将需要在同一节点上，可能共享Namespace以及其他本地资源的容器进行成组调度。</li>
+<li>存在”超亲密关系”的进程，需要按照严格的拓扑顺序启动。也就是需要对容器成组进行调度（gang scheduling）。<br>基于上述原因，Kubernetes提供了Pod这个逻辑概念，将需要在同一节点上，可能共享Namespace以及其他本地资源的容器进行成组调度。</li>
 </ol>
 <h2 id="Pod的实现机制">Pod的实现机制</h2><p>Pod是逻辑概念，其实是一组共享了某些资源（Network Namespace）的容器组。在没有成组调度时，如要实现容器A和容器B共享网络和Volume，可以通过如下命令实现：<br>
           <div class="post-more-link text-center">
@@ -174,7 +268,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/kubernates/"> #kubernates </a>
+            <a href="/tags/kubernetes/"> #kubernetes </a>
           
         </div>
       
@@ -202,7 +296,7 @@
           
             
               <a class="post-title-link" href="/2018/10/29/Kubernates2-essential-concept/">
-                Kubernates2 基本概念
+                Kubernetes2 基本概念
               </a>
             
           
@@ -241,7 +335,7 @@
       
         
           <h2 id="要解决什么问题">要解决什么问题</h2><p>可以方便的将用户应用的镜像部署到集群，并提供路由网关、水平扩展、监控、备份灾难恢复等一系列运维能力。这些问题，其实一个PAAS平台都可以解决。</p>
-<p>除了解决以上问题，Kubernates项目区别于其他PAAS平台，重点要解决的问题，来自于Borg项目的研究人员在论文中的一个重要观点：</p>
+<p>除了解决以上问题，Kubernetes项目区别于其他PAAS平台，重点要解决的问题，来自于Borg项目的研究人员在论文中的一个重要观点：</p>
 <blockquote>
 <p>运行在大规模集群中的各个任务之间，存在着各种各样的关系。这些关系的处理，才是作业编排和管理系统最困难的地方。</p>
 </blockquote>
@@ -266,7 +360,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/kubernates/"> #kubernates </a>
+            <a href="/tags/kubernetes/"> #kubernetes </a>
           
         </div>
       
@@ -474,99 +568,6 @@
 
 
     
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2018/10/06/A-Philosophy-of-Software-Design/">
-                软件设计的哲学（John Ousterhout分享）
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          Posted on 2018-10-06
-        </span>
-
-        
-          <span class="post-category">
-            &nbsp; | &nbsp; In
-            
-              <a href="/categories/Software-Design/">Software Design</a>
-
-              
-              
-
-            
-          </span>
-        
-
-        
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <h2 id="软件设计的目标">软件设计的目标</h2><ol>
-<li><p>软件设计最大的目标是降低软件的复杂性（Complexity），复杂性使软件难于理解和维护。</p>
-</li>
-<li><p>复杂性的来源：</p>
-<ul>
-<li>含义模糊（Obscurity）： 重要信息不突出。</li>
-<li>相互依赖：模块无法独立于其他模块而被理解。</li>
-</ul>
-</li>
-<li><p>复杂性的危害</p>
-</li>
-</ol>
-<p>复杂性会逐渐递增，前面埋的坑，会导致后面的设计越来越复杂。</p>
-<h2 id="设计原则">设计原则</h2><h3 id="暴露简单通用的接口，隐藏复杂的实现。">暴露简单通用的接口，隐藏复杂的实现。</h3>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2018/10/06/A-Philosophy-of-Software-Design/#more">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/Software-Design/"> #Software Design </a>
-          
-        </div>
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
   </div>
 
   
@@ -602,21 +603,21 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">31</span>
+              <span class="site-state-item-count">32</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-count">13</span>
               <span class="site-state-item-name">categories</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">43</span>
+              <span class="site-state-item-count">45</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>
